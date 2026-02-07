@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import './globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import PasswordGate from '@/components/shared/PasswordGate'
 
 const workSans = localFont({
   src: [
@@ -34,9 +35,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={workSans.variable}>
       <body>
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <PasswordGate>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </PasswordGate>
       </body>
     </html>
   )
