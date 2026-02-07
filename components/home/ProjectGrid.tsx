@@ -10,7 +10,7 @@ export default function ProjectGrid() {
     <section className="py-section-sm md:py-section-md lg:py-section px-container-sm md:px-container-md lg:px-container">
       <div className="max-w-[1440px] mx-auto">
         <AnimatedSection variant="fadeInUp" className="mb-16 md:mb-20">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-medium mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-medium mb-4 leading-tight">
             Selected Work
           </h2>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl">

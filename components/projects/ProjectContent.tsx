@@ -15,7 +15,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
         {/* Overview */}
         <AnimatedSection variant="fadeInUp" className="mb-20">
           <h2 className="text-sm uppercase tracking-wider text-gray-500 mb-4">Overview</h2>
-          <p className="text-xl md:text-2xl leading-relaxed text-gray-800">
+          <p className="text-lg md:text-2xl leading-relaxed text-gray-800">
             {project.overview}
           </p>
         </AnimatedSection>
@@ -25,7 +25,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
           <h2 className="text-2xl md:text-3xl font-display font-medium mb-6">
             The Challenge
           </h2>
-          <p className="text-lg leading-relaxed text-gray-700">
+          <p className="text-xl leading-loose text-gray-700">
             {project.challenge}
           </p>
         </AnimatedSection>
@@ -57,7 +57,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
           <h2 className="text-2xl md:text-3xl font-display font-medium mb-6">
             The Solution
           </h2>
-          <p className="text-lg leading-relaxed text-gray-700">
+          <p className="text-xl leading-loose text-gray-700">
             {project.solution}
           </p>
         </AnimatedSection>

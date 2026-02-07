@@ -218,7 +218,7 @@ export default function ContactPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-display font-bold text-xl mb-2">Based in Lisbon</h3>
+                <h3 className="font-display font-bold text-xl mb-2">Based in Berlin</h3>
                 <p className="text-gray-600">
                   Currently working with clients worldwide, but always happy to meet in
                   person if you&apos;re in the area.
