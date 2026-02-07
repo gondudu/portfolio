@@ -63,13 +63,13 @@ export default function ContactPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            Let's work together
+            Let&apos;s work together
           </motion.h1>
         </AnimatedSection>
 
         <AnimatedSection variant="fadeInUp" delay={0.2}>
           <p className="text-xl md:text-2xl text-gray-600 mb-16 max-w-2xl">
-            I'm always interested in hearing about new projects and opportunities.
+            I&apos;m always interested in hearing about new projects and opportunities.
             Feel free to reach out!
           </p>
         </AnimatedSection>
@@ -221,7 +221,7 @@ export default function ContactPage() {
                 <h3 className="font-display font-bold text-xl mb-2">Based in Lisbon</h3>
                 <p className="text-gray-600">
                   Currently working with clients worldwide, but always happy to meet in
-                  person if you're in the area.
+                  person if you&apos;re in the area.
                 </p>
               </div>
             </div>

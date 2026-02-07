@@ -20,7 +20,7 @@ export default function NotFound() {
             Page not found
           </h2>
           <p className="text-lg text-gray-600 mb-8">
-            Sorry, the page you're looking for doesn't exist or has been moved.
+            Sorry, the page you&apos;re looking for doesn&apos;t exist or has been moved.
           </p>
           <Link href="/">
             <Button variant="primary">Back to home</Button>

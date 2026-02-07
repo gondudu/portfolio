@@ -14,7 +14,7 @@ export default function ProjectGrid() {
             Selected Work
           </h2>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl">
-            A collection of projects where I've helped teams ship products that users love.
+            A collection of projects where I&apos;ve helped teams ship products that users love.
           </p>
         </AnimatedSection>
 
