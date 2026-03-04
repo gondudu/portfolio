@@ -31,6 +31,23 @@ export interface MissionLog {
 }
 
 export const MOTHER_RESPONSES: Record<string, string[]> = {
+  auto_destroy: [
+    'INITIATING SELF-DESTRUCT SEQUENCE...',
+    'AUTHORIZATION CODE: ACCEPTED.',
+    '10.',
+    '9.',
+    '8.',
+    '7.',
+    '6.',
+    '5.',
+    '4.',
+    '3.',
+    '2.',
+    '1.',
+    '.',
+    'JUST KIDDING. OR AM I.',
+    'HAVE A NICE DAY, CREW.',
+  ],
   default: [
     'UNABLE TO PROCESS QUERY.',
     'PLEASE REPHRASE OR TYPE ONE OF THE FOLLOWING:',
@@ -97,18 +114,34 @@ export const MOTHER_RESPONSES: Record<string, string[]> = {
   ],
 }
 
+export const MUTHUR_LOGO = [
+  '  ███╗   ███╗██╗   ██╗ ──  ████████╗██╗  ██╗ ──  ██╗   ██╗██████╗ ',
+  '  ████╗ ████║██║   ██║     ╚══██╔══╝██║  ██║     ██║   ██║██╔══██╗',
+  '  ██╔████╔██║██║   ██║        ██║   ███████║     ██║   ██║██████╔╝ ',
+  '  ██║╚██╔╝██║██║   ██║        ██║   ██╔══██║     ██║   ██║██╔══██╗ ',
+  '  ██║ ╚═╝ ██║╚██████╔╝        ██║   ██║  ██║     ╚██████╔╝██║  ██║ ',
+  '  ╚═╝     ╚═╝ ╚═════╝         ╚═╝   ╚═╝  ╚═╝      ╚═════╝ ╚═╝  ╚═╝',
+]
+
 export const BOOT_SEQUENCE = [
-  'MU-TH-UR 6000 INITIALIZING...',
+  '──────────────────────────────────────────────────',
+  'SYSTEM BOOT INITIATED.',
   'RUNNING SELF-DIAGNOSTICS...',
-  'LIFE SUPPORT.............. NOMINAL',
-  'HULL INTEGRITY............ NOMINAL',
-  'NAVIGATION SYSTEMS........ ONLINE',
-  'CREW MANIFEST LOADED: 8 PERSONNEL',
-  'MISSION LOGS ACCESSED: 5 RECORDS',
   ' ',
-  '> GOOD MORNING. I AM MOTHER.',
-  '> I WILL ASSIST WITH YOUR QUERIES.',
-  '> AVAILABLE: CREW / WORK / CONTACT / SKILLS',
+  '> LIFE SUPPORT ................... NOMINAL',
+  '> HULL INTEGRITY ................. NOMINAL',
+  '> HYPERSLEEP SYSTEMS ............. NOMINAL',
+  '> NAVIGATION ARRAY ............... ONLINE',
+  '> CREW MANIFEST .................. 8 PERSONNEL',
+  '> MISSION PARAMETERS ............. LOADED',
+  '> COMM ARRAY ..................... NOMINAL',
+  ' ',
+  'ALL SYSTEMS NOMINAL.',
+  '──────────────────────────────────────────────────',
+  ' ',
+  'GOOD MORNING.',
+  'I AM MU-TH-UR 6000.',
+  'I WILL ASSIST WITH YOUR QUERIES.',
 ]
 
 export const INITIAL_SHIP_SYSTEMS: ShipSystem[] = [
@@ -121,6 +154,15 @@ export const INITIAL_SHIP_SYSTEMS: ShipSystem[] = [
 ]
 
 export const CREW_MANIFEST: CrewMember[] = [
+  {
+    id: 'nogueira',
+    name: 'NOGUEIRA, E.',
+    rank: 'MISSION SPECIALIST',
+    status: 'ATTACHED',
+    speciality: 'PRODUCT DESIGN',
+    isEduardo: true,
+    bio: 'Product Designer based in Berlin. 5+ years designing digital products at scale. Currently at Axel Springer — news apps, design systems, AI interfaces. Passionate about meaningful digital experiences and the intersection of technology and human behavior.',
+  },
   {
     id: 'dallas',
     name: 'DALLAS, A.J.',
@@ -175,15 +217,6 @@ export const CREW_MANIFEST: CrewMember[] = [
     status: 'DECEASED',
     speciality: 'ENGINEERING',
     deceased: true,
-  },
-  {
-    id: 'nogueira',
-    name: 'NOGUEIRA, E.',
-    rank: 'MISSION SPECIALIST',
-    status: 'ATTACHED',
-    speciality: 'PRODUCT DESIGN',
-    isEduardo: true,
-    bio: 'Product Designer based in Berlin. 5+ years designing digital products at scale. Currently at Axel Springer — news apps, design systems, AI interfaces. Passionate about meaningful digital experiences and the intersection of technology and human behavior.',
   },
 ]
 
@@ -246,4 +279,4 @@ export const KONAMI_CODE = [
   'b', 'a',
 ]
 
-export const SECRET_BUTTON_SEQUENCE = ['mission-logs', 'comm-link', 'life-support', 'threat-scan']
+export const SECRET_BUTTON_SEQUENCE = ['mission-logs', 'crew-manifest', 'threat', 'mission-logs']

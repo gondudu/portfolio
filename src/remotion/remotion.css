@@ -1,0 +1,25 @@
+
+@font-face {
+  font-family: 'Work Sans';
+  src: url('/fonts/WorkSans-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Work Sans';
+  src: url('/fonts/WorkSans-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* For VT323, assuming it's also made available locally or via URL */
+@font-face {
+  font-family: 'VT323';
+  src: url('https://fonts.gstatic.com/s/vt323/v17/pxiKyp4fEZzVatF_SQs1.woff2') format('woff2'); /* Example Google Fonts URL */
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

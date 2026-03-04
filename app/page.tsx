@@ -1,5 +1,5 @@
-import SpaceshipConsole from '@/components/home/SpaceshipConsole'
+import HeroIntro from '@/components/home/HeroIntro'
 
 export default function Home() {
-  return <SpaceshipConsole />
+  return <HeroIntro />
 }
