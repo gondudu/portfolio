@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { VT323 } from 'next/font/google'
 import './globals.css'
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
+import ConditionalShell from '@/components/layout/ConditionalShell'
 import PasswordGate from '@/components/shared/PasswordGate'
 
 const workSans = localFont({
@@ -20,6 +20,13 @@ const workSans = localFont({
   display: 'swap',
 })
 
+const vt323 = VT323({
+  weight: '400',
+  variable: '--font-vt323',
+  display: 'swap',
+  subsets: ['latin'],
+})
+
 export const metadata: Metadata = {
   title: 'Eduardo Nogueira | Product Designer',
   description: 'Portfolio of Eduardo Nogueira - Product Designer crafting meaningful digital experiences',
@@ -33,12 +40,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={workSans.variable}>
+    <html lang="en" className={`${workSans.variable} ${vt323.variable}`}>
       <body>
         <PasswordGate>
-          <Header />
-          <main>{children}</main>
-          <Footer />
+          <ConditionalShell>{children}</ConditionalShell>
         </PasswordGate>
       </body>
     </html>
