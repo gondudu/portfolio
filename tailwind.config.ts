@@ -7,6 +7,14 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    screens: {
+      'wide': '600px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       colors: {
         primary: '#0061FF',
@@ -16,10 +24,20 @@ const config: Config = {
         accent4: '#00D9B1',
         background: '#FFFFFF',
         foreground: '#1E1E1E',
+        // Console / 8-bit theme
+        'console-bg': '#0a0e0a',
+        'console-panel': '#050a05',
+        'console-border': '#1a2f1a',
+        'console-phosphor': '#33ff00',
+        'console-phosphor-dim': '#1a8a00',
+        'console-phosphor-bright': '#66ff33',
+        'console-amber': '#ff8c00',
+        'console-red': '#ff2200',
       },
       fontFamily: {
         sans: ['var(--font-work-sans)', 'system-ui', 'sans-serif'],
         display: ['var(--font-work-sans)', 'system-ui', 'sans-serif'],
+        console: ['var(--font-vt323)', 'monospace'],
       },
       fontSize: {
         xs: '12px',

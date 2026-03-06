@@ -1,11 +1,5 @@
-import Hero from '@/components/home/Hero'
-import ProjectGrid from '@/components/home/ProjectGrid'
+import HeroIntro from '@/components/home/HeroIntro'
 
 export default function Home() {
-  return (
-    <>
-      <Hero />
-      <ProjectGrid />
-    </>
-  )
+  return <HeroIntro />
 }
