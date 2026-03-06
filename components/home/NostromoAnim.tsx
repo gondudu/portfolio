@@ -7,26 +7,22 @@ const FRAME_INTERVAL_MS = 90
 
 function parseAsciiFrames(text: string): string[][] {
   const lines = text.replace(/\r/g, '').split('\n')
-  if (lines.length === 0) return []
+  const frames: string[][] = []
+  let current: string[] = []
 
-  const firstLine = lines[0]
-  let frameHeight = 0
-  for (let i = 1; i < lines.length; i += 1) {
-    if (lines[i] === firstLine) {
-      frameHeight = i
-      break
+  for (const line of lines) {
+    if (line === '') {
+      if (current.length > 0) {
+        frames.push(current)
+        current = []
+      }
+    } else {
+      current.push(line)
     }
   }
+  if (current.length > 0) frames.push(current)
 
-  if (frameHeight === 0) return [lines]
-
-  const frames: string[][] = []
-  for (let i = 0; i + frameHeight <= lines.length; i += frameHeight) {
-    const chunk = lines.slice(i, i + frameHeight)
-    if (chunk.length === frameHeight) frames.push(chunk)
-  }
-
-  return frames
+  return frames.length > 0 ? frames : [lines]
 }
 
 function lineRole(line: string): 'hull' | 'body' | 'engine' {
@@ -46,7 +42,7 @@ interface Props {
 }
 
 export default function NostromoAnim({ color, dim, border, amber }: Props) {
-  const [frames, setFrames] = useState<string[][]>(FALLBACK_FRAMES)
+  const [frames, setFrames] = useState<string[][]>([...FALLBACK_FRAMES])
   const [frame, setFrame] = useState(0)
 
   useEffect(() => {
@@ -83,7 +79,7 @@ export default function NostromoAnim({ color, dim, border, amber }: Props) {
       style={{
         marginTop: '20px',
         fontFamily: 'monospace',
-        fontSize: '11px',
+        fontSize: '5.5px',
         lineHeight: '1.45',
         letterSpacing: '0',
       }}

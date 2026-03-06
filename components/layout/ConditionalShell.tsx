@@ -6,7 +6,7 @@ import Footer from './Footer'
 
 export default function ConditionalShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isConsole = pathname === '/'
+  const isConsole = pathname === '/' || pathname.startsWith('/projects/')
 
   return (
     <>

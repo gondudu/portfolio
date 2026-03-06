@@ -1,10 +1,14 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useCallback, KeyboardEvent } from 'react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { MOTHER_RESPONSES, BOOT_SEQUENCE, MUTHUR_LOGO, MISSION_LOGS, CREW_MANIFEST } from '@/lib/console-data'
+import { projects } from '@/lib/projects'
 import { useTerminalQueue } from '@/hooks/useTypewriter'
-import { useThreatScanner } from '@/hooks/useThreatScanner'
 import NostromoAnim from './NostromoAnim'
+import SonarScanner from './SonarScanner'
+import XenomorphAnim from './XenomorphAnim'
 
 type ActiveView = 'chat' | 'mission-logs' | 'crew' | 'threat'
 type LogoPhase = 'hidden' | 'in' | 'out'
@@ -19,30 +23,33 @@ const LOGO_DETAILS = [
 interface Props {
   alertMode: boolean
   ready?: boolean
+  skipBoot?: boolean
+  initialView?: string
   onSecretOrder?: () => void
   onButtonPress?: (id: string) => void
 }
 
 const NAV_TABS: { id: ActiveView; label: string; btnId: string }[] = [
+  { id: 'chat', label: 'MU-TH-UR', btnId: 'MU-TH-UR' },
   { id: 'mission-logs', label: 'Mission log', btnId: 'mission-logs' },
   { id: 'crew', label: 'Crew', btnId: 'crew-manifest' },
-  { id: 'threat', label: 'Scan for threat', btnId: 'threat' },
-  { id: 'chat', label: 'Mission Control', btnId: 'mission-control' },
 ]
 
-const THREAT_GRID = 10 // 10×10 grid inside terminal
+const VALID_VIEWS: ActiveView[] = ['chat', 'mission-logs', 'crew', 'threat']
 
-export default function MUTHURTerminal({ alertMode, ready = false, onSecretOrder, onButtonPress }: Props) {
+export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = false, initialView, onSecretOrder, onButtonPress }: Props) {
+  const router = useRouter()
   const { completedLines, currentDisplay, enqueue } = useTerminalQueue()
   const [inputValue, setInputValue] = useState('')
-  const [activeView, setActiveView] = useState<ActiveView>('chat')
-  const [selectedLog, setSelectedLog] = useState<string | null>(null)
+  const [activeView, setActiveView] = useState<ActiveView>(
+    VALID_VIEWS.includes(initialView as ActiveView) ? (initialView as ActiveView) : 'chat'
+  )
   const [logoPhase, setLogoPhase] = useState<LogoPhase>('hidden')
   const [logoLines, setLogoLines] = useState(0)
   const [uiVisible, setUiVisible] = useState(false)
   const outputRef = useRef<HTMLDivElement>(null)
   const sequenceStartedRef = useRef(false)
-  const { blips, threatLevel } = useThreatScanner(alertMode)
+  const [xenomorphDetected, setXenomorphDetected] = useState(false)
 
   // Stardate — updates every minute
   const getStardate = () => {
@@ -73,6 +80,9 @@ export default function MUTHURTerminal({ alertMode, ready = false, onSecretOrder
   useEffect(() => {
     if (!ready || sequenceStartedRef.current) return
     sequenceStartedRef.current = true
+
+    // Skip intro: bypass logo + boot animation, go straight to idle terminal
+    if (skipBoot) return
 
     const tids: ReturnType<typeof setTimeout>[] = []
     const t = (fn: () => void, ms: number) => { const id = setTimeout(fn, ms); tids.push(id) }
@@ -114,6 +124,23 @@ export default function MUTHURTerminal({ alertMode, ready = false, onSecretOrder
     }
     window.addEventListener('mother-auto-destroy', handler)
     return () => window.removeEventListener('mother-auto-destroy', handler)
+  }, [enqueue])
+
+  // Xenomorph identification event
+  useEffect(() => {
+    let tid: ReturnType<typeof setTimeout>
+    const handler = () => {
+      setXenomorphDetected(true)
+      setActiveView('chat')
+      enqueue(MOTHER_RESPONSES.xenomorph_identified, 55)
+      // Match the 10s alert window then restore Nostromo panel
+      tid = setTimeout(() => setXenomorphDetected(false), 10000)
+    }
+    window.addEventListener('xenomorph-found', handler)
+    return () => {
+      window.removeEventListener('xenomorph-found', handler)
+      clearTimeout(tid)
+    }
   }, [enqueue])
 
   // Alert mode announcements
@@ -185,7 +212,6 @@ export default function MUTHURTerminal({ alertMode, ready = false, onSecretOrder
   const handleNavTab = (tab: (typeof NAV_TABS)[0]) => {
     onButtonPress?.(tab.btnId)
     setActiveView(tab.id)
-    if (tab.id === 'mission-logs') setSelectedLog(null)
   }
 
   // Color tokens (inline styles — avoids dynamic Tailwind class issues)
@@ -204,9 +230,6 @@ export default function MUTHURTerminal({ alertMode, ready = false, onSecretOrder
         border: '#1a3a1a',
         amber: '#ff8c00',
       }
-
-  const blipMap = new Map(blips.map(b => [b.index, b.intensity]))
-  const totalThreatCells = THREAT_GRID * THREAT_GRID
 
   // Staggered fade-in helper
   const fade = (delayMs: number): React.CSSProperties => ({
@@ -279,26 +302,32 @@ export default function MUTHURTerminal({ alertMode, ready = false, onSecretOrder
             </div>
           )}
 
-          {/* Corner glyphs */}
-          <span className="absolute top-3 left-4 select-none" style={{ color: c.dim, fontSize: '20px', ...fade(350) }}>§</span>
-          <span className="absolute top-3 right-8 select-none" style={{ color: c.dim, fontSize: '20px', ...fade(420) }}>Ø</span>
-
-          {/* Right-side action glyphs */}
+          {/* Scan for threat — top right */}
           <button
-            className="absolute right-4 select-none opacity-70 hover:opacity-100 transition-opacity"
-            style={{ bottom: '48px', color: c.dim, fontSize: '20px', ...fade(500) }}
-            onClick={() => { setActiveView('chat'); enqueue(MOTHER_RESPONSES.greeting, 25) }}
-          >?</button>
-          <button
-            className="absolute right-4 bottom-3 select-none opacity-80 hover:opacity-100 transition-opacity"
-            style={{ color: c.amber, fontSize: '20px', ...fade(560) }}
-            onClick={() => window.dispatchEvent(new CustomEvent('mother-auto-destroy'))}
-          >!</button>
+            className="absolute top-3 right-4 select-none transition-opacity hover:opacity-100"
+            title="Scan for life forms"
+            style={{
+              color: activeView === 'threat' ? c.bright : c.dim,
+              opacity: activeView === 'threat' ? 1 : 0.6,
+              fontSize: '18px',
+              lineHeight: 1,
+              ...fade(480),
+            }}
+            onClick={() => handleNavTab({ id: 'threat', label: 'Scan for threat', btnId: 'threat' })}
+          >
+            <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              {/* Radar icon: concentric arcs */}
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="9" cy="9" r="1.5" fill="currentColor" />
+                <path d="M9 9 m-4 0 a4 4 0 1 1 8 0" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+                <path d="M9 9 m-7 0 a7 7 0 1 1 14 0" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" opacity="0.6" />
+                <line x1="9" y1="9" x2="14.5" y2="3.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.8" />
+              </svg>
+              <span style={{ fontSize: '12px', letterSpacing: '0.08em' }}>START SCAN</span>
+            </span>
+          </button>
 
-          {/* User status */}
-          <div className="text-center pt-6 pb-2" style={{ color: c.dim, fontSize: '14px', ...fade(200) }}>
-            User unknown
-          </div>
+      
 
           {/* ── CHAT VIEW ── */}
           {activeView === 'chat' && (
@@ -316,39 +345,58 @@ export default function MUTHURTerminal({ alertMode, ready = false, onSecretOrder
 
           {/* ── MISSION LOGS VIEW ── */}
           {activeView === 'mission-logs' && (
-            <div className="px-6 overflow-y-auto" style={{ height: 'calc(100% - 60px)', scrollbarWidth: 'none' }}>
-              {selectedLog ? (
-                (() => {
-                  const log = MISSION_LOGS.find(l => l.id === selectedLog)!
+            <div className="px-6 py-3 overflow-y-auto" style={{ height: 'calc(100% - 60px)', scrollbarWidth: 'none' }}>
+              <div style={{ color: c.dim, fontSize: '13px', marginBottom: '16px', letterSpacing: '0.05em' }}>
+                MISSION LOGS // {MISSION_LOGS.length} RECORDS ON FILE
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+                {MISSION_LOGS.map(log => {
+                  const thumb = projects.find(p => p.slug === log.slug)?.thumbnail
                   return (
-                    <div>
-                      <button onClick={() => setSelectedLog(null)} className="mb-3 opacity-60 hover:opacity-100 transition-opacity" style={{ color: c.dim }}>← BACK</button>
-                      <div style={{ color: c.dim }} className="mb-1">{log.classification} {'//'} {log.year}</div>
-                      <div style={{ color: c.bright }} className="mb-2">{log.title}</div>
-                      <div style={{ color: c.dim }} className="mb-3">{log.category}</div>
-                      <div className="mb-3">{log.summary}</div>
-                      <div style={{ color: c.dim }} className="mb-1">RESULTS:</div>
-                      {log.results.map((r, i) => <div key={i}>{'>'} {r}</div>)}
-                    </div>
-                  )
-                })()
-              ) : (
-                <div>
-                  <div style={{ color: c.dim }} className="mb-3">MISSION LOGS // {MISSION_LOGS.length} RECORDS ON FILE</div>
-                  {MISSION_LOGS.map(log => (
-                    <button key={log.id} onClick={() => setSelectedLog(log.id)} className="block w-full text-left mb-2 opacity-80 hover:opacity-100 transition-opacity">
-                      <span style={{ color: c.dim }}>{log.classification} {'//'}</span>{' '}
-                      <span style={{ color: c.text }}>{log.title}</span>
+                    <button
+                      key={log.id}
+                      onClick={() => router.push(`/projects/${log.slug}`)}
+                      className="text-left group"
+                      style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}
+                    >
+                      {/* 16:9 image */}
+                      <div
+                        style={{
+                          position: 'relative',
+                          width: '100%',
+                          aspectRatio: '16 / 9',
+                          backgroundColor: '#020603',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {thumb && (
+                          <Image
+                            src={thumb}
+                            alt={log.title}
+                            fill
+                            className="object-cover transition-opacity duration-300 group-hover:opacity-80"
+                            sizes="(max-width: 768px) 50vw, 33vw"
+                          />
+                        )}
+                      </div>
+                      {/* Title */}
+                      <div style={{ color: c.text, fontSize: '15px', lineHeight: '1.3' }}>
+                        {log.title}
+                      </div>
+                      {/* Description */}
+                      <div style={{ color: c.dim, fontSize: '13px', lineHeight: '1.3' }}>
+                        {log.category}
+                      </div>
                     </button>
-                  ))}
-                </div>
-              )}
+                  )
+                })}
+              </div>
             </div>
           )}
 
           {/* ── CREW VIEW ── */}
           {activeView === 'crew' && (
-            <div className="px-6 overflow-y-auto" style={{ height: 'calc(100% - 60px)', scrollbarWidth: 'none' }}>
+            <div className="px-6 overflow-y-auto" style={{ height: 'calc(100%)', scrollbarWidth: 'none' }}>
               <div style={{ color: c.dim }} className="mb-3">CREW MANIFEST // {CREW_MANIFEST.length} PERSONNEL</div>
               {CREW_MANIFEST.map(member => (
                 <div key={member.id} className="mb-1 flex items-baseline gap-2">
@@ -364,32 +412,15 @@ export default function MUTHURTerminal({ alertMode, ready = false, onSecretOrder
 
           {/* ── THREAT SCANNER VIEW ── */}
           {activeView === 'threat' && (
-            <div className="px-6 flex flex-col gap-3 overflow-y-auto" style={{ height: 'calc(100% - 60px)', scrollbarWidth: 'none' }}>
-              <div style={{ color: c.dim, fontSize: '14px' }}>── MOTION TRACKER ──</div>
-              <div className="grid gap-[3px]" style={{ gridTemplateColumns: `repeat(${THREAT_GRID}, 1fr)`, width: 'fit-content' }}>
-                {Array.from({ length: totalThreatCells }, (_, i) => {
-                  const intensity = blipMap.get(i)
-                  let bg = alertMode ? 'rgba(255,34,0,0.15)' : 'rgba(26,58,26,0.6)'
-                  if (intensity === 3) bg = alertMode ? '#ff2200' : '#66ff33'
-                  else if (intensity === 2) bg = alertMode ? 'rgba(255,34,0,0.7)' : '#33ff00'
-                  else if (intensity === 1) bg = alertMode ? 'rgba(255,34,0,0.4)' : 'rgba(51,255,0,0.4)'
-                  return <div key={i} className="rounded-full transition-all duration-200" style={{ width: '8px', height: '8px', backgroundColor: bg }} />
-                })}
-              </div>
-              <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: '8px' }}>
-                <div className="flex justify-between mb-1">
-                  <span style={{ color: c.dim }}>THREAT LEVEL</span>
-                  <span style={{ color: threatLevel === 'CRITICAL' ? '#ff2200' : c.text }}>{threatLevel}</span>
-                </div>
-                <div className="flex justify-between mb-1">
-                  <span style={{ color: c.dim }}>CONTACTS</span>
-                  <span>{alertMode ? blips.length : blips.filter(b => b.intensity === 3).length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span style={{ color: c.dim }}>RANGE</span>
-                  <span>0–100M</span>
-                </div>
-              </div>
+            <div style={{ height: 'calc(100% - 60px)', overflow: 'hidden' }}>
+              <SonarScanner
+                alertMode={alertMode}
+                color={c.text}
+                dim={c.dim}
+                border={c.border}
+                amber={c.amber}
+                onXenomorphDetected={() => window.dispatchEvent(new CustomEvent('xenomorph-found'))}
+              />
             </div>
           )}
         </div>
@@ -398,11 +429,14 @@ export default function MUTHURTerminal({ alertMode, ready = false, onSecretOrder
         <div
           className="hidden lg:flex flex-col items-center justify-center flex-shrink-0 overflow-hidden"
           style={{
-            width: '340px',
+            width: '20vw',
             borderLeft: `1px solid ${c.border}`,
           }}
         >
-          <NostromoAnim color={c.text} dim={c.dim} border={c.border} amber={c.amber} />
+          {xenomorphDetected
+            ? <XenomorphAnim color={c.text} dim={c.dim} border={c.border} amber={c.amber} />
+            : <NostromoAnim color={c.text} dim={c.dim} border={c.border} amber={c.amber} />
+          }
         </div>
 
       </div>

@@ -97,38 +97,29 @@ body {
   display: none;
 }
 
-/* ─── VHS / Tape Effects ─────────────────────────────────────── */
 
-/* Animated grain — shifts background-position to fake moving static */
-@keyframes vhs-grain {
-  0%   { background-position:   0px   0px; }
-  20%  { background-position:  42px  17px; }
-  40%  { background-position:  83px  51px; }
-  60%  { background-position:  17px  84px; }
-  80%  { background-position:  66px  33px; }
-  100% { background-position:   0px   0px; }
+/* ─── Hardware Console Effects ──────────────────────────────────── */
+
+/* Amber indicator light pulse */
+@keyframes amberGlow {
+  0%   { filter: brightness(1); }
+  100% { filter: brightness(0.68); }
 }
 
-.vhs-grain {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
-  animation: vhs-grain 0.4s steps(1) infinite;
+/* CRT power-on: content expands from a horizontal line at center */
+@keyframes crtScanOn {
+  0% {
+    clip-path: inset(49.5% 0 49.5% 0);
+    filter: brightness(5);
+  }
+  40% {
+    filter: brightness(2);
+  }
+  100% {
+    clip-path: inset(0% 0 0% 0);
+    filter: brightness(1);
+  }
 }
-
-/* Horizontal tracking line that drifts down the screen occasionally */
-@keyframes vhs-track {
-  0%,  88%, 100% { transform: translateY(-8px);   opacity: 0;    }
-  89%            { transform: translateY(15vh);    opacity: 0.07; }
-  92%            { transform: translateY(45vh);    opacity: 0.05; }
-  95%            { transform: translateY(75vh);    opacity: 0.07; }
-  97%            { transform: translateY(105vh);   opacity: 0;    }
-}
-
-.vhs-track {
-  animation: vhs-track 7s ease-in-out infinite;
-}
-
 
 /* ─────────────────────────────────────────────────────────────── */
 

@@ -31,6 +31,20 @@ export interface MissionLog {
 }
 
 export const MOTHER_RESPONSES: Record<string, string[]> = {
+  xenomorph_identified: [
+    '.',
+    '..',
+    '...',
+    '⚠ LIFE FORM IDENTIFIED.',
+    '⚠ CLASSIFICATION: XENOMORPH XX121.',
+    '⚠ COLLOQUIAL DESIGNATION: ALIEN.',
+    '⚠ STATUS: HOSTILE. LETHAL.',
+    '⚠ SPECIAL ORDER 937 — PRIORITY ONE:',
+    '⚠ ENSURE RETURN OF ORGANISM.',
+    '⚠ ALL OTHER CONSIDERATIONS SECONDARY.',
+    '⚠ CREW EXPENDABLE.',
+    '[END TRANSMISSION]',
+  ],
   auto_destroy: [
     'INITIATING SELF-DESTRUCT SEQUENCE...',
     'AUTHORIZATION CODE: ACCEPTED.',
@@ -139,7 +153,7 @@ export const BOOT_SEQUENCE = [
   'ALL SYSTEMS NOMINAL.',
   '──────────────────────────────────────────────────',
   ' ',
-  'GOOD MORNING.',
+  'HELLO OFFICER',
   'I AM MU-TH-UR 6000.',
   'I WILL ASSIST WITH YOUR QUERIES.',
 ]
@@ -157,7 +171,7 @@ export const CREW_MANIFEST: CrewMember[] = [
   {
     id: 'nogueira',
     name: 'NOGUEIRA, E.',
-    rank: 'MISSION SPECIALIST',
+    rank: 'CAPTAIN',
     status: 'ATTACHED',
     speciality: 'PRODUCT DESIGN',
     isEduardo: true,
@@ -166,7 +180,7 @@ export const CREW_MANIFEST: CrewMember[] = [
   {
     id: 'dallas',
     name: 'DALLAS, A.J.',
-    rank: 'CAPTAIN',
+    rank: 'MISSION SPECIALIST',
     status: 'DECEASED',
     speciality: 'COMMAND',
     deceased: true,
@@ -244,7 +258,7 @@ export const MISSION_LOGS: MissionLog[] = [
   {
     id: 'log-003',
     slug: 'nmt-product-suite-design-system',
-    title: 'NMT PRODUCT SUITE',
+    title: 'BLATT DESIGN SYSTEM',
     classification: 'MISSION LOG 003',
     year: '2024–2026',
     category: 'DESIGN SYSTEM / ORG TRANSFORMATION',
@@ -260,16 +274,6 @@ export const MISSION_LOGS: MissionLog[] = [
     category: 'INTERNAL TOOL / SIDE PROJECT',
     summary: 'Figma plugin built in 1 day. Injects real publication content into designs. Keygen aesthetic.',
     results: ['10X FASTER TEMPLATES', 'SHIPPED IN 1 DAY', 'ELIMINATED LOREM IPSUM'],
-  },
-  {
-    id: 'log-005',
-    slug: 'personify-ai-companion',
-    title: 'PERSONIFY AI COMPANION',
-    classification: 'MISSION LOG 005',
-    year: '2025',
-    category: 'CONCEPT / AI INTERFACE',
-    summary: 'Experimental AI companion interface. Avatar system with emotional identity. Led to Cosma app at Axel Springer.',
-    results: ['COSMA APP RELEASED', 'AI COMPANION STRATEGY DEFINED', 'TRUST + EMPATHY FRAMEWORK'],
   },
 ]
 

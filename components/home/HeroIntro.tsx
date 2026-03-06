@@ -1,60 +1,63 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
+import { useSearchParams } from 'next/navigation'
 import SpaceshipConsole from './SpaceshipConsole'
-import VHSOverlay from './VHSOverlay'
 
-type Phase = 'gate' | 'playing' | 'transitioning' | 'terminal'
+type Phase = 'gate' | 'playing' | 'fading' | 'terminal'
 
-// Start cross-fade 2 seconds before video ends
+// Start fade 8 seconds into the video (or on video end)
 const TRANSITION_START = 8
 
 export default function HeroIntro() {
-  const [phase, setPhase] = useState<Phase>('gate')
+  const searchParams = useSearchParams()
+  const initialView = searchParams.get('view') ?? undefined
+
+  const [phase, setPhase] = useState<Phase>(() => initialView ? 'terminal' : 'gate')
   const [consoleReady, setConsoleReady] = useState(false)
+  const [skipBoot, setSkipBoot] = useState(() => !!initialView)
   const videoRef = useRef<HTMLVideoElement>(null)
   const transitionStartedRef = useRef(false)
+
+  // When arriving with ?view=..., mount terminal then immediately mark ready
+  useEffect(() => {
+    if (initialView) {
+      const tid = setTimeout(() => setConsoleReady(true), 100)
+      return () => clearTimeout(tid)
+    }
+  }, [initialView])
+
+  // Boot the hardware console: CRT scan-on → terminal boot sequence
+  const bootConsole = () => {
+    setPhase('terminal')
+    // Delay so the terminal mounts with ready=false first, then the effect
+    // fires cleanly when ready transitions false→true (avoids React StrictMode
+    // double-invoke cancelling the boot sequence on the first mount).
+    setTimeout(() => setConsoleReady(true), 100)
+  }
+
+  // Begin fading video to black, then boot
+  const startFade = () => {
+    if (transitionStartedRef.current) return
+    transitionStartedRef.current = true
+    setPhase('fading')
+    setTimeout(bootConsole, 1500)
+  }
 
   const handleEnter = () => {
     setPhase('playing')
     if (videoRef.current) {
       videoRef.current.currentTime = 0
-      videoRef.current.play().catch(() => {
-        setPhase('terminal')
-        setConsoleReady(true)
-      })
+      videoRef.current.play().catch(bootConsole)
     }
   }
 
   const handleTimeUpdate = () => {
-    if (
-      !transitionStartedRef.current &&
-      videoRef.current &&
-      videoRef.current.currentTime >= TRANSITION_START
-    ) {
-      transitionStartedRef.current = true
-      setPhase('transitioning')
-      setTimeout(() => {
-        setPhase('terminal')
-        setConsoleReady(true)
-      }, 2200)
+    if (videoRef.current && videoRef.current.currentTime >= TRANSITION_START) {
+      startFade()
     }
   }
-
-  const handleVideoEnd = () => {
-    if (!transitionStartedRef.current) {
-      transitionStartedRef.current = true
-      setPhase('transitioning')
-      setTimeout(() => {
-        setPhase('terminal')
-        setConsoleReady(true)
-      }, 2200)
-    }
-  }
-
-  const isFading = phase === 'transitioning' || phase === 'terminal'
-  const showTerminal = phase === 'transitioning' || phase === 'terminal'
 
   return (
     <div className="fixed inset-0 bg-black overflow-hidden">
@@ -70,25 +73,32 @@ export default function HeroIntro() {
             style={{ filter: 'blur(12px) brightness(0.45)', transform: 'scale(1.05)' }}
             priority
           />
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
             <button
               onClick={handleEnter}
               className="font-console tracking-[0.4em] cursor-pointer select-none transition-opacity duration-200 hover:opacity-60"
               style={{ color: '#33ff00', fontSize: '18px' }}
             >
-              ENTER
+              ENTER SPACESHIP
+            </button>
+            <button
+              onClick={() => { setSkipBoot(true); bootConsole() }}
+              className="font-console cursor-pointer select-none transition-opacity duration-200 hover:opacity-60"
+              style={{ color: '#1a8a00', fontSize: '12px', letterSpacing: '0.2em' }}
+            >
+              SKIP INTRO
             </button>
           </div>
         </div>
       )}
 
-      {/* ── Video layer — fades out during transition ── */}
+      {/* ── Video: pre-mounted in gate (hidden) so ref is ready on ENTER ── */}
       {phase !== 'terminal' && (
         <div
           className="absolute inset-0"
           style={{
-            opacity: isFading ? 0 : 1,
-            transition: isFading ? 'opacity 2.2s ease-in-out' : 'none',
+            opacity: phase === 'fading' ? 0 : 1,
+            transition: phase === 'fading' ? 'opacity 1.5s ease-in-out' : 'none',
             visibility: phase === 'gate' ? 'hidden' : 'visible',
           }}
         >
@@ -100,32 +110,20 @@ export default function HeroIntro() {
             playsInline
             preload="auto"
             onTimeUpdate={handleTimeUpdate}
-            onEnded={handleVideoEnd}
-            onError={() => { setPhase('terminal'); setConsoleReady(true) }}
+            onEnded={startFade}
+            onError={bootConsole}
             className="w-full h-full object-cover"
           />
         </div>
       )}
 
-      {/* ── Terminal — fades in during transition ── */}
-      {showTerminal && (
-        <div
-          className="absolute inset-0"
-          style={{
-            animation: phase === 'transitioning' ? 'fadeIn 2.2s ease-in-out forwards' : 'none',
-          }}
-        >
-          <SpaceshipConsole ready={consoleReady} />
-          <VHSOverlay />
+      {/* ── Terminal ── */}
+      {phase === 'terminal' && (
+        <div className="absolute inset-0">
+          <SpaceshipConsole ready={consoleReady} skipBoot={skipBoot} initialView={initialView} />
         </div>
       )}
 
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
-        }
-      `}</style>
     </div>
   )
 }
