@@ -349,7 +349,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
               <div style={{ color: c.dim, fontSize: '13px', marginBottom: '16px', letterSpacing: '0.05em' }}>
                 MISSION LOGS // {MISSION_LOGS.length} RECORDS ON FILE
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+              <div className="grid grid-cols-1 wide:grid-cols-2 gap-5">
                 {MISSION_LOGS.map(log => {
                   const thumb = projects.find(p => p.slug === log.slug)?.thumbnail
                   return (
