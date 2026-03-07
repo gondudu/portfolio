@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import Header from './Header'
 import Footer from './Footer'
+import CursorEffect from '@/components/shared/CursorEffect'
 
 export default function ConditionalShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -10,6 +11,7 @@ export default function ConditionalShell({ children }: { children: React.ReactNo
 
   return (
     <>
+      <CursorEffect />
       {!isConsole && <Header />}
       <main className={isConsole ? 'contents' : ''}>{children}</main>
       {!isConsole && <Footer />}

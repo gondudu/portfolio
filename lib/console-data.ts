@@ -17,6 +17,10 @@ export interface CrewMember {
   deceased?: boolean
   isEduardo?: boolean
   bio?: string
+  photo?: string
+  clearance: string
+  fileRef: string
+  missionNotes?: string
 }
 
 export interface MissionLog {
@@ -175,7 +179,11 @@ export const CREW_MANIFEST: CrewMember[] = [
     status: 'ATTACHED',
     speciality: 'PRODUCT DESIGN',
     isEduardo: true,
-    bio: 'Product Designer based in Berlin. 5+ years designing digital products at scale. Currently at Axel Springer — news apps, design systems, AI interfaces. Passionate about meaningful digital experiences and the intersection of technology and human behavior.',
+    clearance: 'ALPHA',
+    fileRef: 'USCSS-NOS-820930-001',
+    photo: '/images/eduardo.jpg',
+    bio: 'Product Designer based in Berlin. 5+ years designing digital products at scale — news apps, design systems, AI interfaces. Currently at Axel Springer building Blatt, a unified design system adopted across 8 teams. Previously led the Upday redesign during a high-stakes user migration from Samsung-bundled to standalone app.',
+    missionNotes: 'Specialities: UX Research / Design Systems / AI Interface Design / Cross-functional leadership. Available for new missions — initiate contact via COMM ARRAY.',
   },
   {
     id: 'dallas',
@@ -184,6 +192,10 @@ export const CREW_MANIFEST: CrewMember[] = [
     status: 'DECEASED',
     speciality: 'COMMAND',
     deceased: true,
+    clearance: 'N/A — RECORD ARCHIVED',
+    fileRef: 'USCSS-NOS-820930-002',
+    bio: 'Exemplary service record across fourteen deep-space missions. Certified command qualification, all vessel classes up to and including commercial towing. Authorized emergency protocol override on Zeta II Reticuli survey, 2122. Incident outcome: terminal. Weyland-Yutani extends formal recognition for service rendered.',
+    missionNotes: 'File status: CLOSED. Incident report LV-426/2122 sealed per Special Order 937.',
   },
   {
     id: 'ripley',
@@ -191,6 +203,10 @@ export const CREW_MANIFEST: CrewMember[] = [
     rank: 'WARRANT OFFICER',
     status: 'ACTIVE',
     speciality: 'SAFETY OFFICER',
+    clearance: 'ALPHA',
+    fileRef: 'USCSS-NOS-820930-003',
+    bio: 'Warrant Officer, first grade. Safety compliance specialist with full emergency protocol certification. The only crew member to correctly identify the threat vector during the LV-426 incident and attempt enforcement of established quarantine procedures. Her objections were overridden. Outcome noted in file.',
+    missionNotes: 'Personnel photo access restricted — Clearance Level A required. Recommend review of emergency override incident report. Survivor status confirmed.',
   },
   {
     id: 'kane',
@@ -199,14 +215,22 @@ export const CREW_MANIFEST: CrewMember[] = [
     status: 'DECEASED',
     speciality: 'SURVEY',
     deceased: true,
+    clearance: 'N/A — RECORD ARCHIVED',
+    fileRef: 'USCSS-NOS-820930-004',
+    bio: 'Twelve-year service record, no prior disciplinary notation. Fatally compromised during routine survey EVA, LV-426, following unauthorized breach of quarantine protocol. Exposure to unclassified biological specimen. Outcome: non-recoverable. Medical data archived under Special Order 937. File sealed pending review.',
+    missionNotes: 'Cause of death: classified. Medical examiner report: see Ash, Science Officer. Bonus disbursement: pending estate resolution.',
   },
   {
     id: 'ash',
     name: 'ASH [SYNTHETIC]',
     rank: 'SCIENCE OFFICER',
-    status: 'DECEASED',
+    status: 'ATTACHED',
     speciality: 'SCIENCE / XENO-BIOLOGY',
     deceased: true,
+    clearance: 'SPECIAL ORDER / CLASSIFIED',
+    fileRef: 'USCSS-NOS-820930-005',
+    bio: 'Hyperdyne Systems 120-A/2 commercial grade. Assigned under Special Order 937 at Weyland-Yutani directive. Role: specimen acquisition and preservation. Secondary role: crew management. All primary objectives fulfilled within acceptable parameters. Unit decommissioned by crew intervention, 2122. Data core retained.',
+    missionNotes: 'Note: this personnel file is maintained under standard crew manifest for administrative continuity. Do not flag as anomaly.',
   },
   {
     id: 'lambert',
@@ -215,6 +239,10 @@ export const CREW_MANIFEST: CrewMember[] = [
     status: 'DECEASED',
     speciality: 'NAVIGATION',
     deceased: true,
+    clearance: 'N/A — RECORD ARCHIVED',
+    fileRef: 'USCSS-NOS-820930-006',
+    bio: 'Navigation specialist, senior grade. Full atmospheric survey qualification. Instrumental in establishing return transit course from LV-426. Confirmed deceased, mass casualty event, 2122. Remains not recovered. Weyland-Yutani notes her contribution to the mission\'s primary objective data collection.',
+    missionNotes: 'File status: CLOSED. Navigation logs archived. Next-of-kin notified per standard protocol.',
   },
   {
     id: 'brett',
@@ -223,6 +251,10 @@ export const CREW_MANIFEST: CrewMember[] = [
     status: 'DECEASED',
     speciality: 'ENGINEERING',
     deceased: true,
+    clearance: 'N/A — RECORD ARCHIVED',
+    fileRef: 'USCSS-NOS-820930-007',
+    bio: 'Competent technical rating, no exceptional notation. Maintained engineering systems alongside Chief Engineer Parker across full transit leg. Deceased 2122, circumstances consistent with those of Chief Engineer Parker. File retained for actuarial purposes.',
+    missionNotes: 'Bonus claim: see Parker, D. Clause 7.4(c) applies. Weyland-Yutani legal: no further action required.',
   },
   {
     id: 'parker',
@@ -231,6 +263,10 @@ export const CREW_MANIFEST: CrewMember[] = [
     status: 'DECEASED',
     speciality: 'ENGINEERING',
     deceased: true,
+    clearance: 'N/A — RECORD ARCHIVED',
+    fileRef: 'USCSS-NOS-820930-008',
+    bio: 'Engineering certification, Class IV. Maintained Nostromo drive systems across full transit leg with commendable uptime. Vocal objections to Company policy noted in personnel file on three separate occasions — all resolved. Deceased 2122.',
+    missionNotes: 'Bonus dispute nullified by estate under clause 7.4(c) of standard crew contract. See also: Brett, S.E. Weyland-Yutani regrets the loss.',
   },
 ]
 

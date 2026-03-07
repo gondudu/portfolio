@@ -40,9 +40,9 @@ const config: Config = {
         console: ['var(--font-vt323)', 'monospace'],
       },
       fontSize: {
-        xs: '24px',
-        sm: '28px',
-        base: '32px',
+        xs: '16px',
+        sm: '20px',
+        base: '24px',
         lg: '36px',
         xl: '48px',
         '2xl': '64px',

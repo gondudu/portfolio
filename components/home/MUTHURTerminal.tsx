@@ -7,7 +7,7 @@ import { MOTHER_RESPONSES, BOOT_SEQUENCE, MUTHUR_LOGO, MISSION_LOGS, CREW_MANIFE
 import { projects } from '@/lib/projects'
 import { useTerminalQueue } from '@/hooks/useTypewriter'
 import { useConsoleAudio } from '@/hooks/useConsoleAudio'
-import NostromoAnim from './NostromoAnim'
+import StatusGrid from './StatusGrid'
 import SonarScanner from './SonarScanner'
 import XenomorphAnim from './XenomorphAnim'
 
@@ -32,8 +32,8 @@ interface Props {
 
 const NAV_TABS: { id: ActiveView; label: string; btnId: string; subtitle: string }[] = [
   { id: 'mission-logs', label: 'Missions', btnId: 'mission-logs', subtitle: '[PORTFOLIO]' },
-  { id: 'chat', label: 'MU-TH-UR', btnId: 'MU-TH-UR', subtitle: '[QUERY TERMINAL]' },
   { id: 'crew', label: 'Crew', btnId: 'crew-manifest', subtitle: '[ABOUT]' },
+  { id: 'chat', label: 'MU-TH-UR', btnId: 'MU-TH-UR', subtitle: '[QUERY TERMINAL]' },
 ]
 
 const VALID_VIEWS: ActiveView[] = ['chat', 'mission-logs', 'crew', 'threat']
@@ -55,6 +55,16 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
   // Tracks if MU-TH-UR terminal has been booted — boot sequence only runs once
   const terminalBootedRef = useRef(skipBoot || initialView === 'chat')
   const [xenomorphDetected, setXenomorphDetected] = useState(false)
+  const [selectedCrewId, setSelectedCrewId] = useState<string>('nogueira')
+  const [crewDetailOpen, setCrewDetailOpen] = useState(false) // mobile slide-in
+  const [crewFading, setCrewFading] = useState(false)
+
+  const selectCrew = (id: string) => {
+    if (id === selectedCrewId) { setCrewDetailOpen(true); return }
+    setCrewFading(true)
+    setTimeout(() => { setSelectedCrewId(id); setCrewFading(false) }, 80)
+    setCrewDetailOpen(true)
+  }
 
   // Stardate — updates every minute
   const getStardate = () => {
@@ -81,16 +91,17 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
     return () => clearTimeout(tid)
   }, [])
 
-  // On ready: ambient hum only (boot sequence now triggered by MU-TH-UR tab click)
+  // On ready: ambient hum only
   useEffect(() => {
     if (!ready || sequenceStartedRef.current) return
     sequenceStartedRef.current = true
     startAmbientHum()
   }, [ready, startAmbientHum])
 
-  // Boot MU-TH-UR: logo splash → boot sequence. Runs once on first tab access.
-  const bootTerminal = useCallback(() => {
-    if (terminalBootedRef.current) return
+  // Boot MU-TH-UR: fires once when activeView first becomes 'chat'.
+  // useEffect approach guarantees cleanup and avoids stale-closure issues.
+  useEffect(() => {
+    if (activeView !== 'chat' || terminalBootedRef.current) return
     terminalBootedRef.current = true
 
     const tids: ReturnType<typeof setTimeout>[] = []
@@ -102,19 +113,15 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
     const totalLines = MUTHUR_LOGO.length + LOGO_DETAILS.length
     for (let n = 1; n <= totalLines; n++) {
       const line = n
-      t(() => {
-        setLogoLines(line)
-        playBootBeep(line - 1)
-      }, elapsed)
+      t(() => { setLogoLines(line); playBootBeep(line - 1) }, elapsed)
       elapsed += n <= MUTHUR_LOGO.length ? 160 : 120
     }
 
     t(() => setLogoPhase('out'), elapsed + 2000)
-    t(() => {
-      setLogoPhase('hidden')
-      enqueue(BOOT_SEQUENCE, 12)
-    }, elapsed + 2000 + 800)
-  }, [enqueue, playBootBeep])
+    t(() => { setLogoPhase('hidden'); enqueue(BOOT_SEQUENCE, 12) }, elapsed + 2000 + 800)
+
+    return () => tids.forEach(clearTimeout)
+  }, [activeView, playBootBeep, enqueue])
 
   // Secret button sequence event
   useEffect(() => {
@@ -242,7 +249,6 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
     playButtonPress()
     onButtonPress?.(tab.btnId)
     setActiveView(tab.id)
-    if (tab.id === 'chat') bootTerminal()
   }
 
   // Color tokens (inline styles — avoids dynamic Tailwind class issues)
@@ -272,18 +278,15 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
   return (
     <div
       className="h-full flex flex-col font-console overflow-hidden crt-monitor crt-flicker"
-      style={{ backgroundColor: '#020100', color: c.text, fontSize: '32px', lineHeight: '1.5' }}
+      style={{ backgroundColor: '#020100', color: c.text, fontSize: '16px', lineHeight: '1.5' }}
     >
       {/* ── Header ── */}
       <div className="flex items-center gap-2 px-4 py-2 flex-wrap" style={fade(0)}>
-        <span style={{ color: c.dim }}>USS</span>
         <span style={{ color: c.bright }}>MU-TH-UR 6000</span>
         <span style={{ color: c.dim }}>·</span>
         <span style={{ color: c.text }}>NOGUEIRA, E.</span>
         <span style={{ color: c.dim }}>·</span>
         <span style={{ color: c.dim }}>PRODUCT DESIGNER</span>
-        <span style={{ color: c.dim }}>·</span>
-        <span style={{ color: c.dim }}>BERLIN</span>
         <div className="ml-auto flex items-center gap-2">
           <span style={{ color: c.dim }}>STARDATE</span>
           <span style={{ color: c.bright }}>{stardate || '-----.------'}</span>
@@ -301,10 +304,12 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
             style={{
               color: activeView === tab.id ? c.bright : c.dim,
               opacity: activeView === tab.id ? 1 : 0.7,
+              fontSize: '24px',
+              lineHeight: '28px',
             }}
           >
             <span>{'>'} {tab.label}</span>
-            <span style={{ fontSize: '20px', color: c.dim, opacity: 0.55 }}>{tab.subtitle}</span>
+            
           </button>
         ))}
       </div>
@@ -372,7 +377,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
             style={{
               color: activeView === 'threat' ? c.bright : c.dim,
               opacity: activeView === 'threat' ? 1 : 0.6,
-              fontSize: '36px',
+              fontSize: '24px',
               lineHeight: 1,
               ...fade(480),
             }}
@@ -395,9 +400,9 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
           {/* ── CHAT VIEW ── */}
           {activeView === 'chat' && (
             <div className="relative h-full flex flex-col">
-              <div ref={outputRef} className="px-6 overflow-y-auto flex-1" style={{ paddingBottom: '72px', scrollbarWidth: 'none' }}>
+              <div ref={outputRef} className="px-6 overflow-y-auto flex-1" style={{ fontSize:'20px', paddingBottom: '96px', scrollbarWidth: 'none' }}>
                 {completedLines.map((line, i) => (
-                  <div key={i} style={{ color: line.startsWith('>') ? c.bright : c.text }}>
+                  <div key={i} style={{ fontSize:'20px', color: line.startsWith('>') ? c.bright : c.text }}>
                     {line || '\u00A0'}
                   </div>
                 ))}
@@ -425,7 +430,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                     onChange={e => { startAmbientHum(); playKeyClick(); setInputValue(e.target.value) }}
                     onKeyDown={handleKeyDown}
                     className="flex-1 bg-transparent outline-none font-console placeholder-console-phosphor-dim"
-                    style={{ color: c.text, fontSize: '32px', textTransform: 'uppercase' }}
+                    style={{ color: c.text, fontSize: '20px', textTransform: 'uppercase' }}
                     placeholder="ENTER QUERY..."
                     autoComplete="off"
                     spellCheck={false}
@@ -450,10 +455,6 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
           {/* ── MISSION LOGS VIEW ── */}
           {activeView === 'mission-logs' && (
             <div className="px-6 py-3 overflow-y-auto" style={{ height: 'calc(100% - 60px)', scrollbarWidth: 'none' }}>
-              <div className="flex items-baseline gap-4 mb-4" style={{ borderBottom: `1px solid ${c.border}`, paddingBottom: '8px' }}>
-                <span style={{ color: c.bright, fontSize: '30px', letterSpacing: '0.08em' }}>MISSION ARCHIVE</span>
-                <span style={{ color: c.dim, fontSize: '22px' }}>{MISSION_LOGS.length} RECORDS // CLASSIFIED</span>
-              </div>
               <div className="grid grid-cols-1 wide:grid-cols-2 gap-6">
                 {MISSION_LOGS.map(log => {
                   const thumb = projects.find(p => p.slug === log.slug)?.thumbnail
@@ -464,27 +465,16 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                       className="text-left group"
                       style={{ display: 'flex', flexDirection: 'column', gap: '0' }}
                     >
-                      {/* Classification strip */}
-                      <div
-                        className="flex items-center justify-between px-2 py-1"
-                        style={{
-                          backgroundColor: c.border,
-                          fontSize: '20px',
-                          letterSpacing: '0.1em',
-                        }}
-                      >
-                        <span style={{ color: c.dim }}>{log.classification}</span>
-                        <span style={{ color: c.dim }}>{log.year}</span>
-                      </div>
+
                       {/* 16:9 image */}
                       <div
                         style={{
                           position: 'relative',
                           width: '100%',
                           aspectRatio: '16 / 9',
-                          backgroundColor: '#080400',
+                          backgroundColor: 'transparent',
                           overflow: 'hidden',
-                          border: `1px solid ${c.border}`,
+                          border: `0px solid ${c.border}`,
                           borderTop: 'none',
                         }}
                       >
@@ -507,26 +497,10 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                       </div>
                       {/* Title + category */}
                       <div className="pt-2 pb-1">
-                        <div style={{ color: c.text, fontSize: '30px', lineHeight: '1.2' }}>{log.title}</div>
+                        <div style={{ color: c.text, fontSize: '30px', lineHeight: '1.0' }}>{log.title}</div>
                         <div style={{ color: c.dim, fontSize: '22px', marginTop: '2px' }}>{log.category}</div>
                       </div>
-                      {/* Results row */}
-                      <div className="flex flex-wrap gap-2 mt-1">
-                        {log.results.map((r, i) => (
-                          <span
-                            key={i}
-                            style={{
-                              color: c.amber,
-                              fontSize: '20px',
-                              border: `1px solid ${c.border}`,
-                              padding: '0 6px',
-                              letterSpacing: '0.05em',
-                            }}
-                          >
-                            {r}
-                          </span>
-                        ))}
-                      </div>
+      
                     </button>
                   )
                 })}
@@ -535,20 +509,234 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
           )}
 
           {/* ── CREW VIEW ── */}
-          {activeView === 'crew' && (
-            <div className="px-6 overflow-y-auto" style={{ height: 'calc(100%)', scrollbarWidth: 'none' }}>
-              <div style={{ color: c.dim }} className="mb-3">CREW MANIFEST // {CREW_MANIFEST.length} PERSONNEL</div>
-              {CREW_MANIFEST.map(member => (
-                <div key={member.id} className="mb-1 flex items-baseline gap-2">
-                  <span style={{ color: member.deceased ? c.dim : c.text }}>{member.name}</span>
-                  <span style={{ color: c.dim, fontSize: '26px' }}>{member.rank}</span>
-                  <span style={{ fontSize: '26px', color: member.status === 'DECEASED' ? 'rgba(255,34,0,0.7)' : member.isEduardo ? c.amber : c.dim }}>
-                    [{member.status}]
-                  </span>
+          {activeView === 'crew' && (() => {
+            const selectedMember = CREW_MANIFEST.find(m => m.id === selectedCrewId) ?? CREW_MANIFEST[0]
+            const statusSymbol = (m: typeof CREW_MANIFEST[0]) => {
+              if (m.status === 'DECEASED') return { sym: '▲', col: c.dim }
+              if (m.status === 'ATTACHED') return { sym: '●', col: m.isEduardo ? c.bright : c.text }
+              return { sym: '■', col: c.bright }
+            }
+
+            const PhotoSlot = ({ member }: { member: typeof CREW_MANIFEST[0] }) => {
+              const size = 130
+              const base: React.CSSProperties = {
+                width: size, height: size, flexShrink: 0,
+                border: `1px solid ${c.border}`,
+                position: 'relative', overflow: 'hidden',
+                backgroundColor: '#0d0700',
+              }
+              if (member.photo) {
+                return (
+                  <div style={base}>
+                    <Image
+                      src={member.photo} alt={member.name} fill
+                      className="object-cover object-top"
+                      style={{ filter: 'sepia(1) saturate(0.7) hue-rotate(5deg) brightness(0.82)' }}
+                      sizes="130px"
+                    />
+                    {/* Scanline overlay */}
+                    <div style={{
+                      position: 'absolute', inset: 0, pointerEvents: 'none',
+                      background: 'repeating-linear-gradient(to bottom, transparent, transparent 1px, rgba(0,0,0,0.32) 1px, rgba(0,0,0,0.32) 2px)',
+                    }} />
+                  </div>
+                )
+              }
+              const isAsh = member.id === 'ash'
+              const isRipley = member.id === 'ripley'
+              const label = isAsh
+                ? ['[SYNTHETIC', 'PERSONNEL', 'RESTRICTED]']
+                : isRipley
+                  ? ['[PHOTO:', 'CLEARANCE', 'ALPHA REQ.]']
+                  : ['[RECORD', 'SEALED]']
+              return (
+                <div style={{ ...base, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+                  {label.map((l, i) => (
+                    <div key={i} style={{ color: isAsh ? c.bright : c.dim, fontSize: '14px', letterSpacing: '0.08em', textAlign: 'center' }}>{l}</div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
+              )
+            }
+
+            return (
+              <div className="h-full flex overflow-hidden" style={{ position: 'relative' }}>
+
+                {/* ── Left: crew list ── */}
+                <div
+                  className="flex-shrink-0 flex flex-col overflow-hidden"
+                  style={{ width: '240px', borderRight: `1px solid ${c.border}` }}
+                >
+                  {/* Header */}
+                  <div
+                    className="flex-shrink-0 px-3 py-2"
+                    style={{ borderBottom: `1px solid ${c.border}`, fontSize: '16px', letterSpacing: '0.12em', color: c.dim }}
+                  >
+                    CREW MANIFEST {'░'.repeat(3)} {CREW_MANIFEST.length} PERSONNEL
+                  </div>
+                  {/* Rows */}
+                  <div className="flex-1 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+                    {CREW_MANIFEST.map(member => {
+                      const { sym, col } = statusSymbol(member)
+                      const isSelected = member.id === selectedCrewId
+                      return (
+                        <button
+                          key={member.id}
+                          onClick={() => selectCrew(member.id)}
+                          className="w-full text-left transition-colors"
+                          style={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                            padding: '7px 10px',
+                            borderLeft: `2px solid ${isSelected ? c.bright : 'transparent'}`,
+                            backgroundColor: isSelected ? '#2a1800' : 'transparent',
+                          }}
+                        >
+                          <div>
+                            <div style={{ color: member.deceased ? c.dim : c.text, fontSize: '20px', lineHeight: '1.2' }}>
+                              {member.name}
+                            </div>
+                            <div style={{ color: c.dim, fontSize: '16px', letterSpacing: '0.04em' }}>
+                              {member.rank}
+                            </div>
+                          </div>
+                          <span style={{ color: col, fontSize: '18px', flexShrink: 0, marginLeft: '8px' }}>{sym}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                  {/* Legend */}
+                  <div
+                    className="flex-shrink-0 px-3 py-2 flex flex-col gap-1"
+                    style={{ borderTop: `1px solid ${c.border}` }}
+                  >
+                    {[['■', c.bright, 'ACTIVE'], ['●', c.text, 'ATTACHED'], ['▲', c.dim, 'DECEASED']].map(([sym, col, label]) => (
+                      <div key={label as string} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ color: col as string, fontSize: '16px' }}>{sym}</span>
+                        <span style={{ color: c.dim, fontSize: '16px', letterSpacing: '0.1em' }}>{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ── Right: dossier detail (desktop always visible) ── */}
+                <div
+                  className="flex-1 overflow-y-auto hidden wide:block"
+                  style={{
+                    scrollbarWidth: 'none',
+                    opacity: crewFading ? 0 : 1,
+                    transition: 'opacity 0.12s ease',
+                  }}
+                >
+                  {/* File header */}
+                  <div
+                    className="px-4 py-2 flex items-center justify-between flex-shrink-0 sticky top-0"
+                    style={{ borderBottom: `1px solid ${c.border}`, backgroundColor: '#020100', fontSize: '16px', letterSpacing: '0.12em' }}
+                  >
+                    <span style={{ color: c.dim }}>PERSONNEL FILE {'░'.repeat(4)} {selectedMember.fileRef}</span>
+                    <span style={{ color: selectedMember.clearance.includes('CLASSIFIED') ? c.bright : c.dim, fontSize: '14px' }}>
+                      CLEARANCE: {selectedMember.clearance}
+                    </span>
+                  </div>
+
+                  <div className="px-4 py-4">
+                    {/* Photo + identity */}
+                    <div style={{ display: 'flex', gap: '16px', marginBottom: '20px', alignItems: 'flex-start' }}>
+                      <PhotoSlot member={selectedMember} />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ color: c.bright, fontSize: '24px', lineHeight: '1.2', marginBottom: '10px' }}>
+                          {selectedMember.name}
+                        </div>
+                        {[
+                          { label: 'RANK', value: selectedMember.rank },
+                          { label: 'SPECIALITY', value: selectedMember.speciality },
+                          { label: 'STATUS', value: (() => { const { sym, col } = statusSymbol(selectedMember); return { text: `${sym} ${selectedMember.status}`, col } })() },
+                        ].map(({ label, value }) => (
+                          <div key={label} style={{ marginBottom: '4px', display: 'flex', gap: '8px', alignItems: 'baseline' }}>
+                            <span style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.12em', minWidth: '88px' }}>{label}</span>
+                            {typeof value === 'string'
+                              ? <span style={{ color: c.text, fontSize: '18px' }}>{value}</span>
+                              : <span style={{ color: value.col, fontSize: '18px' }}>{value.text}</span>
+                            }
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: '14px', marginBottom: '14px' }}>
+                      <div style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.2em', marginBottom: '8px' }}>BIOGRAPHICAL DATA</div>
+                      <div style={{ color: c.text, fontSize: '20px', lineHeight: '1.7' }}>{selectedMember.bio}</div>
+                    </div>
+
+                    {selectedMember.missionNotes && (
+                      <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: '14px' }}>
+                        <div style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.2em', marginBottom: '8px' }}>MISSION NOTES</div>
+                        <div style={{ color: c.dim, fontSize: '16px', lineHeight: '1.7' }}>{selectedMember.missionNotes}</div>
+                      </div>
+                    )}
+
+                    {/* Blinking cursor */}
+                    <div style={{ color: c.dim, marginTop: '12px', fontSize: '20px' }}>
+                      <span className="cursor-blink">█</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Mobile: full-screen dossier slide-in ── */}
+                <div
+                  className="wide:hidden absolute inset-0 flex flex-col overflow-hidden"
+                  style={{
+                    backgroundColor: '#020100',
+                    transform: crewDetailOpen ? 'translateX(0)' : 'translateX(100%)',
+                    transition: 'transform 0.2s ease-out',
+                    opacity: crewFading ? 0 : 1,
+                  }}
+                >
+                  <div
+                    className="flex items-center gap-3 px-4 py-2 flex-shrink-0"
+                    style={{ borderBottom: `1px solid ${c.border}`, fontSize: '20px' }}
+                  >
+                    <button
+                      onClick={() => setCrewDetailOpen(false)}
+                      className="transition-opacity hover:opacity-100"
+                      style={{ color: c.dim, opacity: 0.8 }}
+                    >
+                      {'< MANIFEST'}
+                    </button>
+                    <span style={{ color: c.border }}>·</span>
+                    <span style={{ color: c.dim, fontSize: '16px', letterSpacing: '0.1em' }}>{selectedMember.fileRef}</span>
+                  </div>
+                  <div className="flex-1 overflow-y-auto px-4 py-4" style={{ scrollbarWidth: 'none' }}>
+                    <div style={{ display: 'flex', gap: '16px', marginBottom: '20px', alignItems: 'flex-start' }}>
+                      <PhotoSlot member={selectedMember} />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ color: c.bright, fontSize: '22px', lineHeight: '1.2', marginBottom: '10px' }}>{selectedMember.name}</div>
+                        {[
+                          { label: 'RANK', value: selectedMember.rank },
+                          { label: 'SPECIALITY', value: selectedMember.speciality },
+                        ].map(({ label, value }) => (
+                          <div key={label} style={{ marginBottom: '4px' }}>
+                            <span style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.12em' }}>{label} </span>
+                            <span style={{ color: c.text, fontSize: '18px' }}>{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: '14px', marginBottom: '14px' }}>
+                      <div style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.2em', marginBottom: '8px' }}>BIOGRAPHICAL DATA</div>
+                      <div style={{ color: c.text, fontSize: '20px', lineHeight: '1.7' }}>{selectedMember.bio}</div>
+                    </div>
+                    {selectedMember.missionNotes && (
+                      <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: '14px' }}>
+                        <div style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.2em', marginBottom: '8px' }}>MISSION NOTES</div>
+                        <div style={{ color: c.dim, fontSize: '16px', lineHeight: '1.7' }}>{selectedMember.missionNotes}</div>
+                      </div>
+                    )}
+                    <div style={{ color: c.dim, marginTop: '12px', fontSize: '20px' }}><span className="cursor-blink">█</span></div>
+                  </div>
+                </div>
+
+              </div>
+            )
+          })()}
 
           {/* ── THREAT SCANNER VIEW ── */}
           {activeView === 'threat' && (
@@ -575,7 +763,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
         >
           {xenomorphDetected
             ? <XenomorphAnim color={c.text} dim={c.dim} border={c.border} amber={c.amber} />
-            : <NostromoAnim color={c.text} dim={c.dim} border={c.border} amber={c.amber} />
+            : <StatusGrid color={c.text} dim={c.dim} border={c.border} amber={c.amber} />
           }
         </div>
 
