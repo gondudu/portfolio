@@ -28,12 +28,13 @@ body {
 
 /* ─── CRT / Console Effects ─────────────────────────────────── */
 
-/* Monitor wrapper: scanlines overlay */
+/* Monitor wrapper: scanlines overlay + screen vignette */
 .crt-monitor {
   position: relative;
   overflow: hidden;
 }
 
+/* Scan lines */
 .crt-monitor::after {
   content: '';
   position: absolute;
@@ -42,11 +43,26 @@ body {
     0deg,
     transparent,
     transparent 2px,
-    rgba(0, 0, 0, 0.12) 2px,
-    rgba(0, 0, 0, 0.12) 4px
+    rgba(0, 0, 0, 0.14) 2px,
+    rgba(0, 0, 0, 0.14) 4px
   );
   pointer-events: none;
   z-index: 10;
+}
+
+/* Screen edge vignette */
+.crt-monitor::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.55) 100%);
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* Amber phosphor text glow */
+.text-glow-amber {
+  text-shadow: 0 0 6px rgba(232, 160, 0, 0.65);
 }
 
 /* Screen glow inset */
@@ -119,6 +135,17 @@ body {
     clip-path: inset(0% 0 0% 0);
     filter: brightness(1);
   }
+}
+
+/* Mobile status ticker */
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: ticker-scroll 40s linear infinite;
 }
 
 /* ─────────────────────────────────────────────────────────────── */

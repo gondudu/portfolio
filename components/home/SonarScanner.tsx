@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { useConsoleAudio } from '@/hooks/useConsoleAudio'
 
 interface Blip {
   id: string
@@ -97,10 +98,13 @@ export default function SonarScanner({ alertMode, color, dim, border, amber, onX
   const rafRef = useRef<number>()
   const xenoFiredRef = useRef(false)
   const pingKeyRef = useRef(0)
+  const prevLitRef = useRef<Record<string, number>>({})
+
+  const { playSonarPing } = useConsoleAudio()
 
   const c = alertMode ? '#ff2200' : color
   const cd = alertMode ? 'rgba(255,34,0,0.4)' : dim
-  const trailColor = alertMode ? '255,34,0' : '51,255,0'
+  const trailColor = alertMode ? '255,34,0' : '232,160,0'
 
   // RAF sweep animation + blip lighting
   useEffect(() => {
@@ -115,6 +119,12 @@ export default function SonarScanner({ alertMode, color, dim, border, amber, onX
           const diff = (angle - blip.angle + 360) % 360
           // bright right after sweep, fade over 200°
           const lit = diff <= 5 ? 1 : Math.max(0, 1 - (diff - 5) / 195)
+          // Fire sonar ping when sweep crosses this blip
+          const prevLit = prevLitRef.current[blip.id] ?? 0
+          if (lit > 0.9 && prevLit < 0.5) {
+            playSonarPing(blip.size === 'lg')
+          }
+          prevLitRef.current[blip.id] = lit
           return { ...blip, lit }
         })
       )
@@ -203,7 +213,7 @@ export default function SonarScanner({ alertMode, color, dim, border, amber, onX
           </defs>
 
           {/* Background fill */}
-          <circle cx={CX} cy={CY} r={R} fill="rgba(0,12,0,0.85)" />
+          <circle cx={CX} cy={CY} r={R} fill="rgba(8,5,0,0.85)" />
           <circle cx={CX} cy={CY} r={R} fill="url(#radarBg)" />
 
           {/* Range rings */}

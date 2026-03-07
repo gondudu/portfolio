@@ -49,7 +49,7 @@ export default function SpaceshipConsole({ ready = false, embedded = false, skip
   return (
     <div
       className={`${embedded ? 'absolute' : 'fixed'} inset-0 bg-console-bg flex flex-col font-console overflow-hidden`}
-      style={{ color: '#33ff00' }}
+      style={{ color: '#e8a000' }}
     >
       <PixelDecorations />
 
