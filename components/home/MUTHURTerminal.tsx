@@ -290,8 +290,8 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
         <span style={{ color: c.bright }}>MU-TH-UR 6000</span>
         <span style={{ color: c.dim }}>·</span>
         <span style={{ color: c.text }}>NOGUEIRA, E.</span>
-        <span style={{ color: c.dim }}>·</span>
-        <span style={{ color: c.dim }}>PRODUCT DESIGNER</span>
+        <span className="hidden wide:inline" style={{ color: c.dim }}>·</span>
+        <span className="hidden wide:inline" style={{ color: c.dim }}>PRODUCT DESIGNER</span>
         <div className="ml-auto flex items-center gap-2">
           <span style={{ color: c.dim }}>STARDATE</span>
           <span style={{ color: c.bright }}>{stardate || '-----.------'}</span>
@@ -300,21 +300,23 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
       <div style={{ borderTop: `1px solid ${c.border}`, ...fade(80) }} />
 
       {/* ── Nav tabs ── */}
-      <div className="flex items-center gap-6 px-4 py-2" style={fade(320)}>
+      <div className="flex items-center gap-3 md:gap-6 px-3 md:px-4 py-1 md:py-2 overflow-x-auto" style={{ scrollbarWidth: 'none', ...fade(320) }}>
         {NAV_TABS.map(tab => (
           <button
             key={tab.id}
             onClick={() => handleNavTab(tab)}
-            className="transition-opacity hover:opacity-100 flex flex-col items-start"
+            className="transition-opacity hover:opacity-100 flex flex-col items-start flex-shrink-0"
             style={{
               color: activeView === tab.id ? c.bright : c.dim,
               opacity: activeView === tab.id ? 1 : 0.7,
-              fontSize: '24px',
-              lineHeight: '28px',
+              fontSize: '22px',
+              lineHeight: '1',
+              minHeight: '44px',
+              justifyContent: 'center',
+              display: 'flex',
             }}
           >
             <span>{'>'} {tab.label}</span>
-            
           </button>
         ))}
       </div>
@@ -345,9 +347,9 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                 transition: logoPhase === 'out' ? 'opacity 0.65s ease-out' : 'opacity 0.2s ease-in',
               }}
             >
-              <div style={{ fontSize: '26px', lineHeight: '1.5' }}>
+              <div className="text-[16px] md:text-[26px]" style={{ lineHeight: '1.5' }}>
                 {MUTHUR_LOGO.slice(0, Math.min(logoLines, MUTHUR_LOGO.length)).map((line, i) => (
-                  <div key={i} style={{ color: c.bright, whiteSpace: 'pre' }}>{line}</div>
+                  <div key={i} style={{ color: c.bright, whiteSpace: 'pre', overflow: 'hidden' }}>{line}</div>
                 ))}
                 {logoLines >= MUTHUR_LOGO.length && (
                   <div
@@ -360,12 +362,14 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                 {LOGO_DETAILS.slice(0, Math.max(0, logoLines - MUTHUR_LOGO.length)).map((line, i) => (
                   <div
                     key={i}
+                    className="text-[13px] md:text-[22px]"
                     style={{
                       color: i === 0 ? c.border : c.dim,
-                      fontSize: '22px',
                       letterSpacing: i === 0 ? '0' : '0.04em',
                       marginTop: i === 0 ? '0' : '2px',
                       textAlign: 'center',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
                     }}
                   >
                     {line}
@@ -378,14 +382,17 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
           {/* Scan for threat — only visible on chat tab */}
           {(activeView === 'chat' || activeView === 'threat') && (
           <button
-            className="absolute top-3 right-4 select-none transition-opacity hover:opacity-100"
+            className="absolute top-2 right-3 select-none transition-opacity hover:opacity-100"
             title="Scan for life forms"
             style={{
               color: activeView === 'threat' ? c.bright : c.dim,
               opacity: activeView === 'threat' ? 1 : 0.6,
-              fontSize: '24px',
+              fontSize: '20px',
               lineHeight: 1,
               zIndex: 30,
+              minHeight: '44px',
+              display: 'flex',
+              alignItems: 'center',
               ...fade(480),
             }}
             onClick={() => { startAmbientHum(); playButtonPress(); pulse(); handleNavTab({ id: 'threat', label: 'Scan for threat', btnId: 'threat', subtitle: '[SCANNER]' }) }}
@@ -398,7 +405,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                 <path d="M9 9 m-7 0 a7 7 0 1 1 14 0" stroke="currentColor" strokeWidth="1" fill="none" strokeLinecap="round" opacity="0.6" />
                 <line x1="9" y1="9" x2="14.5" y2="3.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.8" />
               </svg>
-              <span style={{ fontSize: '24px', letterSpacing: '0.08em' }}>START SCAN</span>
+              <span className="hidden wide:inline" style={{ fontSize: '20px', letterSpacing: '0.08em' }}>START SCAN</span>
             </span>
           </button>
           )}
@@ -406,7 +413,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
           {/* ── CHAT VIEW ── */}
           {activeView === 'chat' && (
             <div className="relative h-full flex flex-col">
-              <div ref={outputRef} className="px-6 overflow-y-auto flex-1" style={{ fontSize:'20px', paddingBottom: '96px', scrollbarWidth: 'none' }}>
+              <div ref={outputRef} className="px-3 md:px-6 overflow-y-auto flex-1" style={{ fontSize:'20px', paddingBottom: '96px', scrollbarWidth: 'none' }}>
                 {completedLines.map((line, i) => (
                   <div key={i} style={{ fontSize:'20px', color: line.startsWith('>') ? c.bright : c.text }}>
                     {line || '\u00A0'}
@@ -418,7 +425,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
               </div>
               {/* ── Floating input ── */}
               <div
-                className="absolute bottom-0 left-0 right-0 mx-4 mb-8"
+                className="absolute bottom-0 left-0 right-0 mx-3 md:mx-4 mb-4 md:mb-8"
                 style={{ ...fade(450) }}
               >
                 <div
@@ -460,7 +467,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
 
           {/* ── MISSION LOGS VIEW ── */}
           {activeView === 'mission-logs' && (
-            <div className="px-6 py-3 overflow-y-auto" style={{ height: 'calc(100% - 60px)', scrollbarWidth: 'none' }}>
+            <div className="px-3 md:px-6 py-3 overflow-y-auto" style={{ height: 'calc(100% - 60px)', scrollbarWidth: 'none' }}>
               <div className="grid grid-cols-1 wide:grid-cols-2 gap-6">
                 {MISSION_LOGS.map(log => {
                   const thumb = projects.find(p => p.slug === log.slug)?.thumbnail
@@ -567,10 +574,10 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
             return (
               <div className="h-full flex overflow-hidden" style={{ position: 'relative' }}>
 
-                {/* ── Left: crew list ── */}
+                {/* ── Left: crew list ── full width on mobile, 240px column on wide+ */}
                 <div
-                  className="flex-shrink-0 flex flex-col overflow-hidden"
-                  style={{ width: '240px', borderRight: `1px solid ${c.border}` }}
+                  className="flex-shrink-0 flex flex-col overflow-hidden w-full wide:w-[240px]"
+                  style={{ borderRight: `1px solid ${c.border}` }}
                 >
                   {/* Header */}
                   <div
@@ -591,7 +598,8 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                           className="w-full text-left transition-colors"
                           style={{
                             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                            padding: '7px 10px',
+                            padding: '10px 10px',
+                            minHeight: '44px',
                             borderLeft: `2px solid ${isSelected ? c.bright : 'transparent'}`,
                             backgroundColor: isSelected ? '#2a1800' : 'transparent',
                           }}
@@ -777,7 +785,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
 
       {/* ── COMM ARRAY persistent footer ── */}
       <div style={{ borderTop: `1px solid ${c.border}`, ...fade(480) }}>
-        <div className="flex items-center gap-3 px-4 py-1 overflow-x-auto" style={{ scrollbarWidth: 'none', whiteSpace: 'nowrap', fontSize: '22px' }}>
+        <div className="flex items-center gap-3 px-4 py-1 overflow-x-auto" style={{ scrollbarWidth: 'none', whiteSpace: 'nowrap', fontSize: '18px' }}>
           <span style={{ color: c.dim, flexShrink: 0 }}>COMM ARRAY: ONLINE</span>
           <span style={{ color: c.border }}>·</span>
           <a href="mailto:eduardo.nogueira@example.com" className="hover:opacity-70 transition-opacity" style={{ color: c.text, flexShrink: 0 }}>

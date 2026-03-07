@@ -121,7 +121,7 @@ export default function ConsoleProjectPage({ project }: Props) {
         <span style={{ color: c.dim }}>LOG</span>
         <span style={{ color: c.bright }}>{String(frameNumber).padStart(3, '0')}</span>
         <span style={{ color: c.border }}>·</span>
-        <span style={{ color: c.text, maxWidth: '40vw', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <span style={{ color: c.text, maxWidth: '55vw', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {project.title.toUpperCase()}
         </span>
         <div className="ml-auto flex items-center gap-2">
@@ -222,7 +222,7 @@ export default function ConsoleProjectPage({ project }: Props) {
           )}
 
           {/* Content area */}
-          <div className="px-6 pt-5 pb-10">
+          <div className="px-3 md:px-6 pt-4 md:pt-5 pb-10">
 
             {/* Log access header */}
             <div style={{ color: c.bright, marginBottom: '4px', fontSize: '18px' }}>
@@ -238,7 +238,8 @@ export default function ConsoleProjectPage({ project }: Props) {
                     key={mode}
                     onClick={() => setViewMode(mode)}
                     style={{
-                      fontSize: '14px', letterSpacing: '0.1em', padding: '4px 12px',
+                      fontSize: '16px', letterSpacing: '0.1em', padding: '10px 14px',
+                      minHeight: '44px',
                       border: `1px solid ${viewMode === mode ? c.text : c.border}`,
                       color: viewMode === mode ? c.bright : c.dim,
                       backgroundColor: viewMode === mode ? 'rgba(232,160,0,0.06)' : 'transparent',
@@ -389,13 +390,13 @@ export default function ConsoleProjectPage({ project }: Props) {
       <div style={{ borderTop: `1px solid ${c.border}` }}>
         {/* Mobile nav */}
         <div
-          className="lg:hidden flex items-center gap-4 px-4 py-2 flex-wrap"
+          className="lg:hidden flex items-center gap-4 px-4 py-1 flex-wrap"
           style={{ fontSize: '20px', ...fade(320) }}
         >
           <button
             onClick={() => router.push('/?view=mission-logs')}
             className="transition-opacity hover:opacity-100"
-            style={{ color: c.dim, opacity: 0.7 }}
+            style={{ color: c.dim, opacity: 0.7, minHeight: '44px', display: 'flex', alignItems: 'center' }}
           >
             {'< Mission logs'}
           </button>
@@ -403,7 +404,7 @@ export default function ConsoleProjectPage({ project }: Props) {
             <button
               onClick={() => router.push(`/projects/${nextProject.slug}`)}
               className="ml-auto transition-opacity hover:opacity-100"
-              style={{ color: c.bright }}
+              style={{ color: c.bright, minHeight: '44px', display: 'flex', alignItems: 'center' }}
             >
               {'Next: '}{nextProject.title}{' >'}
             </button>

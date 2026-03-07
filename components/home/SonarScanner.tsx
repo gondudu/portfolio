@@ -191,10 +191,13 @@ export default function SonarScanner({ alertMode, color, dim, border, amber, onX
         justifyContent: 'space-between',
         alignItems: 'center',
       }}>
-        <span style={{ color: cd, fontSize: '14px', letterSpacing: '0.12em' }}>
+        <span style={{ color: cd, fontSize: '16px', letterSpacing: '0.08em' }} className="md:hidden">
+          BIO-SENSOR &nbsp;·&nbsp; LV-426
+        </span>
+        <span style={{ color: cd, fontSize: '14px', letterSpacing: '0.12em' }} className="hidden md:inline">
           BIO-SENSOR ARRAY &nbsp;·&nbsp; SECTOR LV-426
         </span>
-        <span style={{ color: c, fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <span style={{ color: c, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '6px' }}>
           <span style={{ opacity: blink ? 1 : 0.1, transition: 'opacity 0.08s' }}>●</span>
           SWEEP ACTIVE
         </span>
@@ -208,19 +211,36 @@ export default function SonarScanner({ alertMode, color, dim, border, amber, onX
         minHeight: '136px',
       }}>
         {/* Column headers */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '52px 44px 52px 64px 76px 1fr',
-          color: cd,
-          fontSize: '13px',
-          letterSpacing: '0.06em',
-          marginBottom: '1px',
-        }}>
+        <div
+          className="grid md:hidden"
+          style={{
+            gridTemplateColumns: '52px 52px 1fr',
+            color: cd,
+            fontSize: '14px',
+            letterSpacing: '0.06em',
+            marginBottom: '1px',
+          }}
+        >
+          <span>ID</span><span>RANGE</span><span>SIGNAL</span>
+        </div>
+        <div
+          className="hidden md:grid"
+          style={{
+            gridTemplateColumns: '52px 44px 52px 64px 76px 1fr',
+            color: cd,
+            fontSize: '13px',
+            letterSpacing: '0.06em',
+            marginBottom: '1px',
+          }}
+        >
           <span>ID</span><span>BRG</span><span>RANGE</span>
           <span>DELTA-R</span><span>MOTION</span><span>SIGNAL</span>
         </div>
-        <div style={{ color: cd, fontSize: '12px', marginBottom: '4px', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+        <div style={{ color: cd, fontSize: '12px', marginBottom: '4px', overflow: 'hidden', whiteSpace: 'nowrap' }} className="hidden md:block">
           {'──────────────────────────────────────────────────────────────────────'}
+        </div>
+        <div style={{ color: cd, fontSize: '12px', marginBottom: '4px', overflow: 'hidden', whiteSpace: 'nowrap' }} className="md:hidden">
+          {'────────────────────────────'}
         </div>
 
         {/* Flash message */}
@@ -248,28 +268,55 @@ export default function SonarScanner({ alertMode, color, dim, border, amber, onX
               : row.closing ? amber
               : cd
             return (
-              <div key={row.id} style={{
-                display: 'grid',
-                gridTemplateColumns: '52px 44px 52px 64px 76px 1fr',
-                color: rowColor,
-                fontSize: '14px',
-                lineHeight: '19px',
-                transition: 'color 0.2s',
-              }}>
-                <span>{row.id}</span>
-                <span>{row.brg}</span>
-                <span style={{ color: row.critical ? (fastBlink ? '#ff2200' : 'rgba(255,34,0,0.3)') : c }}>{row.range}</span>
-                <span style={{ color: deltaColor, transition: 'color 0.2s' }}>{row.deltaR}</span>
-                <span>{row.motion}</span>
-                <span style={{ color: row.critical ? (fastBlink ? '#ff2200' : 'rgba(255,34,0,0.3)') : c }}>
-                  {row.signal}
-                  {row.isNew && (
-                    <span style={{ color: amber, marginLeft: '6px', opacity: blink ? 1 : 0.1, transition: 'opacity 0.1s' }}>
-                      [!NEW]
-                    </span>
-                  )}
-                </span>
-              </div>
+              <React.Fragment key={row.id}>
+                {/* Mobile: 3-column (ID / RANGE / SIGNAL) — hidden at md+ */}
+                <div
+                  className="grid md:hidden"
+                  style={{
+                    gridTemplateColumns: '52px 52px 1fr',
+                    color: rowColor,
+                    fontSize: '14px',
+                    lineHeight: '20px',
+                    transition: 'color 0.2s',
+                  }}
+                >
+                  <span>{row.id}</span>
+                  <span style={{ color: row.critical ? (fastBlink ? '#ff2200' : 'rgba(255,34,0,0.3)') : c }}>{row.range}</span>
+                  <span style={{ color: row.critical ? (fastBlink ? '#ff2200' : 'rgba(255,34,0,0.3)') : c }}>
+                    {row.signal}
+                    {row.isNew && (
+                      <span style={{ color: amber, marginLeft: '6px', opacity: blink ? 1 : 0.1, transition: 'opacity 0.1s' }}>
+                        [!]
+                      </span>
+                    )}
+                  </span>
+                </div>
+                {/* Desktop: 6-column — hidden below md */}
+                <div
+                  className="hidden md:grid"
+                  style={{
+                    gridTemplateColumns: '52px 44px 52px 64px 76px 1fr',
+                    color: rowColor,
+                    fontSize: '14px',
+                    lineHeight: '19px',
+                    transition: 'color 0.2s',
+                  }}
+                >
+                  <span>{row.id}</span>
+                  <span>{row.brg}</span>
+                  <span style={{ color: row.critical ? (fastBlink ? '#ff2200' : 'rgba(255,34,0,0.3)') : c }}>{row.range}</span>
+                  <span style={{ color: deltaColor, transition: 'color 0.2s' }}>{row.deltaR}</span>
+                  <span>{row.motion}</span>
+                  <span style={{ color: row.critical ? (fastBlink ? '#ff2200' : 'rgba(255,34,0,0.3)') : c }}>
+                    {row.signal}
+                    {row.isNew && (
+                      <span style={{ color: amber, marginLeft: '6px', opacity: blink ? 1 : 0.1, transition: 'opacity 0.1s' }}>
+                        [!NEW]
+                      </span>
+                    )}
+                  </span>
+                </div>
+              </React.Fragment>
             )
           })
         )}
@@ -289,24 +336,26 @@ export default function SonarScanner({ alertMode, color, dim, border, amber, onX
       </div>
 
       {/* ── C: Radar + stats ── */}
-      <div style={{ flex: 1, display: 'flex', minHeight: 0, borderBottom: `1px solid ${border}` }}>
+      <div className="flex-col md:flex-row" style={{ flex: 1, display: 'flex', minHeight: 0, borderBottom: `1px solid ${border}` }}>
 
-        {/* Left: small radar */}
-        <div style={{
-          width: '130px',
-          flexShrink: 0,
-          borderRight: `1px solid ${border}`,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '6px',
-          gap: '4px',
-        }}>
-          <div style={{ color: cd, fontSize: '11px', letterSpacing: '0.08em', textAlign: 'center' }}>
+        {/* Left: small radar — horizontal strip on mobile, vertical column on desktop */}
+        {/* On mobile: full-width row strip with bottom border.
+            On desktop (md+): 130px column with right border, no bottom border. */}
+        <div
+          className="w-full flex flex-row items-center justify-center flex-shrink-0 border-b md:w-[130px] md:flex-col md:justify-center md:border-b-0 md:border-r"
+          style={{
+            borderColor: border,
+            padding: '6px',
+            gap: '8px',
+          }}
+        >
+          <div className="hidden md:block" style={{ color: cd, fontSize: '11px', letterSpacing: '0.08em', textAlign: 'center' }}>
             MOTION TRACK / 130M
           </div>
-          <svg viewBox="0 0 110 110" style={{ width: '110px', height: '110px' }}>
+          <div className="md:hidden" style={{ color: cd, fontSize: '14px', letterSpacing: '0.06em' }}>
+            MOTION TRACK / 130M
+          </div>
+          <svg viewBox="0 0 110 110" style={{ width: '100px', height: '100px' }}>
             <defs>
               <filter id="rsg" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur stdDeviation="1.5" result="blur" />
@@ -374,7 +423,7 @@ export default function SonarScanner({ alertMode, color, dim, border, amber, onX
             <span style={{ color: condColor, fontSize: '18px', transition: 'color 0.3s' }}>{condition}</span>
           </div>
 
-          <div style={{ marginTop: 'auto' }}>
+          <div className="hidden md:block" style={{ marginTop: 'auto' }}>
             <div style={{ color: cd, fontSize: '11px', marginBottom: '1px' }}>SCAN TIME</div>
             <div style={{ color: cd, fontSize: '12px' }}>
               {'['}{elStr}{'] '}{elDisplay}
@@ -400,9 +449,9 @@ export default function SonarScanner({ alertMode, color, dim, border, amber, onX
             : c
           return (
             <div key={ind.label} style={{ display: 'flex', gap: '5px', alignItems: 'baseline' }}>
-              <span style={{ color: indColor, fontSize: '10px', opacity: indDot, transition: 'opacity 0.08s', flexShrink: 0 }}>●</span>
-              <span style={{ color: cd, fontSize: '11px', whiteSpace: 'nowrap', overflow: 'hidden' }}>{ind.label}</span>
-              <span style={{ color: indColor, fontSize: '11px', marginLeft: 'auto', whiteSpace: 'nowrap', transition: 'color 0.4s', flexShrink: 0 }}>{ind.value}</span>
+              <span style={{ color: indColor, fontSize: '12px', opacity: indDot, transition: 'opacity 0.08s', flexShrink: 0 }}>●</span>
+              <span style={{ color: cd, fontSize: '13px', whiteSpace: 'nowrap', overflow: 'hidden' }}>{ind.label}</span>
+              <span style={{ color: indColor, fontSize: '13px', marginLeft: 'auto', whiteSpace: 'nowrap', transition: 'color 0.4s', flexShrink: 0 }}>{ind.value}</span>
             </div>
           )
         })}
