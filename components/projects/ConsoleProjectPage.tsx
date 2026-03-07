@@ -90,7 +90,7 @@ export default function ConsoleProjectPage({ project }: Props) {
   const SectionLabel = ({ children }: { children: string }) => (
     <div style={{
       color: c.bright,
-      fontSize: '14px',
+      fontSize: '16px',
       letterSpacing: '0.2em',
       marginBottom: '10px',
       paddingBottom: '4px',

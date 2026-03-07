@@ -3,11 +3,9 @@
 import React, { useState, useEffect, useRef, memo } from 'react'
 
 const CELL_PX = 20
-const GAP_PX = 4
+const GAP_PX  = 4
 
-// 4 discrete phosphor brightness states
 const OPACITIES = [0.08, 0.22, 0.55, 1.0] as const
-const WEIGHTS   = [0.25, 0.35, 0.28, 0.12]
 
 const BLOOM: Record<number, string> = {
   0: 'none',
@@ -15,6 +13,15 @@ const BLOOM: Record<number, string> = {
   2: '0 0 3px 0px rgba(232,160,0,0.35)',
   3: '0 0 6px 2px rgba(232,160,0,0.65), 0 0 12px 3px rgba(232,160,0,0.2)',
 }
+
+// Speed ranges [min, max] ms per active view
+const MODE_SPEED: Record<string, [number, number]> = {
+  'mission-logs': [2200, 5500],
+  'chat':         [1400, 3800],
+  'crew':         [3200, 7500],
+  'threat':       [300,  1000],
+}
+const FAST_SPEED: [number, number] = [280, 700]
 
 interface CellData {
   level:    0 | 1 | 2 | 3
@@ -25,25 +32,24 @@ interface CellData {
 function weightedRandom(): 0 | 1 | 2 | 3 {
   const r = Math.random()
   let cum = 0
-  for (let i = 0; i < WEIGHTS.length; i++) {
-    cum += WEIGHTS[i]
+  const weights = [0.25, 0.35, 0.28, 0.12]
+  for (let i = 0; i < weights.length; i++) {
+    cum += weights[i]
     if (r < cum) return i as 0 | 1 | 2 | 3
   }
   return 3
 }
 
-function cellInterval(fast: boolean): number {
-  const [min, max] = fast ? [400, 900] : [1800, 4500]
+function modeInterval(view: string, fast: boolean): number {
+  const [min, max] = fast ? FAST_SPEED : (MODE_SPEED[view] ?? [1800, 4500])
   const base = min + Math.random() * (max - min)
-  return Math.max(150, base * (1 + 0.15 * (Math.random() * 2 - 1)))
+  return Math.max(120, base * (1 + 0.15 * (Math.random() * 2 - 1)))
 }
 
-function buildGrid(cols: number, rows: number): { cells: CellData[]; fast: boolean[] } {
+function buildGrid(cols: number, rows: number, view: string): { cells: CellData[]; fast: boolean[] } {
   const total = cols * rows
   let zones = Array.from({ length: total }, () => Math.random())
 
-  // Two spatial blur passes — adjacent cells share similar states,
-  // creating the "real system data" clustering feel of Alien 1979 panels
   for (let pass = 0; pass < 2; pass++) {
     const blurred = zones.slice()
     for (let i = 0; i < total; i++) {
@@ -68,15 +74,14 @@ function buildGrid(cols: number, rows: number): { cells: CellData[]; fast: boole
   const fast = Array.from({ length: total }, () => Math.random() < 0.08)
   const cells: CellData[] = zones.map((z, i) => {
     const level: 0 | 1 | 2 | 3 = z < 0.25 ? 0 : z < 0.60 ? 1 : z < 0.88 ? 2 : 3
-    return { level, decaying: false, nextAt: now + Math.random() * 2000 + cellInterval(fast[i]) }
+    return { level, decaying: false, nextAt: now + Math.random() * 2000 + modeInterval(view, fast[i]) }
   })
 
   return { cells, fast }
 }
 
-// Memoised — only re-renders when level or decaying actually change
 const GridCell = memo(function GridCell({ level, decaying }: { level: 0|1|2|3; decaying: boolean }) {
-  const duration = decaying ? 70 : 16   // snap ON, phosphor-decay OFF
+  const duration = decaying ? 70 : 16
   return (
     <div style={{
       width:           CELL_PX,
@@ -91,20 +96,29 @@ const GridCell = memo(function GridCell({ level, decaying }: { level: 0|1|2|3; d
 })
 
 interface Props {
-  color:  string
-  dim:    string
-  border: string
-  amber:  string
+  color:      string
+  dim:        string
+  border:     string
+  amber:      string
+  activeView?: string
+  pulseCount?: number
 }
 
-export default function StatusGrid(_props: Props) {
+export default function StatusGrid({ activeView = 'mission-logs', pulseCount = 0 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [dims, setDims]   = useState({ cols: 0, rows: 0 })
   const [cells, setCells] = useState<CellData[]>([])
-  const cellsRef = useRef<CellData[]>([])
-  const fastRef  = useRef<boolean[]>([])
+  const cellsRef   = useRef<CellData[]>([])
+  const fastRef    = useRef<boolean[]>([])
+  const dimsRef    = useRef({ cols: 0, rows: 0 })
+  const viewRef    = useRef(activeView)
+  const mountedRef = useRef(false)  // skip sweep on first render
 
-  // Measure container → derive cols/rows
+  // Keep refs in sync
+  dimsRef.current = dims
+  viewRef.current = activeView
+
+  // Measure container
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
@@ -119,25 +133,30 @@ export default function StatusGrid(_props: Props) {
     return () => ro.disconnect()
   }, [])
 
-  // Rebuild when grid dimensions change
+  // Rebuild on dimension change
   useEffect(() => {
     if (dims.cols === 0 || dims.rows === 0) return
-    const { cells: init, fast } = buildGrid(dims.cols, dims.rows)
+    const { cells: init, fast } = buildGrid(dims.cols, dims.rows, viewRef.current)
     fastRef.current  = fast
     cellsRef.current = init
     setCells(init)
+    mountedRef.current = true
   }, [dims.cols, dims.rows])
 
-  // Poll every 100ms — actual cell changes are rare (every 1.8–4.5s each)
+  // Poll ticker — speed adapts to current view via viewRef
   useEffect(() => {
     const id = setInterval(() => {
-      const now  = Date.now()
-      let dirty  = false
-      const next = cellsRef.current.slice()
+      const now   = Date.now()
+      let dirty   = false
+      const next  = cellsRef.current.slice()
       for (let i = 0; i < next.length; i++) {
         if (now >= next[i].nextAt) {
           const lvl = weightedRandom()
-          next[i]   = { level: lvl, decaying: lvl < next[i].level, nextAt: now + cellInterval(fastRef.current[i]) }
+          next[i]   = {
+            level:    lvl,
+            decaying: lvl < next[i].level,
+            nextAt:   now + modeInterval(viewRef.current, fastRef.current[i]),
+          }
           dirty = true
         }
       }
@@ -146,9 +165,78 @@ export default function StatusGrid(_props: Props) {
     return () => clearInterval(id)
   }, [])
 
+  // ── Tab change: left-to-right column sweep ──────────────────────────────
+  useEffect(() => {
+    if (!mountedRef.current) return
+    const { cols, rows } = dimsRef.current
+    if (cols === 0 || rows === 0) return
+
+    const tids: ReturnType<typeof setTimeout>[] = []
+
+    for (let col = 0; col < cols; col++) {
+      const delay = (col / cols) * 420
+      const tid = setTimeout(() => {
+        const next = cellsRef.current.slice()
+        for (let row = 0; row < rows; row++) {
+          const i = row * cols + col
+          next[i] = {
+            level:    3,
+            decaying: false,
+            nextAt:   Date.now() + modeInterval(viewRef.current, fastRef.current[i]),
+          }
+        }
+        cellsRef.current = next
+        setCells([...next])
+      }, delay)
+      tids.push(tid)
+    }
+
+    return () => tids.forEach(clearTimeout)
+  }, [activeView]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Click pulse: radial ripple from centre ───────────────────────────────
+  useEffect(() => {
+    if (pulseCount === 0) return
+    const { cols, rows } = dimsRef.current
+    if (cols === 0 || rows === 0) return
+
+    const cx = (cols - 1) / 2
+    const cy = (rows - 1) / 2
+    const maxDist = Math.hypot(cx, cy)
+
+    // Group indices by ring distance from centre
+    const rings = new Map<number, number[]>()
+    for (let i = 0; i < cols * rows; i++) {
+      const row  = Math.floor(i / cols)
+      const col  = i % cols
+      const ring = Math.round(Math.hypot(col - cx, row - cy))
+      if (!rings.has(ring)) rings.set(ring, [])
+      rings.get(ring)!.push(i)
+    }
+
+    const tids: ReturnType<typeof setTimeout>[] = []
+    rings.forEach((indices, ring) => {
+      const delay = (ring / maxDist) * 320
+      const tid = setTimeout(() => {
+        const next = cellsRef.current.slice()
+        indices.forEach(i => {
+          next[i] = {
+            level:    3,
+            decaying: false,
+            nextAt:   Date.now() + 450 + Math.random() * 350,
+          }
+        })
+        cellsRef.current = next
+        setCells([...next])
+      }, delay)
+      tids.push(tid)
+    })
+
+    return () => tids.forEach(clearTimeout)
+  }, [pulseCount]) // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div ref={containerRef} style={{ flex: 1, alignSelf: 'stretch', overflow: 'hidden', userSelect: 'none', position: 'relative' }}>
-
       {dims.cols > 0 && dims.rows > 0 && (
         <div style={{
           display:             'grid',
@@ -161,15 +249,12 @@ export default function StatusGrid(_props: Props) {
           ))}
         </div>
       )}
-
-      {/* CRT horizontal scan-line overlay */}
       <div style={{
-        position:       'absolute',
-        inset:          0,
-        background:     'repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(0,0,0,0.07) 10px, rgba(0,0,0,0.07) 11px)',
-        pointerEvents:  'none',
+        position:      'absolute',
+        inset:         0,
+        background:    'repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(0,0,0,0.07) 10px, rgba(0,0,0,0.07) 11px)',
+        pointerEvents: 'none',
       }} />
-
     </div>
   )
 }

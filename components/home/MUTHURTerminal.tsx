@@ -55,6 +55,8 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
   // Tracks if MU-TH-UR terminal has been booted — boot sequence only runs once
   const terminalBootedRef = useRef(skipBoot || initialView === 'chat')
   const [xenomorphDetected, setXenomorphDetected] = useState(false)
+  const [statusPulse, setStatusPulse] = useState(0)
+  const pulse = () => setStatusPulse(p => p + 1)
   const [selectedCrewId, setSelectedCrewId] = useState<string>('nogueira')
   const [crewDetailOpen, setCrewDetailOpen] = useState(false) // mobile slide-in
   const [crewFading, setCrewFading] = useState(false)
@@ -64,6 +66,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
     setCrewFading(true)
     setTimeout(() => { setSelectedCrewId(id); setCrewFading(false) }, 80)
     setCrewDetailOpen(true)
+    pulse()
   }
 
   // Stardate — updates every minute
@@ -196,6 +199,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
     startAmbientHum()
     playButtonPress()
     setInputValue('')
+    pulse()
     enqueue([`> ${query.toUpperCase()}`], 0)
 
     const lower = query.toLowerCase()
@@ -249,6 +253,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
     playButtonPress()
     onButtonPress?.(tab.btnId)
     setActiveView(tab.id)
+    pulse()
   }
 
   // Color tokens (inline styles — avoids dynamic Tailwind class issues)
@@ -265,7 +270,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
         dim: '#7a4e00',
         bright: '#ffc93c',
         border: '#2a1800',
-        amber: '#33ff00',
+        amber: '#e8a000',
       }
 
   // Staggered fade-in helper
@@ -370,7 +375,8 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
             </div>
           )}
 
-          {/* Scan for threat — top right */}
+          {/* Scan for threat — only visible on chat tab */}
+          {(activeView === 'chat' || activeView === 'threat') && (
           <button
             className="absolute top-3 right-4 select-none transition-opacity hover:opacity-100"
             title="Scan for life forms"
@@ -379,9 +385,10 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
               opacity: activeView === 'threat' ? 1 : 0.6,
               fontSize: '24px',
               lineHeight: 1,
+              zIndex: 30,
               ...fade(480),
             }}
-            onClick={() => { startAmbientHum(); playButtonPress(); handleNavTab({ id: 'threat', label: 'Scan for threat', btnId: 'threat', subtitle: '[SCANNER]' }) }}
+            onClick={() => { startAmbientHum(); playButtonPress(); pulse(); handleNavTab({ id: 'threat', label: 'Scan for threat', btnId: 'threat', subtitle: '[SCANNER]' }) }}
           >
             <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
               {/* Radar icon: concentric arcs */}
@@ -394,8 +401,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
               <span style={{ fontSize: '24px', letterSpacing: '0.08em' }}>START SCAN</span>
             </span>
           </button>
-
-      
+          )}
 
           {/* ── CHAT VIEW ── */}
           {activeView === 'chat' && (
@@ -461,7 +467,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                   return (
                     <button
                       key={log.id}
-                      onClick={() => router.push(`/projects/${log.slug}`)}
+                      onClick={() => { pulse(); router.push(`/projects/${log.slug}`) }}
                       className="text-left group"
                       style={{ display: 'flex', flexDirection: 'column', gap: '0' }}
                     >
@@ -763,7 +769,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
         >
           {xenomorphDetected
             ? <XenomorphAnim color={c.text} dim={c.dim} border={c.border} amber={c.amber} />
-            : <StatusGrid color={c.text} dim={c.dim} border={c.border} amber={c.amber} />
+            : <StatusGrid color={c.text} dim={c.dim} border={c.border} amber={c.amber} activeView={activeView} pulseCount={statusPulse} />
           }
         </div>
 
