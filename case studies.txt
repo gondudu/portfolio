@@ -1,0 +1,562 @@
+UX DESIGN CASE STUDIES — DATASET
+Source: casestudy.club + external case study pages
+Retrieved: 2026-03-09
+────────────────────────────────────────────────────────────────────────────────
+
+
+================================================================================
+CASE STUDY 1: GOOGLE MAPS TWO-WHEELER MODE
+Author: Raj Arjan
+Company: Google
+Source: design.google/library/designing-google-maps-motorbikes
+================================================================================
+
+OVERVIEW
+Google Maps developed a dedicated mode for two-wheeler vehicles (motorcycles and
+scooters) in India and Indonesia after discovering the platform was designed
+exclusively for cars, missing the needs of millions of urban commuters in rapidly
+growing cities.
+
+CHALLENGE
+In Delhi and Jakarta, traffic congestion had become severe. "In Delhi, the time
+people spend in traffic has doubled in the last six years. In Jakarta, the average
+is 22 days a year." Two-wheelers represented an essential transportation method
+due to their ability to navigate congestion and lower cost compared to cars, yet
+Google Maps provided inaccurate routing, arrival times, and navigation features
+for these vehicles.
+
+PROCESS
+
+Immersive Field Research:
+The team conducted in-person research in Jaipur, Delhi, Bangalore, and Jakarta
+with a diverse research group including engineers, UX designers, product managers,
+and marketing leads. They rode motorcycles with drivers and observed navigation
+methods in real-world conditions.
+
+Key Findings:
+- Drivers used varied navigation approaches: memorized routes, voice guidance,
+  passenger assistance, or phones mounted via suction devices
+- Shortcuts and landmarks significantly improved navigation safety and speed
+- Google Maps frequently suggested roads inaccessible to two-wheelers, causing
+  frustration
+- Drivers operated as communities, relying on each other when technology failed
+
+Community Collaboration:
+The team partnered with Go-Jek drivers in Jakarta, conducting workshops to
+understand daily routines, community values, and specific pain points. They
+created timelines of typical workdays and sketched solutions collaboratively.
+
+Ongoing Testing:
+Partners in India and Indonesia continuously tested routing quality, arrival
+times, landmark accuracy, and navigation throughout development, identifying
+missing roads and landmarks.
+
+SOLUTION
+The two-wheeler mode for Google Maps (available on Android in India and
+Indonesia) includes:
+- Customized routes optimized for two-wheeler accessibility
+- Improved voice navigation
+- Shortcuts for faster arrival times
+- Additional landmarks for better orientation
+- Localized terminology ("two-wheeler" for India, "motor" for Indonesia)
+
+Design Principles Approach:
+The team established design principles early in development that served as a
+foundation for cross-disciplinary collaboration and helped focus on impactful
+improvements.
+
+Storytelling Strategy:
+Rather than relying solely on data reports, the team captured 360-degree videos,
+audio, photographs, and personal stories to convey the emotional and experiential
+aspects of two-wheeler navigation. This multimedia approach helped remote team
+members connect emotionally with research findings.
+
+RESULTS
+The new feature made Google Maps more inclusive for two-wheeler drivers in both
+countries. The improvements benefited not just two-wheeler users, but enhanced
+the overall experience for everyone using Google Maps in India and Indonesia.
+This represented the first new transportation feature added to Google Maps in
+years.
+
+KEY QUOTE
+"Reading a research report or going to a conference will never offer the same
+value as riding on the back of a two-wheeler for 45 minutes, lost because Google
+Maps didn't work for you."
+
+METHODOLOGY INSIGHT
+Empathy functions as an active practice throughout product development, not merely
+a conceptual goal. Direct immersion in user environments yields insights
+impossible to obtain through remote research.
+
+
+================================================================================
+CASE STUDY 2: SLACK REDESIGN — DESIGNING TEAMWORK
+Authors: Anna Niess & Zack Sultan
+Company: Slack
+Source: slack.com/blog/designing-the-future-of-slack-with-customers
+================================================================================
+
+OVERVIEW
+Slack underwent a significant design overhaul to address growing complexity. As
+the platform expanded with new features, the interface became increasingly
+cluttered and non-intuitive for new users.
+
+CHALLENGE
+The original interface suffered from information architecture problems:
+- The header contained "over a dozen places to click" with duplicate search bars
+- Sprawling menus made features difficult to locate
+- Even longtime users were unaware of powerful capabilities buried in obscure
+  locations
+- The accumulated feature additions made it harder to integrate new functionality
+
+PROCESS
+
+Team Assembly:
+Slack created a small, cross-functional team of designers, engineers, researchers,
+and product managers who developed rough prototypes while stripping away
+non-essential interface elements.
+
+Co-Design with Customers:
+Rather than relying solely on internal testing, Slack used a shared Slack channel
+with approximately 100 users from their champion network across dozens of
+organizations worldwide. This approach provided "unfiltered input quickly" and
+enabled iterative feedback within days.
+
+Key Learnings from Customers:
+- Member count visibility proved critical for "reading the room"
+- Users actively sought desired features even when tucked away
+- Navigation and history worked best at the top of the app, matching browser-like
+  expectations
+
+Testing with New Users:
+Slack conducted benchmarking studies comparing old versus new designs. Initial
+mixed results led to refinements:
+- Floating compose buttons were ignored; top-sidebar placement proved intuitive
+- Right-clicking emerged as a primary action, not just a power-user feature
+- Collapsible views performed better when opened by default
+
+SOLUTION
+- Channel sections for organization
+- Simplified header with consolidated search
+- Reorganized information architecture
+- Improved top navigation bar
+- Enhanced right-click menus
+- Refined visual themes
+
+RESULTS
+The second round of user testing showed the new design "beat or tied the existing
+design," providing confidence in improved usability and comprehension for both
+new and existing users.
+
+
+================================================================================
+CASE STUDY 3: SLACK ILLUSTRATION SYSTEM
+Author: Alice Lee
+Company: Slack (via Ueno)
+Source: byalicelee.com/slack
+================================================================================
+
+OVERVIEW
+Alice Lee created a comprehensive illustration voice and 40+ asset library for
+Slack in 2017, drawing inspiration from animation and publishing rather than the
+tech industry to establish a warm, friendly, and distinctive brand identity.
+
+CHALLENGE
+Slack needed illustrations that felt warm and approachable while maintaining
+sophistication and polish — avoiding generic stock imagery. The work had to
+function across diverse contexts: product UI with limited screen space, editorial
+content, and various website applications.
+
+PROCESS
+
+Step One — Research & Moodboards:
+Lee studied Mary Blair's Disney character design and Charley Harper's "minimal
+realist" composition styles. She examined how animation and publishing achieved
+warmth through stylized yet grounded characters with minimal linework. Prior
+editorial work for Slack's blog served as natural reference points.
+
+Step Two — Two-Part System Development:
+The approach separated voice ("how" to draw) from concept ("what" to draw).
+Initial explorations tested color palettes and stylization levels, moving from
+bright, whimsical tones toward deeper colors (purple, navy) that grounded the
+work for an enterprise audience.
+
+Key translated principles:
+- Character-driven compositions
+- Gestural hand-drawn quality
+- Bold primary colors
+
+Step Three — Building the Library:
+Working with Slack's internal design team and Ueno designer Gene Ross, Lee
+produced 40+ illustrations spanning homepage headers, Slack University materials,
+security pages, and UI spot illustrations.
+
+Step Four — Product Design Lens:
+Lee created modular components — small spots, blobs, and patterns — for
+overlooked contexts like navigation and footers. She adapted illustrations for
+mobile screens and considered edge cases across different user flows.
+
+RESULTS
+The illustration system launched on slack.com with distinctive character-driven
+work that influenced industry trends.
+
+KEY QUOTE
+Gene Ross (Ueno Design Lead): "Working with Alice was one of the highlights of my
+year — the excitement she brought to the project was matched only by her sheer
+talent."
+
+INDUSTRY REFLECTION
+Lee distinguishes between two approaches: illustration as stock components versus
+intentional brand extensions. She advocates for process-driven methodology that
+diversifies references beyond immediate industry peers, drawing from history and
+adjacent creative fields.
+
+
+================================================================================
+CASE STUDY 4: OVERCAST 3 — APP REDESIGN
+Author: Marco Arment
+Company: Overcast (independent)
+Source: marco.org/2017/02/20/overcast3
+================================================================================
+
+OVERVIEW
+Marco Arment released Overcast 3, a major redesign of his podcast app after two
+years of testing and user feedback. The update fundamentally modernized the
+interface while maintaining core functionality.
+
+CHALLENGE
+The original Overcast (designed for iOS 7 in 2014) had accumulated several
+usability issues:
+- Discoverability: Critical features like episode deletion and reordering were
+  hidden behind gestures or Edit buttons, generating hundreds of customer emails
+  asking how to access existing functionality
+- Outdated aesthetic compared to current iOS standards
+- Large phone adaptation: Originally designed for iPhone 5S; most users had
+  moved to 4.7" and 5.5" screens
+- Accidental input: Direct-tap playback caused unintended actions
+
+DESIGN GOALS
+1. Update visual style to contemporary standards: thicker fonts, more curves,
+   reduced translucency, increased tactility
+2. Surface all functionality through visible controls rather than hidden gestures
+3. Optimize for larger phones with improved one-handed usability
+
+DESIGN DECISIONS
+
+Card Metaphor Navigation:
+Replaced right-slide Now Playing screen with upward-sliding card interface,
+matching popular music and podcast apps. Cards dismiss by swiping down anywhere
+or using edge-swipe alternatives.
+
+Two-Stage Episode Interaction:
+Changed from immediate playback on tap to a selection step revealing action
+buttons (Play, Delete, Queue, Info). Though this slows playback, Arment found
+it "works far better and more consistently" and users adapt within days.
+
+Visible Reordering Handles:
+Replaced hidden Edit-button-activated reordering with permanent drag handles
+for better discoverability.
+
+Queue Feature:
+Leveraged existing playlist system with special interface placement, allowing
+manual or smart playlist options rather than creating a separate queue system.
+
+Episode Info Redesign:
+Replaced low-contrast popovers with full-screen cards using familiar gesture
+interactions.
+
+Privacy-First Ad Model:
+Removed Google's closed-source ad library and analytics, replacing with in-house
+advertising featuring podcasts, websites, apps, and premium subscriptions.
+
+SOLUTION
+- Horizontal swiping on Now Playing screen reveals effects (left) and episode
+  notes (right) with page-dot indicators
+- Consolidated Effects and Playback controls into single effects pane
+- Multiple podcast subscription from directory without returning between selections
+- New widget with rich notifications
+- Native watchOS 3 app
+
+RESULTS
+- App size grew from 7 MB to approximately 30 MB
+- Subscription revenue increased; 90% of revenue from paid subscriptions
+- Users typically adapt to two-stage playback within days
+- Feature requests for "undiscovered" functionality significantly reduced
+
+KEY QUOTE
+"You wouldn't believe how many customers have asked me to add features that were
+already there, or couldn't find basic functions like deleting episodes, because
+they weren't apparent enough in the design."
+
+
+================================================================================
+CASE STUDY 5: UDACITY MOBILE APP
+Author: Aerolab
+Company: Udacity
+Source: aerolab.co/udacity
+================================================================================
+
+OVERVIEW
+Udacity is an e-learning platform teaching in-demand tech skills. They
+commissioned a habit-building tool for students with a reward-based system
+centered on motivation through Nanodegrees.
+
+CHALLENGE
+The core problem: helping students develop healthy study habits while maintaining
+motivation toward complex, long-term educational goals.
+
+PHILOSOPHY
+"Help & Motivate" — Rather than focusing on distant objectives, the design
+centered on bite-sized steps that would eventually add up to reaching the original
+goal. The experience minimized anxiety through gentle reminders and motivational
+support.
+
+SOLUTION
+
+Goals & Schedules:
+Users selected from four commitment profiles based on availability:
+- I'm lazy: < 2 hours/week
+- Keep it up: 6 hours/week
+- Got time: 12 hours/week
+- Hardcore: 24 hours/week
+
+Key Features:
+- Divided onboarding for focused attention at each step
+- Internal and external notifications with reminders, goal updates, and
+  motivational messages
+- Visual progress indicators showing evolution toward goals
+- Badges and achievements system granting titles to reinforce progress perception
+
+DESIGN IDENTITY
+Adapted Udacity's brand to Material Design guidelines with custom icons, logos,
+illustrations, and color palette.
+
+Colors: Midnight Knight #2E3D49 / Turquoise Noon #02CCBA / Workaholic Pine
+#15C26B / Grey Hour #DBE2E8 / Café Bleu #08B2E2 / Saffron Tea #FFAE0C
+Typography: Roboto
+
+
+================================================================================
+CASE STUDY 6: AI AT HELP SCOUT
+Author: Seán Halpin
+Company: Help Scout
+Source: seanhalpin.xyz/work/ai
+================================================================================
+
+OVERVIEW
+Seán Halpin's case study explores designing user experiences for AI-driven
+applications, focusing on simplifying complex technology through human-centered
+design principles.
+
+KEY FOCUS AREAS
+- Transparency: Making AI functionality clear to users
+- User Control: Empowering users in their interactions with AI
+- Trust: Building confidence in AI-driven experiences
+
+DESIGN APPROACH
+The project emphasizes involving users early in the design process to create
+intuitive, understandable experiences that bridge the gap between AI's technical
+capabilities and actual user needs.
+
+Categories: AI / Prototyping / UX Design
+
+
+================================================================================
+CASE STUDY 7: WEBSITE REVAMP — 80% SIGN-UP INCREASE
+Author: Faye Tan
+Company: ZOLO (B2B order management startup)
+Source: fayetan.site/ZOLO
+================================================================================
+
+OVERVIEW
+Documents how designer Faye Tan tackled the redesign of ZOLO, a B2B order
+management platform focused on creating a seamless online shopping experience.
+
+KEY RESULT
+80% increase in sign-ups following the website revamp.
+
+APPROACH
+- User research and validation
+- Prototyping and iterative testing
+- Blending functionality with visually engaging interface design
+- Refining the product through testing cycles
+
+OUTCOME
+The redesigned platform achieved the dual goal of meeting user needs while
+delivering "an enjoyable and intuitive experience."
+
+Categories: E-commerce / UX Design / User Research
+
+
+================================================================================
+CASE STUDY 8: ASSEMBLE — COMPENSATION CYCLE
+Author: Liza Bel
+Company: Assemble
+Source: creamzy.com/work/assemble
+================================================================================
+
+OVERVIEW
+Compensation planning platform for HR teams. The case study details work
+emphasizing efficiency improvements through automation and performance scaling
+features.
+
+KEY FOCUS
+Simplifying complex compensation management processes, ultimately enhancing
+decision-making and transparency for users.
+
+Categories: Wireframing / UX Design / UI Design
+
+
+================================================================================
+CURATED CASE STUDY INDEX
+Source: casestudy.club/case-studies
+Total: 100+ curated examples from top UX designers
+================================================================================
+
+ENTERPRISE & B2B
+- Assemble — Compensation Cycle in a Nutshell | Liza Bel
+- Harness the Potential of Big Data | Atanas Mahony
+- Designing teamwork: Slack | Anna Niess & Zack Sultan
+- FiscalNote Business Card Scanning | Aashrey Sharma
+- Atlassian | Buzz Usborne
+- Zepl - Web App Design | Aerolab
+- Introducing the new Dashboard (Mollie) | Giel
+- Designing employee-centred workplace experience | Kristyna Markova
+
+AI & EMERGING TECH
+- AI at Help Scout | Seán Halpin
+- Postman discovering resources | Yash Shenai
+- Android private space | Dousan Miao
+- zoomBot — Chat Bot for Real Estate | Carina Skladal
+
+CONSUMER APPS
+- VSCO, More Than Just Filters | Kevin Kwon
+- Netflix discovery experience | Faraz Ali
+- Overcast 3: Design walkthrough | Marco Arment
+- Udacity — Branding & Mobile App | Aerolab
+- MailChimp Continuous Onboarding | Shuli Liu
+- Your subscriptions, under control | Saagar Bellani
+- The feature instagram won't give us | Saagar Bellani
+- How we updated our onboarding and got more users | William Woodhead
+- How we solved our lack of app reviews | Chris Weston
+
+SOCIAL & COMMUNICATION
+- Designing a simpler LinkedIn Home & Sharing | Alex Lakas
+- Evolving the Facebook News Feed | Ryan Freitas
+- Designing for Privacy on Facebook | Charlie Deets
+- Reactions: Not everything in life is Likable | Geoff Teehan
+- How We Changed the Facebook Friends Icon | Caitlin Winner
+- Welcome to WhatsApp Pay | Ana Sanchis Cabanas
+- WhatsApp Polls Research and Design | Kunal Satpal
+- Creating Slack's Illustration Voice | Alice Lee
+
+MAPS, MOBILITY & TRAVEL
+- Designing Google Maps for Motorbikes | Raj Arjan
+- The Evolution Of Google Maps & Colour Picking | Jasmine Bilham
+- Designing towards live parking map | Florent Lenormand
+- Self-parking cars | Morten Winther
+- Redesigning The Future Of Public Transport | Justin Pybus
+- Public transportation route finder | Chidinma
+- The Future of Airline Websites | Fantasy Interactive
+- Navigacio: an app for traveling wizards | Briandito Priambodo
+
+DESIGN SYSTEMS & BRAND
+- Redesigning the Office App Icons | Jon Friedman (Microsoft)
+- Iconic Icons: Designing the World of Windows | Christina Koehn
+- Refining logos of Wikimedia Projects | Nirzar Pangarkar
+- Space Design System | Pratibha Joshi
+- Designing Yahoo's Winter Olympics Icons | Budi Tanrim
+- Amsterdam Watch Company — Rolex's Don't Tick Tock | Alex van Zijl
+- Becoming a Figma Ninja with Base Components | Nacho Allendesalazar
+- Boosted Boards Gen 3 Launch | Kyson Dana
+- Color Hunt: Behind The Scenes | Gal Shir
+- Miro, for modern-day pioneers | Roman Stikkelorum
+
+RESEARCH & PROCESS
+- Coronavirus Dashboard UX: How Design Impacts Perception | Growth.Design
+- Measuring design quality with heuristics | Jasmine Christensen
+- Design Principles: Choosing the Right Patterns | Gustavs Cirulis
+- 4 Tools for Unmoderated Usability Testing | Kathryn Whitenton
+- Google Design Sprint Case Study Collection | Google
+- 7 Ethical Design Examples for Facebook | Attila Somos
+- Dashboard Design Guide | Insight Software
+- When Android is a better way to start | BraveGeeks
+
+E-COMMERCE & FINTECH
+- Increased B2B sign-ups by 80% | Faye Tan
+- Gemtrade | Omar Hassan
+- Charity App — Payment flow | Johny Vino
+- honestbee: A Usability Case Study | Stephanie Sutanto
+- Family banking app — Pockee | Natalia Chrzanowska
+- Resume Angels | Mateusz Tatara
+
+HEALTH & SOCIAL GOOD
+- Connecting People of Color with Mental Health Services | Duaa
+- Knowledge Depot - ElleHacks Winner | Duaa
+- SFO Airport Security Redesign | Anchi Hsin
+- Be the Change: micro-donation app | Amy Lima
+- Coronavirus Dashboard UX | Growth.Design
+
+GAMING & ENTERTAINMENT
+- Real Racing. UX and UI Design for Mobile Game | Marina Yalanska
+- Gaming Platform Redesign | Himanshu Aneja
+- TV Guide Android App | Abdus Salam
+
+FOOD & LIFESTYLE
+- Social Kitchen — Culinary Confidence app | Preethi Shreeya
+- Quisine. Brand Identity for Food Delivery | Tubik
+- Filo News — Stories worth telling | Augustin Schelstraete
+- How UberEats could simplify group ordering | Rachit
+
+ACCESSIBILITY & INCLUSION
+- Designing accessible escape hatches for modals | Linzi Berry
+- Designing accessible escape hatches | Linzi Berry
+- Use Contrast — Guide | Matt D. Smith
+
+EDUCATION
+- Udacity — Branding & Mobile App | Aerolab
+- MailChimp Continuous Onboarding | Shuli Liu
+- Designing a Text-To-Speech App | Santiago Dimaren
+
+
+================================================================================
+NOTES ON CASE STUDY WRITING PATTERNS
+Derived from analysis of the above examples
+================================================================================
+
+STRUCTURAL PATTERNS
+Most strong case studies follow this arc:
+  1. Context/Problem Statement — Who are the users? What's broken?
+  2. Research/Discovery — What did you learn and how?
+  3. Process/Approach — What decisions did you make and why?
+  4. Solution — What did you build?
+  5. Results/Impact — What changed? (metrics preferred)
+  6. Reflection/Learnings — What would you do differently?
+
+VOICE CHARACTERISTICS (observed across top-rated case studies)
+- Active voice: "We redesigned..." not "The interface was redesigned..."
+- Specific over vague: "80% increase in sign-ups" not "improved conversion"
+- Problem-first framing: lead with the user pain, not the feature
+- Decision rationale: explain WHY a choice was made, not just what
+- Honest about tradeoffs: acknowledge what didn't work or was cut
+
+COMMON WEAKNESSES TO AVOID
+- "Users loved it" without supporting evidence
+- Process description without showing design decisions
+- Listing features instead of explaining impact
+- Generic problem statements ("improve UX")
+- No connection between research and solution
+
+STRONG OPENING PATTERNS
+- State the core tension: "X was designed for Y, but Z needed it"
+- Lead with the outcome: "We increased sign-ups by 80%..."
+- Start with a human detail: direct quote or observation from research
+- Frame the stakes: why does solving this problem matter?
+
+METRICS THAT WORK
+- % increase/decrease in specific behaviours (sign-ups, task completion, errors)
+- Time savings ("users now complete X in Y seconds vs Z minutes")
+- Adoption rates
+- Qualitative signals with scale ("hundreds of emails about X stopped")
+- NPS or satisfaction score changes
+
