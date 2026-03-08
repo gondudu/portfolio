@@ -105,18 +105,24 @@ interface Props {
 }
 
 export default function StatusGrid({ activeView = 'mission-logs', pulseCount = 0 }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [dims, setDims]   = useState({ cols: 0, rows: 0 })
+  const containerRef    = useRef<HTMLDivElement>(null)
+  const [dims, setDims] = useState({ cols: 0, rows: 0 })
   const [cells, setCells] = useState<CellData[]>([])
-  const cellsRef   = useRef<CellData[]>([])
-  const fastRef    = useRef<boolean[]>([])
-  const dimsRef    = useRef({ cols: 0, rows: 0 })
-  const viewRef    = useRef(activeView)
-  const mountedRef = useRef(false)  // skip sweep on first render
+  const cellsRef        = useRef<CellData[]>([])
+  const fastRef         = useRef<boolean[]>([])
+  const dimsRef         = useRef({ cols: 0, rows: 0 })
+  const viewRef         = useRef(activeView)
+  const mountedRef      = useRef(false)
+  const reducedMotionRef = useRef(false)
 
   // Keep refs in sync
   dimsRef.current = dims
   viewRef.current = activeView
+
+  // Check prefers-reduced-motion once on mount
+  useEffect(() => {
+    reducedMotionRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  }, [])
 
   // Measure container
   useEffect(() => {
@@ -143,8 +149,9 @@ export default function StatusGrid({ activeView = 'mission-logs', pulseCount = 0
     mountedRef.current = true
   }, [dims.cols, dims.rows])
 
-  // Poll ticker — speed adapts to current view via viewRef
+  // Poll ticker — speed adapts to current view via viewRef (disabled under reduced motion)
   useEffect(() => {
+    if (reducedMotionRef.current) return
     const id = setInterval(() => {
       const now   = Date.now()
       let dirty   = false
@@ -165,9 +172,9 @@ export default function StatusGrid({ activeView = 'mission-logs', pulseCount = 0
     return () => clearInterval(id)
   }, [])
 
-  // ── Tab change: left-to-right column sweep ──────────────────────────────
+  // ── Tab change: left-to-right column sweep (disabled under reduced motion) ─
   useEffect(() => {
-    if (!mountedRef.current) return
+    if (!mountedRef.current || reducedMotionRef.current) return
     const { cols, rows } = dimsRef.current
     if (cols === 0 || rows === 0) return
 
@@ -195,8 +202,9 @@ export default function StatusGrid({ activeView = 'mission-logs', pulseCount = 0
   }, [activeView]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Click pulse: radial ripple from centre ───────────────────────────────
+  // ── Click pulse: radial ripple (disabled under reduced motion) ─────────────
   useEffect(() => {
-    if (pulseCount === 0) return
+    if (pulseCount === 0 || reducedMotionRef.current) return
     const { cols, rows } = dimsRef.current
     if (cols === 0 || rows === 0) return
 

@@ -13,7 +13,7 @@ interface Props {
 
 const c = {
   text: '#e8a000',
-  dim: '#7a4e00',
+  dim: '#a87000',
   bright: '#ffc93c',
   border: '#2a1800',
 }
@@ -21,13 +21,14 @@ const c = {
 // Full-bleed content image with scanline overlay + corner brackets + label
 function ContentImage({ src, alt, label, index }: { src: string; alt: string; label: string; index: number }) {
   return (
-    <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', overflow: 'hidden', marginBottom: '28px', marginTop: '4px' }}>
+    <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', overflow: 'hidden', marginBottom: '28px', marginTop: '4px', backgroundColor: '#0d0800' }}>
       <Image
         src={src}
         alt={alt}
         fill
         className="object-cover"
         sizes="(min-width: 768px) 720px, 100vw"
+        loading="lazy"
       />
       {/* Scanline overlay */}
       <div style={{
@@ -139,10 +140,10 @@ export default function ConsoleProjectPage({ project }: Props) {
 
           {/* Hero image — full bleed, no padding */}
           {img(0) && (
-            <div style={{ position: 'relative', width: '100%', aspectRatio: '21 / 9', overflow: 'hidden', flexShrink: 0 }}>
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '21 / 9', overflow: 'hidden', flexShrink: 0, backgroundColor: '#0d0800' }}>
               <Image
                 src={img(0)!}
-                alt={project.title}
+                alt={`${project.title} — hero image`}
                 fill
                 className="object-cover"
                 priority
@@ -250,11 +251,11 @@ export default function ConsoleProjectPage({ project }: Props) {
 
               {/* ── BRIEF ── */}
               {viewMode === 'brief' && (
-                <div style={{ fontSize: '20px' }}>
+                <div style={{ fontSize: '22px' }}>
 
                   <div style={{ marginBottom: '28px' }}>
                     <SectionLabel>{'// OVERVIEW'}</SectionLabel>
-                    <div style={{ color: c.text, lineHeight: '1.7' }}>{project.overview}</div>
+                    <div style={{ color: c.text, lineHeight: '1.8' }}>{project.overview}</div>
                   </div>
 
                   {img(1) && (
@@ -263,7 +264,7 @@ export default function ConsoleProjectPage({ project }: Props) {
 
                   <div style={{ marginBottom: '28px' }}>
                     <SectionLabel>{'// CHALLENGE'}</SectionLabel>
-                    <div style={{ color: c.text, lineHeight: '1.7' }}>{project.challenge}</div>
+                    <div style={{ color: c.text, lineHeight: '1.8' }}>{project.challenge}</div>
                   </div>
 
                   {img(2) && (
@@ -272,7 +273,7 @@ export default function ConsoleProjectPage({ project }: Props) {
 
                   <div style={{ marginBottom: '28px' }}>
                     <SectionLabel>{'// SOLUTION'}</SectionLabel>
-                    <div style={{ color: c.text, lineHeight: '1.7' }}>{project.solution}</div>
+                    <div style={{ color: c.text, lineHeight: '1.8' }}>{project.solution}</div>
                   </div>
 
                   {img(3) && (
@@ -296,11 +297,11 @@ export default function ConsoleProjectPage({ project }: Props) {
 
               {/* ── FULL LOG (debrief) ── */}
               {viewMode === 'debrief' && project.caseStudy && (
-                <div style={{ fontSize: '20px' }}>
+                <div style={{ fontSize: '22px' }}>
 
                   <div style={{ marginBottom: '28px' }}>
                     <SectionLabel>{'// MISSION CONTEXT'}</SectionLabel>
-                    <div style={{ color: c.text, lineHeight: '1.7' }}>{project.caseStudy.context}</div>
+                    <div style={{ color: c.text, lineHeight: '1.8' }}>{project.caseStudy.context}</div>
                   </div>
 
                   {img(1) && (
@@ -369,7 +370,7 @@ export default function ConsoleProjectPage({ project }: Props) {
 
                   <div style={{ marginBottom: '28px' }}>
                     <SectionLabel>{'// RETROSPECTIVE'}</SectionLabel>
-                    <div style={{ color: c.dim, lineHeight: '1.7', fontStyle: 'italic' }}>{project.caseStudy.retrospective}</div>
+                    <div style={{ color: c.dim, lineHeight: '1.8', fontStyle: 'italic' }}>{project.caseStudy.retrospective}</div>
                   </div>
 
                 </div>

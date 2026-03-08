@@ -81,11 +81,12 @@ export default function SonarScanner({ alertMode, color, dim, border, amber, onX
   const [litMap, setLitMap]             = useState<Record<number, number>>({})
   const [flashMsg, setFlashMsg]         = useState('')
 
-  const startRef    = useRef(Date.now())
-  const rafRef      = useRef<number>()
-  const phaseRef    = useRef<Phase>(0)
-  const prevLitRef  = useRef<Record<number, number>>({})
-  const xenoFired   = useRef(false)
+  const startRef         = useRef(Date.now())
+  const rafRef           = useRef<number>()
+  const phaseRef         = useRef<Phase>(0)
+  const prevLitRef       = useRef<Record<number, number>>({})
+  const xenoFired        = useRef(false)
+  const reducedMotionRef = useRef(false)
   phaseRef.current  = phase
 
   const { playSonarPing } = useConsoleAudio()
@@ -100,6 +101,11 @@ export default function SonarScanner({ alertMode, color, dim, border, amber, onX
   const condColor  = isCritical ? '#ff2200' : isWarning ? amber : c
   const closeColor = isCritical ? '#ff2200' : phase >= 3 ? amber : c
 
+  // Check prefers-reduced-motion once on mount
+  useEffect(() => {
+    reducedMotionRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  }, [])
+
   // Blink intervals
   useEffect(() => {
     const a = setInterval(() => setBlink(b => !b), 530)
@@ -112,7 +118,7 @@ export default function SonarScanner({ alertMode, color, dim, border, amber, onX
     const animate = () => {
       const now = Date.now()
       const el  = now - startRef.current
-      const angle = ((el / SWEEP_MS) * 360) % 360
+      const angle = reducedMotionRef.current ? 0 : ((el / SWEEP_MS) * 360) % 360
       setSweepAngle(angle)
       setElapsed(el)
       setScanProg(Math.sin(el / 4000) * 0.5 + 0.5)

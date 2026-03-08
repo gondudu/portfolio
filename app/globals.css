@@ -72,18 +72,20 @@ body {
     0 0 8px rgba(51, 255, 0, 0.2);
 }
 
-/* Subtle flicker — opacity never drops below 0.97 */
+/* Subtle flicker — opacity never drops below 0.98 */
 @keyframes crt-flicker {
   0%,
   90%,
   100% { opacity: 1; }
-  93%  { opacity: 0.98; }
-  96%  { opacity: 0.97; }
+  93%  { opacity: 0.99; }
+  96%  { opacity: 0.98; }
   98%  { opacity: 0.99; }
 }
 
-.crt-flicker {
-  animation: crt-flicker 8s ease-in-out infinite;
+@media (prefers-reduced-motion: no-preference) {
+  .crt-flicker {
+    animation: crt-flicker 8s ease-in-out infinite;
+  }
 }
 
 /* Cursor blink on the typing line */
@@ -111,6 +113,36 @@ body {
 /* Hide scrollbars globally (console aesthetic) */
 .font-console ::-webkit-scrollbar {
   display: none;
+}
+
+/* ─── Accessibility: Focus rings ─────────────────────────────── */
+
+/* Skip-to-content link */
+.skip-to-content {
+  position: fixed;
+  top: -100%;
+  left: 8px;
+  z-index: 9999;
+  padding: 6px 14px;
+  background: #020100;
+  border: 1px solid #a87000;
+  color: #a87000;
+  font-family: var(--font-vt323), monospace;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: top 0.1s;
+}
+.skip-to-content:focus {
+  top: 8px;
+}
+
+/* Amber focus ring for all interactive console elements */
+.font-console button:focus-visible,
+.font-console a:focus-visible,
+.font-console input:focus-visible {
+  outline: 1px solid #a87000;
+  outline-offset: 2px;
 }
 
 

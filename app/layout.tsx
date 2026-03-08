@@ -42,8 +42,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${workSans.variable} ${vt323.variable}`}>
       <body>
+        <a href="#main-content" className="skip-to-content">SKIP TO CONTENT</a>
+        <noscript>
+          <div style={{ position: 'fixed', inset: 0, background: '#020100', color: '#a87000', fontFamily: 'monospace', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', textAlign: 'center', padding: '24px' }}>
+            MU-TH-UR 6000 requires JavaScript to operate. Please enable JavaScript in your browser.
+          </div>
+        </noscript>
         <PasswordGate>
-          <ConditionalShell>{children}</ConditionalShell>
+          <ConditionalShell>
+            <div id="main-content">{children}</div>
+          </ConditionalShell>
         </PasswordGate>
       </body>
     </html>

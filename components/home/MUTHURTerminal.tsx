@@ -267,7 +267,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
       }
     : {
         text: '#e8a000',
-        dim: '#7a4e00',
+        dim: '#a87000',
         bright: '#ffc93c',
         border: '#2a1800',
         amber: '#e8a000',
@@ -382,6 +382,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
           {/* Scan for threat — only visible on chat tab */}
           {(activeView === 'chat' || activeView === 'threat') && (
           <button
+            aria-label="Start life form scan"
             className="absolute top-2 right-3 select-none transition-opacity hover:opacity-100"
             title="Scan for life forms"
             style={{
@@ -450,15 +451,19 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                   />
                   <button
                     onClick={handleSubmit}
-                    className="opacity-60 hover:opacity-100 transition-opacity"
+                    aria-label="Send query to MU-TH-UR"
+                    disabled={currentDisplay !== null}
+                    className="transition-opacity"
                     style={{
-                      color: c.dim,
+                      color: currentDisplay !== null ? c.border : c.dim,
                       fontSize: '28px',
-                      border: `1px solid ${c.border}`,
+                      border: `1px solid ${currentDisplay !== null ? c.border : c.border}`,
                       padding: '0 4px',
+                      opacity: currentDisplay !== null ? 0.3 : 0.7,
+                      cursor: currentDisplay !== null ? 'not-allowed' : 'default',
                     }}
                   >
-                    SEND
+                    {currentDisplay !== null ? '...' : 'SEND'}
                   </button>
                 </div>
               </div>
@@ -474,6 +479,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                   return (
                     <button
                       key={log.id}
+                      aria-label={`Open mission log: ${log.title}`}
                       onClick={() => { pulse(); router.push(`/projects/${log.slug}`) }}
                       className="text-left group"
                       style={{ display: 'flex', flexDirection: 'column', gap: '0' }}

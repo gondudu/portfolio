@@ -14,6 +14,8 @@ export function useCursorEffect() {
   useEffect(() => {
     if (!window.matchMedia('(pointer: fine)').matches) return
 
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
     const canvas = document.createElement('canvas')
     canvas.style.cssText =
       'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9998;'
@@ -73,28 +75,30 @@ export function useCursorEffect() {
         mouseY >= rect.top  && mouseY <= rect.bottom
       )
 
-      // Lerp cursor size toward target
+      // Lerp cursor size toward target (instant snap when reduced motion)
       const target = hovering ? SIZE_HOVER : SIZE
-      currentSize += (target - currentSize) * 0.18
+      currentSize += reducedMotion ? (target - currentSize) : (target - currentSize) * 0.18
 
-      // Draw trail echoes (oldest → newest, so live cursor paints on top)
-      trail.forEach((pt, i) => {
-        const age      = now - pt.t
-        if (age > TRAIL_MS) return
-        const progress = age / TRAIL_MS                    // 0 (fresh) → 1 (gone)
-        const alpha    = (1 - progress) * 0.55            // fade out
-        const s        = currentSize * (1 - progress * 0.3) // slightly shrink with age
-        ctx.save()
-        ctx.globalAlpha = alpha
-        ctx.fillStyle   = AMBER
-        ctx.fillRect(
-          Math.round(pt.x - s / 2),
-          Math.round(pt.y - s / 2),
-          Math.round(s),
-          Math.round(s),
-        )
-        ctx.restore()
-      })
+      // Draw trail echoes — skipped when reduced motion
+      if (!reducedMotion) {
+        trail.forEach((pt) => {
+          const age      = now - pt.t
+          if (age > TRAIL_MS) return
+          const progress = age / TRAIL_MS
+          const alpha    = (1 - progress) * 0.55
+          const s        = currentSize * (1 - progress * 0.3)
+          ctx.save()
+          ctx.globalAlpha = alpha
+          ctx.fillStyle   = AMBER
+          ctx.fillRect(
+            Math.round(pt.x - s / 2),
+            Math.round(pt.y - s / 2),
+            Math.round(s),
+            Math.round(s),
+          )
+          ctx.restore()
+        })
+      }
 
       // Draw live cursor square
       const s = currentSize
