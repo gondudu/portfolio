@@ -640,56 +640,87 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                     transition: 'opacity 0.12s ease',
                   }}
                 >
-                  {/* File header */}
-                  <div
-                    className="px-4 py-2 flex items-center justify-between flex-shrink-0 sticky top-0"
-                    style={{ borderBottom: `1px solid ${c.border}`, backgroundColor: '#020100', fontSize: '16px', letterSpacing: '0.12em' }}
-                  >
-                    <span style={{ color: c.dim }}>PERSONNEL FILE {'░'.repeat(4)} {selectedMember.fileRef}</span>
-                    <span style={{ color: selectedMember.clearance.includes('CLASSIFIED') ? c.bright : c.dim, fontSize: '14px' }}>
-                      CLEARANCE: {selectedMember.clearance}
-                    </span>
-                  </div>
+                  <div style={{ padding: '16px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    {/* Card with corner brackets */}
+                    <div style={{ position: 'relative', border: `1px solid ${c.border}`, flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                      {/* Corner brackets SVG */}
+                      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }} viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <polyline points="0,6 0,0 6,0" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+                        <polyline points="94,0 100,0 100,6" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+                        <polyline points="0,94 0,100 6,100" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+                        <polyline points="94,100 100,100 100,94" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+                      </svg>
 
-                  <div className="px-4 py-4">
-                    {/* Photo + identity */}
-                    <div style={{ display: 'flex', gap: '16px', marginBottom: '20px', alignItems: 'flex-start' }}>
-                      <PhotoSlot member={selectedMember} />
-                      <div style={{ flex: 1 }}>
-                        <div style={{ color: c.bright, fontSize: '24px', lineHeight: '1.2', marginBottom: '10px' }}>
-                          {selectedMember.name}
-                        </div>
-                        {[
-                          { label: 'RANK', value: selectedMember.rank },
-                          { label: 'SPECIALITY', value: selectedMember.speciality },
-                          { label: 'STATUS', value: (() => { const { sym, col } = statusSymbol(selectedMember); return { text: `${sym} ${selectedMember.status}`, col } })() },
-                        ].map(({ label, value }) => (
-                          <div key={label} style={{ marginBottom: '4px', display: 'flex', gap: '8px', alignItems: 'baseline' }}>
-                            <span style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.12em', minWidth: '88px' }}>{label}</span>
-                            {typeof value === 'string'
-                              ? <span style={{ color: c.text, fontSize: '18px' }}>{value}</span>
-                              : <span style={{ color: value.col, fontSize: '18px' }}>{value.text}</span>
-                            }
+                      {/* Card header */}
+                      <div style={{
+                        padding: '10px 14px 8px',
+                        borderBottom: `1px solid ${c.border}`,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'baseline',
+                        flexShrink: 0,
+                      }}>
+                        <span style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.15em' }}>{'// PERSONNEL FILE'}</span>
+                        <span style={{ color: selectedMember.clearance.includes('CLASSIFIED') ? c.bright : c.dim, fontSize: '13px', letterSpacing: '0.1em' }}>
+                          {selectedMember.clearance}
+                        </span>
+                      </div>
+
+                      {/* Card body */}
+                      <div style={{ padding: '16px 14px', display: 'flex', gap: '16px', flexShrink: 0 }}>
+                        {/* Left: fields */}
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                          {/* Name — large */}
+                          <div>
+                            <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>NAME</div>
+                            <div style={{ color: c.bright, fontSize: '22px', lineHeight: '1.1' }}>{selectedMember.name}</div>
                           </div>
-                        ))}
+                          {/* Rank */}
+                          <div>
+                            <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>RANK</div>
+                            <div style={{ color: c.text, fontSize: '17px', lineHeight: '1.2' }}>{selectedMember.rank}</div>
+                          </div>
+                          {/* Speciality */}
+                          <div>
+                            <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>SPECIALITY</div>
+                            <div style={{ color: c.text, fontSize: '17px', lineHeight: '1.2' }}>{selectedMember.speciality}</div>
+                          </div>
+                          {/* Status */}
+                          <div>
+                            <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>STATUS</div>
+                            <div style={{ color: statusSymbol(selectedMember).col, fontSize: '17px' }}>
+                              {statusSymbol(selectedMember).sym} {selectedMember.status}
+                            </div>
+                          </div>
+                          {/* File ref */}
+                          <div>
+                            <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>FILE REF</div>
+                            <div style={{ color: c.dim, fontSize: '13px', letterSpacing: '0.06em' }}>{selectedMember.fileRef}</div>
+                          </div>
+                        </div>
+
+                        {/* Right: photo */}
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                          <PhotoSlot member={selectedMember} />
+                          <div style={{ color: c.dim, fontSize: '11px', letterSpacing: '0.06em', textAlign: 'center' }}>
+                            {selectedMember.fileRef}
+                          </div>
+                        </div>
                       </div>
-                    </div>
 
-                    <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: '14px', marginBottom: '14px' }}>
-                      <div style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.2em', marginBottom: '8px' }}>BIOGRAPHICAL DATA</div>
-                      <div style={{ color: c.text, fontSize: '20px', lineHeight: '1.7' }}>{selectedMember.bio}</div>
-                    </div>
-
-                    {selectedMember.missionNotes && (
-                      <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: '14px' }}>
-                        <div style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.2em', marginBottom: '8px' }}>MISSION NOTES</div>
-                        <div style={{ color: c.dim, fontSize: '16px', lineHeight: '1.7' }}>{selectedMember.missionNotes}</div>
+                      {/* Bio section */}
+                      <div style={{
+                        borderTop: `1px solid ${c.border}`,
+                        padding: '12px 14px',
+                        flex: 1,
+                        overflowY: 'auto',
+                        scrollbarWidth: 'none' as const,
+                      }}>
+                        <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '8px' }}>BIOGRAPHICAL DATA</div>
+                        <div style={{ color: c.text, fontSize: '17px', lineHeight: '1.6' }}>
+                          {selectedMember.bio ?? selectedMember.missionNotes ?? '—'}
+                        </div>
                       </div>
-                    )}
-
-                    {/* Blinking cursor */}
-                    <div style={{ color: c.dim, marginTop: '12px', fontSize: '20px' }}>
-                      <span className="cursor-blink">█</span>
                     </div>
                   </div>
                 </div>
@@ -718,33 +749,47 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                     <span style={{ color: c.border }}>·</span>
                     <span style={{ color: c.dim, fontSize: '16px', letterSpacing: '0.1em' }}>{selectedMember.fileRef}</span>
                   </div>
-                  <div className="flex-1 overflow-y-auto px-4 py-4" style={{ scrollbarWidth: 'none' }}>
-                    <div style={{ display: 'flex', gap: '16px', marginBottom: '20px', alignItems: 'flex-start' }}>
+                  {/* Mobile dossier — same card layout but full-screen */}
+                  <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    {/* Card header */}
+                    <div style={{
+                      padding: '8px 14px',
+                      borderBottom: `1px solid ${c.border}`,
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'baseline',
+                      flexShrink: 0,
+                    }}>
+                      <span style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.15em' }}>{'// PERSONNEL FILE'}</span>
+                      <span style={{ color: c.dim, fontSize: '13px' }}>{selectedMember.clearance}</span>
+                    </div>
+                    {/* Top: name + photo row */}
+                    <div style={{ padding: '12px 14px', display: 'flex', gap: '12px', flexShrink: 0, borderBottom: `1px solid ${c.border}` }}>
                       <PhotoSlot member={selectedMember} />
-                      <div style={{ flex: 1 }}>
-                        <div style={{ color: c.bright, fontSize: '22px', lineHeight: '1.2', marginBottom: '10px' }}>{selectedMember.name}</div>
-                        {[
-                          { label: 'RANK', value: selectedMember.rank },
-                          { label: 'SPECIALITY', value: selectedMember.speciality },
-                        ].map(({ label, value }) => (
-                          <div key={label} style={{ marginBottom: '4px' }}>
-                            <span style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.12em' }}>{label} </span>
-                            <span style={{ color: c.text, fontSize: '18px' }}>{value}</span>
+                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div>
+                          <div style={{ color: c.dim, fontSize: '11px', letterSpacing: '0.2em' }}>NAME</div>
+                          <div style={{ color: c.bright, fontSize: '20px', lineHeight: '1.1' }}>{selectedMember.name}</div>
+                        </div>
+                        <div>
+                          <div style={{ color: c.dim, fontSize: '11px', letterSpacing: '0.2em' }}>RANK</div>
+                          <div style={{ color: c.text, fontSize: '16px' }}>{selectedMember.rank}</div>
+                        </div>
+                        <div>
+                          <div style={{ color: c.dim, fontSize: '11px', letterSpacing: '0.2em' }}>STATUS</div>
+                          <div style={{ color: statusSymbol(selectedMember).col, fontSize: '16px' }}>
+                            {statusSymbol(selectedMember).sym} {selectedMember.status}
                           </div>
-                        ))}
+                        </div>
                       </div>
                     </div>
-                    <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: '14px', marginBottom: '14px' }}>
-                      <div style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.2em', marginBottom: '8px' }}>BIOGRAPHICAL DATA</div>
-                      <div style={{ color: c.text, fontSize: '20px', lineHeight: '1.7' }}>{selectedMember.bio}</div>
-                    </div>
-                    {selectedMember.missionNotes && (
-                      <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: '14px' }}>
-                        <div style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.2em', marginBottom: '8px' }}>MISSION NOTES</div>
-                        <div style={{ color: c.dim, fontSize: '16px', lineHeight: '1.7' }}>{selectedMember.missionNotes}</div>
+                    {/* Bio */}
+                    <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none' as const, padding: '12px 14px' }}>
+                      <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '6px' }}>BIOGRAPHICAL DATA</div>
+                      <div style={{ color: c.text, fontSize: '17px', lineHeight: '1.6' }}>
+                        {selectedMember.bio ?? selectedMember.missionNotes ?? '—'}
                       </div>
-                    )}
-                    <div style={{ color: c.dim, marginTop: '12px', fontSize: '20px' }}><span className="cursor-blink">█</span></div>
+                    </div>
                   </div>
                 </div>
 
