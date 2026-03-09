@@ -31,9 +31,10 @@ interface Props {
 }
 
 const NAV_TABS: { id: ActiveView; label: string; btnId: string; subtitle: string }[] = [
+  { id: 'chat', label: 'Terminal', btnId: 'MU-TH-UR', subtitle: '[QUERY TERMINAL]' },
   { id: 'mission-logs', label: 'Missions', btnId: 'mission-logs', subtitle: '[PORTFOLIO]' },
-  { id: 'crew', label: 'Crew', btnId: 'crew-manifest', subtitle: '[ABOUT]' },
-  { id: 'chat', label: 'MU-TH-UR', btnId: 'MU-TH-UR', subtitle: '[QUERY TERMINAL]' },
+  { id: 'crew', label: 'Profile', btnId: 'crew-manifest', subtitle: '[ABOUT]' },
+  
 ]
 
 const VALID_VIEWS: ActiveView[] = ['chat', 'mission-logs', 'crew', 'threat']
@@ -45,7 +46,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
   const prevDisplayLenRef = useRef(0)
   const [inputValue, setInputValue] = useState('')
   const [activeView, setActiveView] = useState<ActiveView>(
-    VALID_VIEWS.includes(initialView as ActiveView) ? (initialView as ActiveView) : 'mission-logs'
+    VALID_VIEWS.includes(initialView as ActiveView) ? (initialView as ActiveView) : 'chat'
   )
   const [logoPhase, setLogoPhase] = useState<LogoPhase>('hidden')
   const [logoLines, setLogoLines] = useState(0)
@@ -60,6 +61,12 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
   const [selectedCrewId, setSelectedCrewId] = useState<string>('nogueira')
   const [crewDetailOpen, setCrewDetailOpen] = useState(false) // mobile slide-in
   const [crewFading, setCrewFading] = useState(false)
+
+  // ── Mission prompt (post-boot interactive options) ──────────
+  const [promptState, setPromptState] = useState<'idle' | 'showing' | 'done'>('idle')
+  const [selectedOption, setSelectedOption] = useState(0)
+  const promptShownRef = useRef(false)
+  const promptEnqueuedRef = useRef(false)
 
   const selectCrew = (id: string) => {
     if (id === selectedCrewId) { setCrewDetailOpen(true); return }
@@ -193,6 +200,56 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
     prevAlertRef.current = alertMode
   }, [alertMode, enqueue, startAlertAlarm, stopAlertAlarm])
 
+  // Step 1 — detect boot completion, enqueue prompt lines
+  useEffect(() => {
+    if (promptShownRef.current) return
+    const last = completedLines[completedLines.length - 1]
+    if (last !== 'TYPE QUERY TO PROCEED.') return
+    if (currentDisplay !== null) return
+    promptShownRef.current = true
+    setTimeout(() => {
+      enqueue([' ', '> MISSION LOGS AVAILABLE.', '> CREW RECORDS AND PROJECT DATA ON FILE.', '> DISPLAY MISSION LOGS?', ' '], 30)
+      promptEnqueuedRef.current = true
+    }, 400)
+  }, [completedLines, currentDisplay, enqueue])
+
+  // Step 2 — show options once prompt lines finish typing
+  useEffect(() => {
+    if (!promptEnqueuedRef.current) return
+    if (promptState !== 'idle') return
+    if (currentDisplay !== null) return
+    if (completedLines.includes('> DISPLAY MISSION LOGS?')) {
+      setPromptState('showing')
+    }
+  }, [completedLines, currentDisplay, promptState])
+
+  // Arrow key navigation for mission prompt
+  useEffect(() => {
+    if (promptState !== 'showing') return
+    const handler = (e: globalThis.KeyboardEvent) => {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        e.preventDefault()
+        setSelectedOption(o => o === 0 ? 1 : 0)
+      } else if (e.key === 'Enter') {
+        e.preventDefault()
+        handleMissionConfirm()
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [promptState])
+
+  const handleMissionConfirm = useCallback(() => {
+    setPromptState('done')
+    playButtonPress()
+    enqueue(['> CONFIRMED. ACCESSING MISSION LOGS...'], 25)
+    setTimeout(() => {
+      setActiveView('mission-logs')
+      pulse()
+    }, 1200)
+  }, [enqueue, playButtonPress])
+
   const handleSubmit = useCallback(() => {
     const query = inputValue.trim()
     if (!query) return
@@ -245,7 +302,14 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
   }, [inputValue, enqueue, onSecretOrder, startAmbientHum, playButtonPress])
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') handleSubmit()
+    if (e.key === 'Enter') {
+      if (promptState === 'showing' && inputValue.trim().toLowerCase().startsWith('y')) {
+        handleMissionConfirm()
+        setInputValue('')
+        return
+      }
+      handleSubmit()
+    }
   }
 
   const handleNavTab = (tab: (typeof NAV_TABS)[0]) => {
@@ -424,7 +488,50 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                   <div className="cursor-blink" style={{ color: c.text }}>{currentDisplay}</div>
                 )}
               </div>
-              {/* ── Floating input ── */}
+              {/* ── Mission prompt options ── */}
+              {promptState === 'showing' && (
+                <div
+                  className="absolute bottom-0 left-0 right-0 mx-3 md:mx-4 mb-4 md:mb-8"
+                  style={{ ...fade(0) }}
+                >
+                  <div
+                    style={{
+                      backgroundColor: '#020100',
+                      border: `1px solid ${c.border}`,
+                      boxShadow: `0 0 12px rgba(0,0,0,0.6)`,
+                      padding: '10px 16px',
+                    }}
+                  >
+                    {['-YES', '-YES, PLEASE'].map((opt, i) => (
+                      <div
+                        key={opt}
+                        onClick={() => { setSelectedOption(i); handleMissionConfirm() }}
+                        onMouseEnter={() => setSelectedOption(i)}
+                        style={{
+                          fontSize: '22px',
+                          color: selectedOption === i ? c.bright : c.dim,
+                          cursor: 'pointer',
+                          padding: '3px 0',
+                          letterSpacing: '0.08em',
+                          transition: 'color 80ms ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                        }}
+                      >
+                        <span style={{ color: selectedOption === i ? c.bright : 'transparent', fontSize: '18px' }}>{'>'}</span>
+                        {opt}
+                      </div>
+                    ))}
+                    <div style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.1em', marginTop: '8px', opacity: 0.6 }}>
+                      ↑↓ NAVIGATE · ENTER SELECT · TYPE YES
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ── Floating input (hidden while mission prompt is showing) ── */}
+              {promptState !== 'showing' && (
               <div
                 className="absolute bottom-0 left-0 right-0 mx-3 md:mx-4 mb-4 md:mb-8"
                 style={{ ...fade(450) }}
@@ -467,6 +574,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                   </button>
                 </div>
               </div>
+              )}
             </div>
           )}
 
@@ -506,16 +614,22 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                             sizes="(max-width: 768px) 90vw, 45vw"
                           />
                         )}
-                        {/* Hover overlay */}
+                        {/* Hover overlay — mobile: ACCESS FILE label / desktop: title + category */}
                         <div
                           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
                           style={{ backgroundColor: 'rgba(8,5,0,0.65)' }}
                         >
-                          <span style={{ color: c.bright, fontSize: '26px', letterSpacing: '0.2em' }}>{'> ACCESS FILE'}</span>
+                          {/* Mobile */}
+                          <span className="md:hidden" style={{ color: c.bright, fontSize: '26px', letterSpacing: '0.2em' }}>{'> ACCESS FILE'}</span>
+                          {/* Desktop */}
+                          <div className="hidden md:flex flex-col items-center gap-1" style={{ textAlign: 'center' }}>
+                            <div style={{ color: c.bright, fontSize: '30px', lineHeight: '1.0' }}>{log.title}</div>
+                            <div style={{ color: c.dim, fontSize: '20px', marginTop: '2px' }}>{log.category}</div>
+                          </div>
                         </div>
                       </div>
-                      {/* Title + category */}
-                      <div className="pt-2 pb-1">
+                      {/* Title + category — mobile only */}
+                      <div className="md:hidden pt-2 pb-1">
                         <div style={{ color: c.text, fontSize: '30px', lineHeight: '1.0' }}>{log.title}</div>
                         <div style={{ color: c.dim, fontSize: '22px', marginTop: '2px' }}>{log.category}</div>
                       </div>
@@ -529,276 +643,94 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
 
           {/* ── CREW VIEW ── */}
           {activeView === 'crew' && (() => {
-            const selectedMember = CREW_MANIFEST.find(m => m.id === selectedCrewId) ?? CREW_MANIFEST[0]
-            const statusSymbol = (m: typeof CREW_MANIFEST[0]) => {
-              if (m.status === 'DECEASED') return { sym: '▲', col: c.dim }
-              if (m.status === 'ATTACHED') return { sym: '●', col: m.isEduardo ? c.bright : c.text }
-              return { sym: '■', col: c.bright }
-            }
-
-            const PhotoSlot = ({ member }: { member: typeof CREW_MANIFEST[0] }) => {
-              const size = 130
-              const base: React.CSSProperties = {
-                width: size, height: size, flexShrink: 0,
-                border: `1px solid ${c.border}`,
-                position: 'relative', overflow: 'hidden',
-                backgroundColor: '#0d0700',
-              }
-              if (member.photo) {
-                return (
-                  <div style={base}>
-                    <Image
-                      src={member.photo} alt={member.name} fill
-                      className="object-cover object-top"
-                      style={{ filter: 'sepia(1) saturate(0.7) hue-rotate(5deg) brightness(0.82)' }}
-                      sizes="130px"
-                    />
-                    {/* Scanline overlay */}
-                    <div style={{
-                      position: 'absolute', inset: 0, pointerEvents: 'none',
-                      background: 'repeating-linear-gradient(to bottom, transparent, transparent 1px, rgba(0,0,0,0.32) 1px, rgba(0,0,0,0.32) 2px)',
-                    }} />
-                  </div>
-                )
-              }
-              const isAsh = member.id === 'ash'
-              const isRipley = member.id === 'ripley'
-              const label = isAsh
-                ? ['[SYNTHETIC', 'PERSONNEL', 'RESTRICTED]']
-                : isRipley
-                  ? ['[PHOTO:', 'CLEARANCE', 'ALPHA REQ.]']
-                  : ['[RECORD', 'SEALED]']
-              return (
-                <div style={{ ...base, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-                  {label.map((l, i) => (
-                    <div key={i} style={{ color: isAsh ? c.bright : c.dim, fontSize: '14px', letterSpacing: '0.08em', textAlign: 'center' }}>{l}</div>
-                  ))}
-                </div>
-              )
+            const member = CREW_MANIFEST.find(m => m.id === 'nogueira') ?? CREW_MANIFEST[0]
+            const sym = member.status === 'DECEASED' ? '▲' : member.status === 'ATTACHED' ? '●' : '■'
+            const col = member.status === 'DECEASED' ? c.dim : c.bright
+            const photoBase: React.CSSProperties = {
+              width: 130, height: 130, flexShrink: 0,
+              border: `1px solid ${c.border}`,
+              position: 'relative', overflow: 'hidden',
+              backgroundColor: '#0d0700',
             }
 
             return (
-              <div className="h-full flex overflow-hidden" style={{ position: 'relative' }}>
+              <div className="h-full overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+                <div style={{ padding: '16px', minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+                  {/* Card with corner brackets */}
+                  <div style={{ position: 'relative', border: `1px solid ${c.border}`, flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                    {/* Corner brackets SVG */}
+                    <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }} viewBox="0 0 100 100" preserveAspectRatio="none">
+                      <polyline points="0,6 0,0 6,0" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+                      <polyline points="94,0 100,0 100,6" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+                      <polyline points="0,94 0,100 6,100" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+                      <polyline points="94,100 100,100 100,94" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+                    </svg>
 
-                {/* ── Left: crew list ── full width on mobile, 240px column on wide+ */}
-                <div
-                  className="flex-shrink-0 flex flex-col overflow-hidden w-full wide:w-[240px]"
-                  style={{ borderRight: `1px solid ${c.border}` }}
-                >
-                  {/* Header */}
-                  <div
-                    className="flex-shrink-0 px-3 py-2"
-                    style={{ borderBottom: `1px solid ${c.border}`, fontSize: '16px', letterSpacing: '0.12em', color: c.dim }}
-                  >
-                    CREW MANIFEST {'░'.repeat(3)} {CREW_MANIFEST.length} PERSONNEL
-                  </div>
-                  {/* Rows */}
-                  <div className="flex-1 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
-                    {CREW_MANIFEST.map(member => {
-                      const { sym, col } = statusSymbol(member)
-                      const isSelected = member.id === selectedCrewId
-                      return (
-                        <button
-                          key={member.id}
-                          onClick={() => selectCrew(member.id)}
-                          className="w-full text-left transition-colors"
-                          style={{
-                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                            padding: '10px 10px',
-                            minHeight: '44px',
-                            borderLeft: `2px solid ${isSelected ? c.bright : 'transparent'}`,
-                            backgroundColor: isSelected ? '#2a1800' : 'transparent',
-                          }}
-                        >
-                          <div>
-                            <div style={{ color: member.deceased ? c.dim : c.text, fontSize: '20px', lineHeight: '1.2' }}>
-                              {member.name}
-                            </div>
-                            <div style={{ color: c.dim, fontSize: '16px', letterSpacing: '0.04em' }}>
-                              {member.rank}
-                            </div>
-                          </div>
-                          <span style={{ color: col, fontSize: '18px', flexShrink: 0, marginLeft: '8px' }}>{sym}</span>
-                        </button>
-                      )
-                    })}
-                  </div>
-                  {/* Legend */}
-                  <div
-                    className="flex-shrink-0 px-3 py-2 flex flex-col gap-1"
-                    style={{ borderTop: `1px solid ${c.border}` }}
-                  >
-                    {[['■', c.bright, 'ACTIVE'], ['●', c.text, 'ATTACHED'], ['▲', c.dim, 'DECEASED']].map(([sym, col, label]) => (
-                      <div key={label as string} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ color: col as string, fontSize: '16px' }}>{sym}</span>
-                        <span style={{ color: c.dim, fontSize: '16px', letterSpacing: '0.1em' }}>{label}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* ── Right: dossier detail (desktop always visible) ── */}
-                <div
-                  className="flex-1 overflow-y-auto hidden wide:block"
-                  style={{
-                    scrollbarWidth: 'none',
-                    opacity: crewFading ? 0 : 1,
-                    transition: 'opacity 0.12s ease',
-                  }}
-                >
-                  <div style={{ padding: '16px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                    {/* Card with corner brackets */}
-                    <div style={{ position: 'relative', border: `1px solid ${c.border}`, flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                      {/* Corner brackets SVG */}
-                      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }} viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <polyline points="0,6 0,0 6,0" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-                        <polyline points="94,0 100,0 100,6" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-                        <polyline points="0,94 0,100 6,100" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-                        <polyline points="94,100 100,100 100,94" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-                      </svg>
-
-                      {/* Card header */}
-                      <div style={{
-                        padding: '10px 14px 8px',
-                        borderBottom: `1px solid ${c.border}`,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'baseline',
-                        flexShrink: 0,
-                      }}>
-                        <span style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.15em' }}>{'// PERSONNEL FILE'}</span>
-                        <span style={{ color: selectedMember.clearance.includes('CLASSIFIED') ? c.bright : c.dim, fontSize: '13px', letterSpacing: '0.1em' }}>
-                          {selectedMember.clearance}
-                        </span>
-                      </div>
-
-                      {/* Card body */}
-                      <div style={{ padding: '16px 14px', display: 'flex', gap: '16px', flexShrink: 0 }}>
-                        {/* Left: fields */}
-                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                          {/* Name — large */}
-                          <div>
-                            <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>NAME</div>
-                            <div style={{ color: c.bright, fontSize: '22px', lineHeight: '1.1' }}>{selectedMember.name}</div>
-                          </div>
-                          {/* Rank */}
-                          <div>
-                            <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>RANK</div>
-                            <div style={{ color: c.text, fontSize: '17px', lineHeight: '1.2' }}>{selectedMember.rank}</div>
-                          </div>
-                          {/* Speciality */}
-                          <div>
-                            <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>SPECIALITY</div>
-                            <div style={{ color: c.text, fontSize: '17px', lineHeight: '1.2' }}>{selectedMember.speciality}</div>
-                          </div>
-                          {/* Status */}
-                          <div>
-                            <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>STATUS</div>
-                            <div style={{ color: statusSymbol(selectedMember).col, fontSize: '17px' }}>
-                              {statusSymbol(selectedMember).sym} {selectedMember.status}
-                            </div>
-                          </div>
-                          {/* File ref */}
-                          <div>
-                            <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>FILE REF</div>
-                            <div style={{ color: c.dim, fontSize: '13px', letterSpacing: '0.06em' }}>{selectedMember.fileRef}</div>
-                          </div>
-                        </div>
-
-                        {/* Right: photo */}
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                          <PhotoSlot member={selectedMember} />
-                          <div style={{ color: c.dim, fontSize: '11px', letterSpacing: '0.06em', textAlign: 'center' }}>
-                            {selectedMember.fileRef}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Bio section */}
-                      <div style={{
-                        borderTop: `1px solid ${c.border}`,
-                        padding: '12px 14px',
-                        flex: 1,
-                        overflowY: 'auto',
-                        scrollbarWidth: 'none' as const,
-                      }}>
-                        <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '8px' }}>BIOGRAPHICAL DATA</div>
-                        <div style={{ color: c.text, fontSize: '17px', lineHeight: '1.6' }}>
-                          {selectedMember.bio ?? selectedMember.missionNotes ?? '—'}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* ── Mobile: full-screen dossier slide-in ── */}
-                <div
-                  className="wide:hidden absolute inset-0 flex flex-col overflow-hidden"
-                  style={{
-                    backgroundColor: '#020100',
-                    transform: crewDetailOpen ? 'translateX(0)' : 'translateX(100%)',
-                    transition: 'transform 0.2s ease-out',
-                    opacity: crewFading ? 0 : 1,
-                  }}
-                >
-                  <div
-                    className="flex items-center gap-3 px-4 py-2 flex-shrink-0"
-                    style={{ borderBottom: `1px solid ${c.border}`, fontSize: '20px' }}
-                  >
-                    <button
-                      onClick={() => setCrewDetailOpen(false)}
-                      className="transition-opacity hover:opacity-100"
-                      style={{ color: c.dim, opacity: 0.8 }}
-                    >
-                      {'< MANIFEST'}
-                    </button>
-                    <span style={{ color: c.border }}>·</span>
-                    <span style={{ color: c.dim, fontSize: '16px', letterSpacing: '0.1em' }}>{selectedMember.fileRef}</span>
-                  </div>
-                  {/* Mobile dossier — same card layout but full-screen */}
-                  <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                     {/* Card header */}
-                    <div style={{
-                      padding: '8px 14px',
-                      borderBottom: `1px solid ${c.border}`,
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'baseline',
-                      flexShrink: 0,
-                    }}>
+                    <div style={{ padding: '10px 14px 8px', borderBottom: `1px solid ${c.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexShrink: 0 }}>
                       <span style={{ color: c.dim, fontSize: '14px', letterSpacing: '0.15em' }}>{'// PERSONNEL FILE'}</span>
-                      <span style={{ color: c.dim, fontSize: '13px' }}>{selectedMember.clearance}</span>
+                      <span style={{ color: member.clearance.includes('CLASSIFIED') ? c.bright : c.dim, fontSize: '13px', letterSpacing: '0.1em' }}>
+                        {member.clearance}
+                      </span>
                     </div>
-                    {/* Top: name + photo row */}
-                    <div style={{ padding: '12px 14px', display: 'flex', gap: '12px', flexShrink: 0, borderBottom: `1px solid ${c.border}` }}>
-                      <PhotoSlot member={selectedMember} />
-                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+
+                    {/* Card body */}
+                    <div style={{ padding: '16px 14px', display: 'flex', gap: '16px', flexShrink: 0 }}>
+                      {/* Left: fields */}
+                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                         <div>
-                          <div style={{ color: c.dim, fontSize: '11px', letterSpacing: '0.2em' }}>NAME</div>
-                          <div style={{ color: c.bright, fontSize: '20px', lineHeight: '1.1' }}>{selectedMember.name}</div>
+                          <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>NAME</div>
+                          <div style={{ color: c.bright, fontSize: '22px', lineHeight: '1.1' }}>{member.name}</div>
                         </div>
                         <div>
-                          <div style={{ color: c.dim, fontSize: '11px', letterSpacing: '0.2em' }}>RANK</div>
-                          <div style={{ color: c.text, fontSize: '16px' }}>{selectedMember.rank}</div>
+                          <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>RANK</div>
+                          <div style={{ color: c.text, fontSize: '17px', lineHeight: '1.2' }}>{member.rank}</div>
                         </div>
                         <div>
-                          <div style={{ color: c.dim, fontSize: '11px', letterSpacing: '0.2em' }}>STATUS</div>
-                          <div style={{ color: statusSymbol(selectedMember).col, fontSize: '16px' }}>
-                            {statusSymbol(selectedMember).sym} {selectedMember.status}
-                          </div>
+                          <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>SPECIALITY</div>
+                          <div style={{ color: c.text, fontSize: '17px', lineHeight: '1.2' }}>{member.speciality}</div>
+                        </div>
+                        <div>
+                          <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>STATUS</div>
+                          <div style={{ color: col, fontSize: '17px' }}>{sym} {member.status}</div>
+                        </div>
+                        <div>
+                          <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '2px' }}>FILE REF</div>
+                          <div style={{ color: c.dim, fontSize: '13px', letterSpacing: '0.06em' }}>{member.fileRef}</div>
                         </div>
                       </div>
+
+                      {/* Right: photo */}
+                      {member.photo && (
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                          <div style={photoBase}>
+                            <Image
+                              src={member.photo} alt={member.name} fill
+                              className="object-cover object-top"
+                              style={{ filter: 'sepia(1) saturate(0.7) hue-rotate(5deg) brightness(0.82)' }}
+                              sizes="130px"
+                            />
+                            <div style={{
+                              position: 'absolute', inset: 0, pointerEvents: 'none',
+                              background: 'repeating-linear-gradient(to bottom, transparent, transparent 1px, rgba(0,0,0,0.32) 1px, rgba(0,0,0,0.32) 2px)',
+                            }} />
+                          </div>
+                          <div style={{ color: c.dim, fontSize: '11px', letterSpacing: '0.06em', textAlign: 'center' }}>
+                            {member.fileRef}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    {/* Bio */}
-                    <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none' as const, padding: '12px 14px' }}>
-                      <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '6px' }}>BIOGRAPHICAL DATA</div>
+
+                    {/* Bio section */}
+                    <div style={{ borderTop: `1px solid ${c.border}`, padding: '12px 14px', flex: 1, overflowY: 'auto', scrollbarWidth: 'none' as const }}>
+                      <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.2em', marginBottom: '8px' }}>BIOGRAPHICAL DATA</div>
                       <div style={{ color: c.text, fontSize: '17px', lineHeight: '1.6' }}>
-                        {selectedMember.bio ?? selectedMember.missionNotes ?? '—'}
+                        {member.bio ?? member.missionNotes ?? '—'}
                       </div>
                     </div>
                   </div>
                 </div>
-
               </div>
             )
           })()}
@@ -818,19 +750,21 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
           )}
         </div>
 
-        {/* ── RIGHT: Nostromo schematic panel (lg+ only) ── */}
-        <div
-          className="hidden lg:flex flex-col items-center justify-center flex-shrink-0 overflow-hidden"
-          style={{
-            width: '20vw',
-            borderLeft: `1px solid ${c.border}`,
-          }}
-        >
-          {xenomorphDetected
-            ? <XenomorphAnim color={c.text} dim={c.dim} border={c.border} amber={c.amber} />
-            : <StatusGrid color={c.text} dim={c.dim} border={c.border} amber={c.amber} activeView={activeView} pulseCount={statusPulse} />
-          }
-        </div>
+        {/* ── RIGHT: Nostromo schematic panel (chat only, lg+ only) ── */}
+        {activeView === 'chat' && (
+          <div
+            className="hidden lg:flex flex-col items-center justify-center flex-shrink-0 overflow-hidden"
+            style={{
+              width: '20vw',
+              borderLeft: `1px solid ${c.border}`,
+            }}
+          >
+            {xenomorphDetected
+              ? <XenomorphAnim color={c.text} dim={c.dim} border={c.border} amber={c.amber} />
+              : <StatusGrid color={c.text} dim={c.dim} border={c.border} amber={c.amber} activeView={activeView} pulseCount={statusPulse} />
+            }
+          </div>
+        )}
 
       </div>
 
