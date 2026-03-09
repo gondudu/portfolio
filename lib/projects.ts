@@ -14,6 +14,7 @@ export interface Project {
   role: string
   thumbnail: string
   heroImage: string
+  brief: string
   overview: string
   challenge: string
   solution: string
@@ -30,55 +31,71 @@ export const projects: Project[] = [
     category: 'Mobile App / News Platform',
     year: '2024–Present',
     role: 'Lead Product Designer',
-    thumbnail: '/images/img_upday_cover.jpg',
-    heroImage: '/images/img_upday_cover.jpg',
-    overview: 'Upday was a news app preinstalled on every Samsung phone, serving millions of users across Europe. When Samsung ended the partnership and replaced Upday with Google News, the company had one option: migrate its existing user base to a standalone app and acquire new users — fast. I led the redesign under survival conditions: a stripped-down team, compressed timelines, and a product that needed to justify its own existence.',
-    challenge: 'Analytics showed that 80% of users only ever opened the top news feed. The app\'s identity was tied to Samsung hardware that no longer shipped it. At the same time, Upday was transitioning from a news aggregator to an in-house editorial model with AI-written content — a fundamental shift in what the product was, not just how it looked. The challenge was redesigning an experience that felt fresh and ownable while migrating users who expected familiarity. Not every decision went the way I wanted: I argued to keep the aggregator model and lost.',
-    solution: 'I audited the existing product, worked with the research team to define three user personas — the News Seeker, the Explorer, and the Passive Reader — and focused the redesign on the 80% use case first. I introduced two new typefaces to move the brand away from a generic Roboto stack, giving the UI editorial personality without losing credibility. A new brand color was planned in phases to avoid disorienting migrating users. Features with low engagement and high infrastructure cost — including the aggregator and local news — were cut after advocating for their retention with data.',
+    thumbnail: '/images/UPDAY.jpg',
+    heroImage: '/images/brand-guidelins/upday_cover.jpg',
+    brief:
+      'Upday came preinstalled on 70 million Samsung phones across Europe — users never chose it. When Samsung replaced it with Google News in 2024, the product had to survive on its own for the first time. Analytics showed 80% of users had never left the top feed, which changed the whole problem: this wasn\'t a visual refresh, it was a question of whether the product had a reason to exist without Samsung\'s distribution. I led the redesign as part of a ten-person team with six months and a new backend, rebuilding the information architecture around the 80% case, replacing the type system for editorial credibility and multilingual efficiency, and fixing an accessibility failure in the brand colour that had been sitting undetected in the UI.',
+    overview:
+      'Upday came preinstalled on every Samsung Galaxy phone in Europe — seventy million monthly users who never chose to download it. When Samsung replaced it with Google News in 2024, the product had to survive on its own for the first time. I led the redesign as part of a ten-person cross-functional team, working against a six-month deadline and a new backend. What we thought was a visual refresh turned into a harder question: without Samsung\'s distribution, what reason does anyone have to install this?',
+    challenge:
+      'The brief was to modernise the interface. Then we pulled the analytics. Eighty percent of users had never left the top news feed — the personalisation features, local news, and discovery tools the team treated as differentiators had almost no one using them. The problem wasn\'t visual. It was that the product had been designed for a captive audience that no longer existed. I argued to keep the local news feed using engagement data from sister publications at Axel Springer. I lost.',
+    solution:
+      'I audited the full existing product — surfacing the iOS home widget as a critical retention feature for power users, and identifying the old accent colour (#1DB8DA) as an accessibility failure: roughly 2.7:1 contrast against white on buttons and chips, below the WCAG minimum. Found it myself in the audit. Navigation went from five tabs to four — Top News, My News, Shorts, and Games — with profile moved to the top bar. Two Google Fonts replaced Roboto: Freeman for display (condensed, giving more control across the app\'s seven language editions, and with the editorial personality Roboto never had) and Gothic A1 for body and labels. I considered Gotham Condensed and Futura — proven, well-established typefaces I\'d have preferred — but the team needed to avoid typefoundry licensing costs. The new colour, #002BFF, passed WCAG. Rolled out in phases to avoid disorienting users mid-migration.',
     results: [
       '10% increase in user retention',
       '20% increase in time spent in app',
-      'Information architecture rebuilt around the dominant use case',
-      'New type system reduced perceived genericness of the product',
-      'Phased color rollout prevented disruption during a high-risk user migration',
+      'Information architecture rebuilt around the dominant 80% use case',
+      'Accessibility corrected: #1DB8DA → #002BFF, WCAG contrast restored on all interactive elements',
+      'iOS home widget retained through migration — essential for power users, identified in audit',
+      'Ads shipped before UI issues resolved — Eduardo flagged the risk; business proceeded',
     ],
     images: [
-      'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1553484771-371a605b060b?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop',
+      '/images/UPDAY.jpg',
+      '/images/brand-guidelins/upday-notificaciones.jpg',
+      '/images/brand-guidelins/big-news-in-short-time-die-individualisierbare-nachrichten-app-upday-informiert-aktuell-und-kompakt-zum-tagesgeschehen,72118_proportional_6.jpg',
+      '/images/brand-guidelins/Slide 16_9 - 8.jpg',
+      '/images/brand-guidelins/Slide 16_9 - 34@2x.jpg',
     ],
     nextProject: 'media-player-sdk-axel-springer',
     caseStudy: {
-      context: 'Upday had been preinstalled on Samsung phones for years, serving millions of users as a bundled news app. When Samsung ended the partnership and replaced Upday with Google News, the stakes were immediate: users switching to newer Samsung phones would have to manually install the app, and the company needed to migrate its existing base while acquiring new users — fast. The team and budget were stripped down to survival mode. Build fast or be sunset.',
+      context:
+        'Upday had been Samsung\'s default swipe-left news surface across Europe — preinstalled on Galaxy devices, never downloaded by choice. When Samsung replaced it with Google News in 2024, the product faced the open market for the first time. A ten-person cross-functional team — developers, product owners, business managers, the CTO, and Eduardo handling UI/UX — had roughly six months to ship a version that could survive without the preinstall.',
       researchFindings: [
-        '80% of users only used the top news feed — personalization and local features had far lower engagement than assumed',
-        'User reviews and interviews surfaced three core needs: fresher content, a simpler experience, and quicker updates',
-        'Local news had a consistent and loyal niche — comparable segment sizes to regional news outlets elsewhere in the Axel Springer portfolio',
-        'The transition from news aggregator to AI-written editorial content was a fundamental product shift, not just a redesign',
-        'Three user personas defined: the News Seeker (fast, reliable), the Explorer (diverse perspectives), the Passive Reader (AI summaries)',
+        '80% of users had never left the top news feed — the personalisation, local news, and discovery features the team treated as differentiators had almost no one using them',
+        'Three user personas defined: News Seeker (fast, reliable updates), Explorer (diverse perspectives), Passive Reader (AI summaries)',
+        'Local news retained a loyal niche — Eduardo used engagement data from sister Axel Springer publications to argue for keeping it',
+        'Old accent colour #1DB8DA failed WCAG contrast requirements on buttons and chips against white (~2.7:1) — identified during design system audit, not flagged externally',
+        'iOS home widget: identified as essential for power users during the product audit; at risk of being cut in the migration sprint',
       ],
       keyDecisions: [
         {
-          decision: 'Cut the news aggregator model and local news to reduce infrastructure costs',
-          outcome: 'Eduardo advocated for keeping local news using engagement data from sister publications, but accepted the business rationale. Retrospectively: the shift to AI-written content hurt the product more than any feature cut.',
+          decision: 'Rebuild navigation around the 80% use case — four tabs instead of five',
+          outcome:
+            'Discover and Local were cut despite Eduardo advocating for their retention with data. The decision was driven by infrastructure cost and the new AI-editorial backend. Profile moved to the top bar. The aggregator model ended with this redesign.',
         },
         {
-          decision: 'Introduce two new typefaces to replace Roboto',
-          outcome: 'Gave the brand more personality while keeping editorial credibility. The previous generic type stack made the UI feel transitional and undifferentiated.',
+          decision: 'Replace Roboto with Freeman (display) and Gothic A1 (body)',
+          outcome:
+            'Considered Gotham Condensed and Futura — established, better-proven typefaces Eduardo would have preferred. Budget ruled them out. Freeman\'s condensed style handles the app\'s seven language editions more efficiently: headlines stay tighter across longer words in German, Polish, and Dutch. Gothic A1 chosen for readability in short reading sessions. Both are Google Fonts, avoiding typefoundry licensing costs entirely.',
         },
         {
-          decision: 'Phase the brand color change instead of shipping it immediately',
-          outcome: 'The original accent color — a bright pool green (#1DB8DA) — failed accessibility contrast checks and gave the brand a pastelized feeling. Rather than confuse migrating users with too much change at once, a phased rollout was planned. New brand blue (#002BFF) introduced in a later phase.',
+          decision: 'Fix the accessibility failure and phase the colour rebrand separately',
+          outcome:
+            '#1DB8DA on white was running at ~2.7:1 contrast — below WCAG AA minimum for interactive UI components. Self-identified during the audit. #002BFF replaced it. The rollout was phased to avoid disorienting users who were already navigating a product migration.',
+        },
+        {
+          decision: 'Add Games as a fourth core tab',
+          outcome:
+            'Supported by patterns across Axel Springer news products: news consumption is largely entertainment-driven, and games fit that habit for a meaningful user segment. Eduardo was genuinely convinced — this was not a compromise.',
         },
       ],
       tradeoffs: [
-        'Speed vs. quality — the app needed to ship fast to survive, which limited how much the experience could be rethought',
-        'Feature breadth vs. cost — beloved features (aggregator, local news) were cut to make the economics work',
-        'Brand improvement vs. migration comfort — color and identity changes were deferred to avoid disorienting a large transitioning user base',
+        'Ads shipped before UI quality issues were resolved — Eduardo raised the risk; the business made the call. The concern was documented.',
+        'Local news and the aggregator model were cut despite engagement data supporting their retention — timeline and infrastructure cost won',
+        'Google Fonts instead of professional typefoundry licences — a reasonable constraint-driven compromise, but a compromise on typographic craft',
       ],
-      retrospective: 'I would have fought harder to keep the aggregator model. The content quality shift to AI-written articles hurt the product\'s value proposition in ways that good design alone couldn\'t compensate for. The design system work and brand direction held up — but the editorial pivot was the decision I disagreed with most.',
+      retrospective:
+        'The iOS home widget is the work I\'m most proud of that isn\'t in the case study — finding it in the audit and making sure it survived the migration mattered to the users who relied on it daily. The ad timing decision is the one I\'d push harder on next time. Design can\'t fix what monetisation breaks.',
     },
   },
   {
@@ -89,9 +106,14 @@ export const projects: Project[] = [
     role: 'Lead Product Designer',
     thumbnail: '/images/bhxnu-s2HHseW10Pc-unsplash.jpg',
     heroImage: '/images/bhxnu-s2HHseW10Pc-unsplash.jpg',
-    overview: 'WELT and Bild — Axel Springer\'s two largest news brands — each had separate contracts with video infrastructure providers, with their developers independently solving the same problems. I led the design of a unified media player SDK that consolidates that effort into a single shared foundation, while giving each brand full freedom to express its own visual identity on top.',
-    challenge: 'Users arriving at article pages via SEO or direct traffic were running into two consistent drop-off points: no Picture-in-Picture support on iOS, and audio that stopped the moment they left the page. Both issues required platform-level changes that neither brand had prioritized individually. The brief came from management as a cost-cutting initiative — my job was to make it a user experience improvement at the same time. The hardest part was designing a system flexible enough for two distinct brand identities without it fracturing into two separate products.',
-    solution: 'Working with a lean team alongside UX researchers and one designer from each brand, I scoped the MVP around the two highest-impact fixes: persistent PiP and continuous audio playback. Co-designing with brand designers from WELT and Bild meant the architecture reflected real product constraints from the start. The result was a shared behavioral core with a flexible styling layer — each brand implements the same SDK but applies its own visual identity independently.',
+    brief:
+      'WELT and Bild each ran separate video infrastructure contracts, with engineers at both brands independently solving the same problems. The brief was cost consolidation — I came in with a heuristic evaluation of WELT\'s media experience already mapped. The product\'s videos performed well on YouTube; on our own apps, users lost the audio the moment they left the article page and had no way to continue watching. I led the design of a shared SDK that fixed the two highest-impact failures — persistent Picture-in-Picture and continuous audio — while giving each brand full control over its own visual layer.',
+    overview:
+      'WELT and Bild — Axel Springer\'s two largest news brands — each ran separate video infrastructure contracts, with engineers at both brands independently solving identical problems. I came into this project already knowing WELT\'s media experience from the inside: I\'d mapped its failure points through heuristic evaluation before the brief existed. The cost consolidation mandate gave us the opening to fix what I\'d already found.',
+    challenge:
+      'Our videos performed well on YouTube. On our own products, they didn\'t. Users who arrived at an article page faced the same sequence: find the teaser, navigate to the article, locate the video container, press play — and lose the audio the moment they left the page. No Picture-in-Picture. No playlists. No suggested content after a video ended. The experience was article-locked in a product where users had every reason to keep scrolling.',
+    solution:
+      'I led the design alongside one designer from WELT and one from Bild, working in shared Figma files with constant feedback loops. I set the design vision and architecture; brand designers defined the criteria for how it had to express each brand. The result: a shared behavioural core — persistent PiP, continuous audio, playlist and suggestion patterns — with a flexible visual layer on top. Brand differences are colours, typography, iconography, and spacing. The chassis is shared; neither brand is wearing the other\'s paint. One tradeoff I couldn\'t fully resolve: WELT chose to trigger the PiP container from teasers without opening a new page. I argued against it — the interface is already dense, and this adds more visual weight to an already crowded layout. They knew their users better in theory. In practice I\'m not sure the decision was right.',
     results: [
       '8% improvement in media retention',
       '15% increase in audio consumption',
@@ -100,99 +122,116 @@ export const projects: Project[] = [
       'Single SDK foundation for all future Axel Springer media products',
     ],
     images: [
-      'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=800&fit=crop',
+      '/images/bhxnu-s2HHseW10Pc-unsplash.jpg',
+      '/images/brand-guidelins/Slide 16_9 - 41.jpg',
+      '/images/brand-guidelins/Slide 16_9 - 42.png',
+      '/images/brand-guidelins/Slide 16_9 - 44.png',
+      '/images/brand-guidelins/Slide 16_9 - 54.png',
     ],
     nextProject: 'nmt-product-suite-design-system',
     caseStudy: {
-      context: 'WELT and Bild — Axel Springer\'s two largest news brands — each had separate contracts with media providers like Bitmovin for video infrastructure. Their developers were independently solving identical problems. Management\'s goal was cost reduction through consolidation. Eduardo\'s concern: use that consolidation as an opportunity to fix the user experience, not just the invoice.',
+      context:
+        'WELT and Bild ran separate contracts with video infrastructure providers. Developers at both brands were independently solving the same problems. Management\'s goal was consolidation and cost reduction. Eduardo\'s goal: use that mandate to fix a user experience that had been falling behind for years. He came in with a head start — having already mapped WELT\'s media UX through heuristic evaluation before the project brief existed.',
       researchFindings: [
-        'Users on iOS had no consistent Picture-in-Picture experience — a friction point that broke media consumption flows',
-        'Audio playback was page-contained: users who left the article page lost the audio, causing significant drop-off',
-        'WELT\'s audience arrives primarily via SEO; Bild\'s via direct traffic — different user behaviors but shared media consumption patterns',
-        'Both brand dev teams were working in parallel on the same problems with no shared infrastructure or design language',
-        'Competitive analysis revealed that persistent audio and PiP were table-stakes features in leading news and media apps',
+        'Video performed well on YouTube but not on own products — isolating the experience, not the content, as the problem',
+        'Core UX failures: article-locked playback (users lost audio on navigation), no PiP on iOS, no playlists, no content discovery after a video ended',
+        'WELT audience primarily SEO-driven, cold-start users; Bild audience direct traffic, habitual returners — different behaviours, shared media consumption friction',
+        'Both brand dev teams working in parallel on the same problems with no shared infrastructure or design language',
+        'No external user testing conducted — internal stakeholder reviews and prototype walkthroughs used to mitigate risk; Eduardo would not make this call again',
       ],
       keyDecisions: [
         {
-          decision: 'Scope the MVP around the two highest-impact UX fixes: PiP and persistent audio',
-          outcome: 'Rather than trying to redesign the entire media experience, focusing on the two biggest drop-off causes gave the project clear success metrics and a manageable scope for a lean team.',
+          decision: 'Scope the MVP to the two highest-impact fixes: persistent PiP and continuous audio',
+          outcome:
+            'Article-locked audio was the clearest drop-off point. Scoping tightly gave the project measurable success criteria and a delivery cycle fast enough to get management support.',
         },
         {
-          decision: 'Co-design with brand designers rather than designing for them',
-          outcome: 'Bringing in one designer from WELT and one from Bild to iterate on concepts meant the final system reflected the real constraints of each brand\'s product — not just Eduardo\'s assumptions from the outside.',
+          decision: 'Co-design with one designer from each brand, not design for them',
+          outcome:
+            'Eduardo set the structural vision and component architecture. Brand designers from WELT and Bild defined the visual criteria. The final system reflected real constraints from each product — not assumptions from the outside.',
         },
         {
-          decision: 'Design a shared foundation that each brand could independently extend',
-          outcome: 'The SDK defined core component behavior and interaction patterns while leaving visual customization to each brand. This preserved brand identity without duplicating engineering effort.',
+          decision: 'Shared behavioural core with a flexible visual layer',
+          outcome:
+            'Colours, typography, iconography, and spacing are brand-specific. Everything else is shared. The risk of a less carefully considered abstraction was a system where one brand felt like the other with different paint. That was avoided.',
         },
       ],
       tradeoffs: [
-        'Management\'s cost-reduction goal vs. user experience investment — resolved by framing UX improvements as retention drivers with measurable ROI',
-        'Shared foundation vs. brand differentiation — the modular architecture let each brand apply its own visual layer on top of a common behavioral core',
-        'Speed of delivery vs. depth of research — lean team meant making confident decisions on behavioral research rather than extensive primary user testing',
+        'No external user testing — too fast. Internal reviews and stakeholder walkthroughs mitigated risk but left uncertainty about real user behaviour that Eduardo carries forward',
+        'Brand autonomy over player trigger design — WELT chose teaser-to-PiP without a new page; Eduardo disagreed on grounds of visual density, but brands were given final say over trigger patterns',
+        'Video discovery still broken post-launch — the player works; the path to it doesn\'t. Videos remain scattered across the product, and users who want to consume video still lack a dedicated surface to do so',
       ],
-      retrospective: 'The project proved that a well-argued case for UX quality can align with a business cost-cutting mandate rather than fight against it. The shared SDK shipped to both WELT and Bild iOS apps within 6 months — a fast cycle in a large corporate environment.',
+      retrospective:
+        'The player improved media retention. But the bigger problem — how users find video content before they reach the player — wasn\'t in scope and still isn\'t solved. A well-designed feature that\'s hard to find is a partial win at best.',
     },
   },
   {
     slug: 'nmt-product-suite-design-system',
     title: 'Blatt Design System',
-    category: 'Design System / Organizational Transformation',
+    category: 'Design System / Organisational Transformation',
     year: '2024–2026',
     role: 'Product Designer',
     thumbnail: '/images/blatt.jpg',
     heroImage: '/images/blatt.jpg',
-    overview: 'Blatt is the unified design system supporting all digital products within Axel Springer — B2B and B2C, editorial and infrastructure. This was as much a cultural project as a design one: building design maturity inside a traditionally decentralized organization, finding allies across business units, and making the case that systematic design is a strategic investment, not overhead.',
-    challenge: 'Every team at Axel Springer built independently. There was no shared foundation, no common workflow — even within the design team itself. Designers without engineering context were building components that were aesthetically free but inconsistent and costly to implement. The resistance wasn\'t technical; it was about changing how people work. Introducing design tokens, shared libraries, and contribution workflows meant asking colleagues to rethink habits that had been in place for years. Getting teams to invest time in the system while still shipping their own roadmaps was a tension that never fully went away.',
-    solution: 'I started a pilot team with one designer from each major brand — WELT, Bild, Editorial — and focused on education before governance. Workshops, monthly meetings, and shared documentation built familiarity slowly. The turning point was demonstrating that Blatt\'s tokens made Claude-powered prototyping dramatically more on-brand than anything before — colleagues saw the immediate value and wanted in. I also built the tooling layer: a Figma plugin for component evaluation and contribution flows, a token export plugin that replaced Token Studio, and CSS conversion scripts I wrote to connect Figma variables directly to the WELT codebase. I now maintain the WELT design system repository on GitHub.',
+    brief:
+      'Axel Springer\'s product teams built independently — no shared components, no common conventions, and a design culture that had never had a seat at the table. I came to this work through my bachelor\'s thesis, written while on an Axel Springer scholarship at CODE University Berlin: I interviewed colleagues and mapped exactly what was keeping teams from better product workflows. That research became the credibility that made the system possible. Blatt is the result — a unified design infrastructure for WELT and Bild, now in active migration across both brands, built through developer alignment, collective tooling experiments, and a long argument that systematic design is not overhead.',
+    overview:
+      'Axel Springer\'s product teams built independently — separate components, separate conventions, no shared foundation across brands. I came to this work through an unusual door: my bachelor\'s thesis, written while on an Axel Springer scholarship at CODE University Berlin, mapped the state of design culture across the company through interviews with colleagues. That research became the credibility that made the system possible. Blatt is the result: a unified design infrastructure for WELT, Bild, and the editorial products, currently in active migration across both brands.',
+    challenge:
+      'The problem was never technical — it was cultural. Designers without engineering context were building in an aesthetically free but system-hostile way: components that looked right in Figma and broke in production. Introducing design tokens, shared libraries, and contribution workflows meant asking colleagues to change habits that had been in place for years — while still shipping their own roadmaps. Without management patience and protected roadmap space, this system simply wouldn\'t exist. That tension has never fully gone away.',
+    solution:
+      'I started with a pattern library for WELT — an immediate speed-up that created buy-in before any governance existed. From there: workshops and onboarding sessions to close the gap between how designers think and how systems work. The real breakthrough came from aligning with developers: we synced naming conventions, documentation standards, and repositories — creating an automated pipeline between Figma and production code. Developers taught me how their codebases worked; I taught them how design decisions were made. That mutual education changed the collaboration model entirely. Across the team, designers started building tooling: a colleague built a Figma plugin to replace Token Studio (the licensed alternative was too expensive at scale across multiple brands). My contribution was a content plugin for populating designs with live publication data — later integrated into the company-wide Designers Toolkit, available to all Axel Springer employees.',
     results: [
-      'Adopted by 8 teams across the organization',
-      'Replaced Token Studio with a custom-built plugin, cutting external tooling costs',
-      'Design tokens structured for LLM consumption — enabling AI-assisted on-brand prototyping',
-      'Direct Figma-to-production CSS pipeline, reducing design-to-dev handoff friction',
-      'Design function established with strategic input on product decisions across brands',
+      'Adopted by 8 teams across the organisation',
+      'Migration phase active — WELT and Bild currently refactoring components to the Blatt standard',
+      'Automated Figma-to-production CSS pipeline, reducing design-to-dev handoff friction',
+      'Design tokens structured for LLM consumption — AI-assisted on-brand prototyping now possible',
+      'Internal tooling ecosystem built collectively across the design team, distributed company-wide via the Designers Toolkit',
+      'Design function has strategic input on product decisions across brands that it did not have before',
     ],
     images: [
-      'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1200&h=800&fit=crop',
+      '/images/blatt.jpg',
+      '/images/brand-guidelins/Slide 16_9 - 48.png',
+      '/images/brand-guidelins/Slide 16_9 - 50.png',
+      '/images/brand-guidelins/Slide 16_9 - 55.png',
+      '/images/brand-guidelins/Slide 16_9 - 51.png',
+      '/images/brand-guidelins/Slide 16_9 - 49.png',
     ],
     nextProject: 'figma-content-plugin',
     caseStudy: {
-      context: 'Axel Springer\'s decentralized structure meant every product team built independently — no shared foundations, growing design debt, and duplicated effort across brands. Beyond the technical complexity, the deeper challenge was organizational: building design maturity inside a company with limited design culture, and convincing management that systematic design was a strategic investment, not overhead. The project was as much about cultural change as component libraries.',
+      context:
+        'Eduardo came to Blatt through an unusual path. While studying at CODE University Berlin on an Axel Springer scholarship, he wrote his bachelor\'s thesis on the state of design culture at the company — interviewing colleagues, mapping workflow fragmentation, documenting exactly what was keeping teams from better product development. That research gave him credibility when he proposed the system. He was hired after graduation to do what the thesis had argued for. Blatt started in mid-2025.',
       researchFindings: [
-        'Internal audit revealed scattered infrastructure, inconsistent patterns, and redundant work across teams',
-        'Within the design team itself: no common workflow, no shared tooling conventions, designers unaccustomed to system thinking or code constraints',
-        'Designers were building in an unconstrained way — aesthetically free, but generating components that were hard to implement consistently',
-        'Management skepticism: design systems create additional workload for teams who didn\'t ask for it, with benefits that are long-term and indirect',
-        'Opportunity identified: design tokens as machine-readable context could unlock AI-assisted prototyping workflows',
+        'Teams across Axel Springer brands built independently — no shared components, no common conventions, growing design debt and duplicated effort',
+        'Designers without engineering context were building components that were aesthetically free but expensive to implement and impossible to maintain at scale',
+        'Token Studio: too expensive to license per employee across multiple brands — an opening for internal tooling built by the team itself',
+        'Developers and designers lacked a shared vocabulary — naming conventions, documentation standards, and handoff workflows were inconsistent across brands',
+        'Structuring tokens for LLM consumption would extend the system\'s reach into AI-assisted prototyping — design decisions readable not just by humans, but by AI coding tools',
       ],
       keyDecisions: [
         {
-          decision: 'Start with a pilot team of one designer per brand rather than a top-down mandate',
-          outcome: 'Reduced resistance by building the system with the people who would use it, not for them. Created internal ambassadors in each team from day one.',
+          decision: 'Start with a pattern library for WELT, not a company-wide mandate',
+          outcome:
+            'Created an immediate speed-up for the team Eduardo knew best — early proof of value before asking anyone else to invest. Buy-in preceded governance.',
         },
         {
-          decision: 'Use Claude-powered prototyping as a proof-of-value demo',
-          outcome: 'When Eduardo showed colleagues that design tokens enabled Claude to generate on-brand coded prototypes automatically, abstract system value became concrete and immediately desirable. Adoption followed the demo.',
+          decision: 'Education before governance — workshops and onboarding before contribution rules',
+          outcome:
+            'Designers needed to understand why the system worked the way it did before following it. Mandating adoption without that understanding generates resistance. Building it generates allies.',
         },
         {
-          decision: 'Build internal tooling to eliminate friction at adoption points',
-          outcome: 'Created a Figma plugin for component evaluation and contribution flows. Built a token export plugin that replaced Token Studio — eliminating a paid tool while improving the Figma-to-code pipeline. Eduardo wrote the CSS variable conversion scripts and maintains the WELT design system GitHub repo.',
+          decision: 'Align with developers and build a real pipeline, not just a Figma library',
+          outcome:
+            'Syncing naming conventions and repositories made the system live in production code, not just in design files. The mutual education — developers teaching Eduardo about codebases, Eduardo teaching them about design decisions — is what made the handoff workflow replicable across teams.',
         },
       ],
       tradeoffs: [
-        'Creating additional workload (the system itself) for teams already under delivery pressure — required sustained stakeholder management',
-        'System consistency vs. team autonomy — governance models had to balance standardization with room for brand-specific expression',
-        'Long-term investment vs. short-term velocity — made the case repeatedly that the system pays back its upfront cost through reduced decision fatigue and faster shipping',
+        'Management expects quick results; design systems require long-term cultural change — the project exists at the mercy of roadmap space that other teams control',
+        'System consistency vs. team autonomy — governance had to leave room for brand-specific expression, or teams would simply build outside the system',
+        'The tooling ecosystem was a collective effort across the design team — Eduardo contributed significantly but did not build everything. The work was collaborative, not a solo achievement.',
       ],
-      retrospective: 'This project showed me the future of the design profession. A designer who understands tokens, version control, and AI-assisted workflows can multiply their impact in ways that pure craft work cannot. The hardest part was never the system — it was the culture. Getting a seat at the table for design in a traditional organization requires patience, allies, and proof that you speak the language of the business.',
+      retrospective:
+        'The hardest part was never the components — it was the culture. A design system is only as strong as the management patience that protects its roadmap space. That\'s still the thing I can\'t fully control, and it\'s the thing that would break this if it disappeared.',
     },
   },
   {
@@ -203,51 +242,61 @@ export const projects: Project[] = [
     role: 'Designer + Developer',
     thumbnail: '/images/figmaplug_cover.jpg',
     heroImage: '/images/figmaplug_cover.jpg',
-    overview: 'While working on the Blatt design system, I started exploring what it meant for a designer to build software. One afternoon I was laying out a prototype and needed real German content — not lorem ipsum. The manual process of hunting through publications was something every designer on the team did, every day. I built a Figma plugin with Claude that solves it in a button press. Conceived, designed, and shipped in a single day.',
-    challenge: 'Our multilingual team constantly hunted for real German content to populate mockups. Placeholder text broke design authenticity — character counts were wrong, line breaks unpredictable, and the resulting designs often broke in production. Template creation was slow and repetitive. For a team working at the pace of a news organization, this friction compounded daily. The limit of the solution was scope: it solves the content problem but does nothing to address the deeper workflow of keeping designs in sync with a continuously changing publication.',
-    solution: 'I built a Figma plugin that pulls live publication content directly into selected text layers. The interface is a single button. The aesthetic was intentionally playful — originally a nostalgic early-2000s keygen vibe, now updated to match the terminal aesthetic of this portfolio. The design principle: work is serious enough. Every time a colleague opens this tool, it should make them smile. It was also the project that proved to me — and to the team — that designers can ship working software.',
+    brief:
+      'Every designer on the team spent time hunting through live publications to populate mockups with real content — a manual process that took around five minutes per teaser and compounded across every project. I was laying out a WELT prototype when I decided to build the solution instead of doing the task again. One button, live content from the RSS feed, five seconds. The plugin was integrated into the company-wide Designers Toolkit and distributed to all Axel Springer employees — the first piece of working software independently shipped by a designer on the team.',
+    overview:
+      'While working on the Blatt design system, I was laying out a WELT prototype that needed real news content — ten teasers, populated with actual headlines and text. The manual process: open the website, find an article that fits, copy it in. Five minutes per teaser, twenty minutes minimum for a full page. I had been building vibe coding skills through the Blatt project. This time I built the solution instead of doing the task. First version scraped the website directly. Second used the RSS feed — stable, shareable, deployable to the whole team. Conceived, designed, and shipped in a day.',
+    challenge:
+      'Our multilingual team populated mockups with placeholder text by default — hunting through live publications when they needed something real, guessing how German character counts would behave, discovering that designs broke in production when the real content arrived. It was a daily friction point that compounded across every designer, every project. The limit of the solution is scope: it solves the content problem at the point of design, but does nothing for the deeper problem of keeping designs in sync with a continuously changing publication.',
+    solution:
+      'A Figma plugin with a single button. Press it: selected text layers populate with live content from the publication\'s RSS feed. No configuration, no field mapping, no options. The interface is minimal — the complexity is hidden, the interaction is instant. The aesthetic was deliberate: I started with a keygen reference (early-2000s software cracking tools — playful, good energy for a tool that makes something tedious disappear). Later updated to match the terminal aesthetic of this portfolio — with a practical reason too: Figma plugins can\'t be moved outside the viewport, so a minimal UI means less interface covering your work. The plugin was integrated into the Designers Toolkit — a collective Figma plugin built during the Blatt project — making it available to every Axel Springer employee.',
     results: [
-      '10x faster template creation',
+      '60x faster content population: ~5 minutes per teaser → ~5 seconds (observed estimate)',
       'Real publication content in designs, eliminating lorem ipsum entirely',
-      'Solved German character count guesswork for the multilingual team',
-      'Conceived, designed, and shipped in 1 day',
-      'Sparked a wider movement of designer-built tooling across the team',
+      'Integrated into the Designers Toolkit — distributed to all Axel Springer employees',
+      'First designer on the team to independently ship working software',
+      'Contributed to a wider movement of designer-built tooling, including a team-built Token Studio replacement',
     ],
     images: [
-      'https://images.unsplash.com/photo-1618761714954-0b8cd0026356?w=1200&h=800&fit=crop',
-      'https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=1200&h=800&fit=crop',
+      '/images/figmaplug_cover.jpg',
+      'video-pair::/images/Screen Recording 2026-03-09 at 20.37.53.mov::/images/2.Screen Recording 2026-03-09 at 20.37.53.mov',
       'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=800&fit=crop',
       'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=800&fit=crop',
       'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=800&fit=crop',
     ],
     nextProject: 'upday-news-app-redesign',
     caseStudy: {
-      context: 'During the Blatt design system project, Eduardo started exploring Figma plugin development — learning how accessible it had become to build internal tools with Claude. One afternoon, while laying out a prototype for a new website, he needed to insert real, dynamic German content. The manual process — searching publications, copying text, guessing character counts — was a daily friction point for the entire multilingual team. He thought: there has to be a way to automate this. A few hours later, there was.',
+      context:
+        'Eduardo was working on a WELT prototype — a full page of news teasers that needed real content. He\'d done this manually hundreds of times: open the site, find articles, copy them in. Five minutes each, twenty minutes for a page. This time was different: he\'d been building vibe coding skills through the Blatt project, experimenting with Claude, learning how to prototype software. He decided to build the solution instead of doing the task again.',
       researchFindings: [
-        'The team constantly searched for real German content to populate design mockups — placeholder text broke authenticity and made designs harder to evaluate',
-        'For a multilingual team, German character counts and line breaks were unpredictable with lorem ipsum — designs often broke in production',
-        'Template creation was slow and repetitive — the same content-hunting process repeated for every new design',
-        'The plugin concept was immediately validated: colleagues across the team identified the same friction before the tool even existed',
+        'Every designer on the team encountered the same friction daily — populating mockups with real content was a manual process with no shortcut',
+        'German character counts, line breaks, and typographic behaviour were unpredictable with placeholder text — designs regularly broke in production',
+        'Colleagues validated the problem before the tool existed — Eduardo knew this was a shared pain, not a personal one',
+        'V1 (website scraping) worked but was fragile and couldn\'t be released externally; V2 (RSS feed) was stable enough to share across the company',
       ],
       keyDecisions: [
         {
-          decision: 'Build and ship in a single day rather than planning a longer project',
-          outcome: 'The problem was clear, the solution was focused, the user was himself. Shipping fast proved the point: the best design solves a clear problem without over-engineering it.',
+          decision: 'Switch from website scraping to RSS feed for v2',
+          outcome:
+            'Scraping breaks when page structure changes and can\'t be distributed as a shared tool. The RSS feed is stable, publicly accessible, and maintenance-free. This is what made company-wide distribution possible.',
         },
         {
-          decision: 'Design the UI for delight, not just function',
-          outcome: 'An internal tool could have been purely utilitarian. Eduardo chose an aesthetic deliberately — originally a nostalgic early-2000s keygen vibe, later updated to the Alien/console terminal aesthetic. The reasoning: work is serious enough. Every time a colleague opens this plugin, it should make them smile.',
+          decision: 'One button. No configuration, no options.',
+          outcome:
+            'A more complex version would have added content filters, field mapping, and language selection. All of that would have made it slower to use and harder to explain. The constraint — it does one thing — is what made adoption instant.',
         },
         {
-          decision: 'Use Claude as a coding partner throughout the build',
-          outcome: 'This project proved to Eduardo — and later to his colleagues — that designers could ship working software independently. It became an early proof-of-concept for the designer-as-builder capability that later drove Blatt\'s tooling layer.',
+          decision: 'Design the aesthetic for delight, not just function',
+          outcome:
+            'Keygen reference first — playful, a bit transgressive, good energy for a tool that makes something tedious disappear. Later updated to terminal aesthetic for portfolio consistency and to reduce viewport intrusion. An internal tool people enjoy opening gets used more than one they don\'t.',
         },
       ],
       tradeoffs: [
-        'Solve it now vs. solve it right — chose speed and clarity over architecture; the tool does one thing and does it well',
-        'Functional vs. delightful — invested time in the aesthetic even for an internal tool, because delight is a legitimate design goal',
+        'Solve it now vs. solve it right — shipped in a day, no architecture planning. It does one thing well. That\'s the correct scope for a problem this focused.',
+        'The plugin populates content once, at design time — designs still drift from live content over time. The deeper problem of design-reality sync remains unsolved.',
       ],
-      retrospective: 'This project crystallized something I\'d felt for a while: the best design is often the simplest intervention at the right moment. I didn\'t need a brief, a research plan, or a stakeholder approval. I saw a problem I had myself, built the solution in a day, and my colleagues were immediately happier. Sometimes that\'s what design is.',
+      retrospective:
+        'This was the first piece of working software I shipped independently on this team. No brief, no stakeholder approval — just a problem I had myself, a solution I could build, and a day to build it. When I showed colleagues, there was no pushback. Just people asking if they could use it. Sometimes that\'s what design is.',
     },
   },
 ]

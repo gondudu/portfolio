@@ -29,7 +29,7 @@ const config: Config = {
         'console-panel': '#020100',
         'console-border': '#2a1800',
         'console-phosphor': '#e8a000',
-        'console-phosphor-dim': '#a87000',
+        'console-phosphor-dim': '#915c00',
         'console-phosphor-bright': '#ffc93c',
         'console-amber': '#e8a000',
         'console-red': '#ff2200',

@@ -1,11 +1,9 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Project, projects, getNextProject } from '@/lib/projects'
-
-type ViewMode = 'brief' | 'debrief'
 
 interface Props {
   project: Project
@@ -18,10 +16,80 @@ const c = {
   border: '#2a1800',
 }
 
+// Side-by-side video pair: shortSrc left, longSrc right. Both restart when long video ends.
+// leftSrc = long video, rightSrc = short video. Both restart when long video ends.
+function VideoPair({ leftSrc, rightSrc }: { leftSrc: string; rightSrc: string }) {
+  const leftRef = useRef<HTMLVideoElement>(null)
+  const rightRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const long = leftRef.current
+    if (!long) return
+    const restart = () => {
+      long.currentTime = 0
+      long.play()
+      if (rightRef.current) { rightRef.current.currentTime = 0; rightRef.current.play() }
+    }
+    long.addEventListener('ended', restart)
+    return () => long.removeEventListener('ended', restart)
+  }, [])
+
+  const wrapStyle: React.CSSProperties = {
+    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+  }
+  const videoStyle: React.CSSProperties = {
+    width: '100%', height: '100%', objectFit: 'contain',
+  }
+
+  return (
+    <>
+    <div style={{
+      width: 'min(936px, 100vw)',
+      marginLeft: 'calc((min(936px, 100vw) - min(720px, 100%)) / -2)',
+      aspectRatio: '16 / 9',
+      display: 'flex',
+      gap: '2px',
+      backgroundColor: '#0d0800',
+      marginBottom: '0',
+      marginTop: '4px',
+      overflow: 'hidden',
+      position: 'relative',
+    }}>
+      <div style={wrapStyle}>
+        <video ref={leftRef} src={leftSrc} autoPlay muted playsInline style={videoStyle} />
+      </div>
+      <div style={{ width: '1px', backgroundColor: '#2a1800', flexShrink: 0 }} />
+      <div style={wrapStyle}>
+        <video ref={rightRef} src={rightSrc} autoPlay muted playsInline loop style={videoStyle} />
+      </div>
+      {/* Corner brackets */}
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} viewBox="0 0 100 100" preserveAspectRatio="none">
+        <polyline points="0,8 0,0 8,0"        fill="none" stroke="#2a1800" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+        <polyline points="92,0 100,0 100,8"   fill="none" stroke="#2a1800" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+        <polyline points="0,92 0,100 8,100"   fill="none" stroke="#2a1800" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+        <polyline points="92,100 100,100 100,92" fill="none" stroke="#2a1800" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
+      </svg>
+    </div>
+    <div style={{
+      width: 'min(936px, 100vw)',
+      marginLeft: 'calc((min(936px, 100vw) - min(720px, 100%)) / -2)',
+      display: 'flex',
+      justifyContent: 'space-between',
+      marginTop: '-20px',
+      marginBottom: '28px',
+      padding: '0 4px',
+    }}>
+      <span style={{ color: '#a87000', fontSize: '13px', letterSpacing: '0.12em' }}>BEFORE: AROUND 2 MINUTES</span>
+      <span style={{ color: '#a87000', fontSize: '13px', letterSpacing: '0.12em' }}>AFTER: 8 SECONDS</span>
+    </div>
+    </>
+  )
+}
+
 // Full-bleed content image with scanline overlay + corner brackets + label
 function ContentImage({ src, alt, label, index }: { src: string; alt: string; label: string; index: number }) {
   return (
-    <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', overflow: 'hidden', marginBottom: '28px', marginTop: '4px', backgroundColor: '#0d0800' }}>
+    <div style={{ position: 'relative', width: 'min(936px, 100vw)', marginLeft: 'calc((min(936px, 100vw) - min(720px, 100%)) / -2)', aspectRatio: '16 / 9', overflow: 'hidden', marginBottom: '28px', marginTop: '4px', backgroundColor: '#0d0800' }}>
       <Image
         src={src}
         alt={alt}
@@ -57,7 +125,6 @@ function ContentImage({ src, alt, label, index }: { src: string; alt: string; la
 export default function ConsoleProjectPage({ project }: Props) {
   const router = useRouter()
   const [uiVisible, setUiVisible] = useState(false)
-  const [viewMode, setViewMode] = useState<ViewMode>('brief')
 
   const allImages = project.images.length > 0 ? project.images : [project.heroImage]
   const img = (n: number) => allImages[n] ?? null
@@ -88,6 +155,16 @@ export default function ConsoleProjectPage({ project }: Props) {
 
   const fileId = `MX-${String(frameNumber).padStart(3, '0')}-LV426`
 
+  const renderMedia = (n: number, label: string) => {
+    const src = img(n)
+    if (!src) return null
+    if (src.startsWith('video-pair::')) {
+      const [, leftSrc, rightSrc] = src.split('::')
+      return <VideoPair key={n} leftSrc={leftSrc} rightSrc={rightSrc} />
+    }
+    return <ContentImage key={n} src={src} alt={`${project.title} — ${label}`} label={label} index={n} />
+  }
+
   const SectionLabel = ({ children }: { children: string }) => (
     <div style={{
       color: c.bright,
@@ -103,7 +180,7 @@ export default function ConsoleProjectPage({ project }: Props) {
 
   return (
     <div
-      className="fixed inset-0 flex flex-col font-console overflow-hidden crt-monitor crt-flicker"
+      className="fixed inset-0 flex flex-col font-console overflow-hidden"
       style={{ backgroundColor: '#020100', color: c.text, lineHeight: '1.5' }}
     >
       {/* ── Header ── */}
@@ -227,76 +304,8 @@ export default function ConsoleProjectPage({ project }: Props) {
               </div>
               <div style={{ color: c.border, marginBottom: '20px', fontSize: '16px' }}>{'─'.repeat(48)}</div>
 
-              {/* View mode toggle */}
+              {/* ── FULL LOG ── */}
               {project.caseStudy && (
-                <div className="flex items-center gap-3 mb-6">
-                  {(['brief', 'debrief'] as ViewMode[]).map(mode => (
-                    <button
-                      key={mode}
-                      onClick={() => setViewMode(mode)}
-                      style={{
-                        fontSize: '16px', letterSpacing: '0.1em', padding: '10px 14px',
-                        minHeight: '44px',
-                        border: `1px solid ${viewMode === mode ? c.text : c.border}`,
-                        color: viewMode === mode ? c.bright : c.dim,
-                        backgroundColor: viewMode === mode ? 'rgba(232,160,0,0.06)' : 'transparent',
-                        opacity: viewMode === mode ? 1 : 0.6,
-                      }}
-                    >
-                      {mode === 'brief' ? 'BRIEF' : 'FULL LOG'}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* ── BRIEF ── */}
-              {viewMode === 'brief' && (
-                <div style={{ fontSize: '22px' }}>
-
-                  <div style={{ marginBottom: '28px' }}>
-                    <SectionLabel>{'// OVERVIEW'}</SectionLabel>
-                    <div style={{ color: c.text, lineHeight: '1.8' }}>{project.overview}</div>
-                  </div>
-
-                  {img(1) && (
-                    <ContentImage src={img(1)!} alt={`${project.title} — detail`} label={project.title.toUpperCase()} index={1} />
-                  )}
-
-                  <div style={{ marginBottom: '28px' }}>
-                    <SectionLabel>{'// CHALLENGE'}</SectionLabel>
-                    <div style={{ color: c.text, lineHeight: '1.8' }}>{project.challenge}</div>
-                  </div>
-
-                  {img(2) && (
-                    <ContentImage src={img(2)!} alt={`${project.title} — process`} label={project.category.toUpperCase()} index={2} />
-                  )}
-
-                  <div style={{ marginBottom: '28px' }}>
-                    <SectionLabel>{'// SOLUTION'}</SectionLabel>
-                    <div style={{ color: c.text, lineHeight: '1.8' }}>{project.solution}</div>
-                  </div>
-
-                  {img(3) && (
-                    <ContentImage src={img(3)!} alt={`${project.title} — outcome`} label="OUTCOME" index={3} />
-                  )}
-
-                  <div style={{ marginBottom: '28px' }}>
-                    <SectionLabel>{'// RESULTS'}</SectionLabel>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      {project.results.map((r, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'baseline', gap: '10px', paddingLeft: '4px', borderLeft: `2px solid ${c.border}` }}>
-                          <span style={{ color: c.bright, flexShrink: 0 }}>{'>'}</span>
-                          <span style={{ color: c.bright }}>{r.toUpperCase()}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                </div>
-              )}
-
-              {/* ── FULL LOG (debrief) ── */}
-              {viewMode === 'debrief' && project.caseStudy && (
                 <div style={{ fontSize: '22px' }}>
 
                   <div style={{ marginBottom: '28px' }}>
@@ -304,9 +313,7 @@ export default function ConsoleProjectPage({ project }: Props) {
                     <div style={{ color: c.text, lineHeight: '1.8' }}>{project.caseStudy.context}</div>
                   </div>
 
-                  {img(1) && (
-                    <ContentImage src={img(1)!} alt={`${project.title} — context`} label="MISSION CONTEXT" index={1} />
-                  )}
+                  {renderMedia(1, 'MISSION CONTEXT')}
 
                   <div style={{ marginBottom: '28px' }}>
                     <SectionLabel>{'// RECON FINDINGS'}</SectionLabel>
@@ -320,9 +327,7 @@ export default function ConsoleProjectPage({ project }: Props) {
                     </div>
                   </div>
 
-                  {img(2) && (
-                    <ContentImage src={img(2)!} alt={`${project.title} — process`} label="PROCESS" index={2} />
-                  )}
+                  {renderMedia(2, 'PROCESS')}
 
                   <div style={{ marginBottom: '28px' }}>
                     <SectionLabel>{'// KEY DECISIONS'}</SectionLabel>
@@ -348,9 +353,7 @@ export default function ConsoleProjectPage({ project }: Props) {
                     </div>
                   </div>
 
-                  {img(3) && (
-                    <ContentImage src={img(3)!} alt={`${project.title} — results`} label="RESULTS" index={3} />
-                  )}
+                  {renderMedia(3, 'RESULTS')}
 
                   <div style={{ marginBottom: '28px' }}>
                     <SectionLabel>{'// RESULTS'}</SectionLabel>
@@ -364,9 +367,7 @@ export default function ConsoleProjectPage({ project }: Props) {
                     </div>
                   </div>
 
-                  {img(4) && (
-                    <ContentImage src={img(4)!} alt={`${project.title} — retrospective`} label="RETROSPECTIVE" index={4} />
-                  )}
+                  {renderMedia(4, 'RETROSPECTIVE')}
 
                   <div style={{ marginBottom: '28px' }}>
                     <SectionLabel>{'// RETROSPECTIVE'}</SectionLabel>

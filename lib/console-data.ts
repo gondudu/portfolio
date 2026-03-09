@@ -182,7 +182,7 @@ export const CREW_MANIFEST: CrewMember[] = [
     clearance: 'ALPHA',
     fileRef: 'USCSS-NOS-820930-001',
     photo: '/images/eduardo.jpg',
-    bio: 'Product Designer based in Berlin. 5+ years designing digital products at scale — news apps, design systems, AI interfaces. Currently at Axel Springer building Blatt, a unified design system adopted across 8 teams. Previously led the Upday redesign during a high-stakes user migration from Samsung-bundled to standalone app.',
+    bio: 'Product Designer based in Berlin. Graphic design background — five years in branding and advertising — before crossing into digital product. That foundation still shapes everything: systematic thinking, communication design, a trained instinct for what type is doing and why. At Axel Springer on a company scholarship, wrote a bachelor\'s thesis on the state of design culture across the organisation — interviewed colleagues, mapped what was broken, was hired to fix it. That thesis became Blatt, a design system now in active migration across WELT and Bild. Led the Upday redesign during the Samsung exit: 70 million users, six months, survival conditions. Builds Figma plugins when the problem is faster solved with code than without it. Brazilian. Eight years in Berlin. Asks for the analytics before opening Figma.',
     missionNotes: 'Specialities: UX Research / Design Systems / AI Interface Design / Cross-functional leadership. Available for new missions — initiate contact via COMM ARRAY.',
   },
   {
