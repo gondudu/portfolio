@@ -40,3 +40,5 @@ next-env.d.ts
 
 # claude code
 .claude
+.case studies.txt
+CHANGELOG.md

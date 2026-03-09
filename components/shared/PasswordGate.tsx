@@ -56,6 +56,18 @@ export default function PasswordGate({ children }: Props) {
     if (auth === 'true') setIsAuthenticated(true)
   }, [])
 
+  // ── Lock body scroll while gate is visible ───────────────
+  useEffect(() => {
+    if (!isAuthenticated) {
+      document.documentElement.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.documentElement.style.overflow = ''
+        document.body.style.overflow = ''
+      }
+    }
+  }, [isAuthenticated])
+
   // ── Fade-in the whole screen ────────────────────────────────
   useEffect(() => {
     const tid = setTimeout(() => setUiVisible(true), 60)
@@ -129,6 +141,7 @@ export default function PasswordGate({ children }: Props) {
         transition: 'opacity 0.4s ease',
         display: 'flex',
         flexDirection: 'column',
+        zIndex: 9999,
       }}
       aria-label="Crew authentication terminal"
     >
@@ -163,7 +176,8 @@ export default function PasswordGate({ children }: Props) {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '24px 16px',
-          minHeight: 0,
+          minHeight: '90vh',
+          height:'90vh',
         }}
       >
 
