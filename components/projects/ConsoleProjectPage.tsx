@@ -173,6 +173,7 @@ export default function ConsoleProjectPage({ project }: Props) {
       marginBottom: '10px',
       paddingBottom: '4px',
       borderBottom: `1px dashed ${c.border}`,
+      fontFamily: 'var(--font-ibm-plex-mono)',
     }}>
       {children}
     </div>
@@ -236,13 +237,6 @@ export default function ConsoleProjectPage({ project }: Props) {
                 position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', pointerEvents: 'none',
                 background: 'linear-gradient(to bottom, transparent, #020100)',
               }} />
-              {/* Hero label */}
-              <div style={{
-                position: 'absolute', bottom: 16, left: 24,
-                color: c.dim, fontSize: '13px', letterSpacing: '0.15em',
-              }}>
-                {`MISSION LOG ${String(frameNumber).padStart(3, '0')} — ${project.title.toUpperCase()}`}
-              </div>
             </div>
           )}
 
@@ -306,11 +300,11 @@ export default function ConsoleProjectPage({ project }: Props) {
 
               {/* ── FULL LOG ── */}
               {project.caseStudy && (
-                <div style={{ fontSize: '22px' }}>
+                <div style={{ fontSize: '18px' }}>
 
                   <div style={{ marginBottom: '28px' }}>
                     <SectionLabel>{'// MISSION CONTEXT'}</SectionLabel>
-                    <div style={{ color: c.text, lineHeight: '1.8' }}>{project.caseStudy.context}</div>
+                    <div style={{ color: c.text, lineHeight: '1.8', fontFamily: 'var(--font-ibm-plex-mono)' }}>{project.caseStudy.context}</div>
                   </div>
 
                   {renderMedia(1, 'MISSION CONTEXT')}
@@ -320,8 +314,8 @@ export default function ConsoleProjectPage({ project }: Props) {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       {project.caseStudy.researchFindings.map((f, i) => (
                         <div key={i} style={{ display: 'flex', gap: '12px', color: c.text, lineHeight: '1.6' }}>
-                          <span style={{ color: c.dim, flexShrink: 0 }}>—</span>
-                          <span>{f}</span>
+                          <span style={{ color: c.dim, flexShrink: 0, fontFamily: 'var(--font-ibm-plex-mono)' }}>—</span>
+                          <span style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}>{f}</span>
                         </div>
                       ))}
                     </div>
@@ -334,8 +328,8 @@ export default function ConsoleProjectPage({ project }: Props) {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                       {project.caseStudy.keyDecisions.map((d, i) => (
                         <div key={i} style={{ paddingLeft: '10px', borderLeft: `2px solid ${c.border}` }}>
-                          <div style={{ color: c.bright, marginBottom: '4px' }}>{'>'} {d.decision.toUpperCase()}</div>
-                          <div style={{ color: c.dim, lineHeight: '1.6' }}>{d.outcome}</div>
+                          <div style={{ color: c.bright, marginBottom: '4px', fontFamily: 'var(--font-ibm-plex-mono)' }}>{'>'} {d.decision.toUpperCase()}</div>
+                          <div style={{ color: c.dim, lineHeight: '1.6', fontFamily: 'var(--font-ibm-plex-mono)' }}>{d.outcome}</div>
                         </div>
                       ))}
                     </div>
@@ -346,8 +340,8 @@ export default function ConsoleProjectPage({ project }: Props) {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                       {project.caseStudy.tradeoffs.map((t, i) => (
                         <div key={i} style={{ display: 'flex', gap: '12px', color: c.text, lineHeight: '1.6' }}>
-                          <span style={{ color: c.dim, flexShrink: 0 }}>—</span>
-                          <span>{t}</span>
+                          <span style={{ color: c.dim, flexShrink: 0, fontFamily: 'var(--font-ibm-plex-mono)' }}>—</span>
+                          <span style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}>{t}</span>
                         </div>
                       ))}
                     </div>
@@ -360,8 +354,8 @@ export default function ConsoleProjectPage({ project }: Props) {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       {project.results.map((r, i) => (
                         <div key={i} style={{ display: 'flex', alignItems: 'baseline', gap: '10px', paddingLeft: '4px', borderLeft: `2px solid ${c.border}` }}>
-                          <span style={{ color: c.bright, flexShrink: 0 }}>{'>'}</span>
-                          <span style={{ color: c.bright }}>{r.toUpperCase()}</span>
+                          <span style={{ color: c.bright, flexShrink: 0, fontFamily: 'var(--font-ibm-plex-mono)' }}>{'>'}</span>
+                          <span style={{ color: c.bright, fontFamily: 'var(--font-ibm-plex-mono)' }}></span>
                         </div>
                       ))}
                     </div>
@@ -371,7 +365,7 @@ export default function ConsoleProjectPage({ project }: Props) {
 
                   <div style={{ marginBottom: '28px' }}>
                     <SectionLabel>{'// RETROSPECTIVE'}</SectionLabel>
-                    <div style={{ color: c.dim, lineHeight: '1.8', fontStyle: 'italic' }}>{project.caseStudy.retrospective}</div>
+                    <div style={{ color: c.dim, lineHeight: '1.8', fontStyle: 'italic', fontFamily: 'var(--font-ibm-plex-mono)' }}>{project.caseStudy.retrospective}</div>
                   </div>
 
                 </div>

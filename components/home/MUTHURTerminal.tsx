@@ -381,10 +381,10 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
           </div>
         </div>
         {/* Right column: operator info (top) + stardate (bottom) */}
-        <div className="flex flex-col flex-shrink-0" style={{ minWidth: '140px' }}>
+        <div className="flex flex-col flex-shrink-0" style={{ minWidth: '200px' }}>
           <div className="px-3 py-2" style={{ borderBottom: `1px solid ${c.border}` }}>
             <div style={{ color: c.text, fontSize: '16px', letterSpacing: '0.06em', lineHeight: '1.3' }}>USS Nostromo.</div>
-            <div style={{ color: c.dim, fontSize: '13px', letterSpacing: '0.08em', lineHeight: '1.3' }}>Weyland U. Corp</div>
+            <div style={{ color: c.dim, fontSize: '13px', letterSpacing: '0.08em', lineHeight: '1.3' }}>W.Y. Corp</div>
           </div>
           <div className="px-3 py-2">
             <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.12em' }}>STARDATE</div>
@@ -647,7 +647,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
             const sym = member.status === 'DECEASED' ? '▲' : member.status === 'ATTACHED' ? '●' : '■'
             const col = member.status === 'DECEASED' ? c.dim : c.bright
             const photoBase: React.CSSProperties = {
-              width: 130, height: 130, flexShrink: 0,
+              width: 300, height: 300, flexShrink: 1,
               border: `1px solid ${c.border}`,
               position: 'relative', overflow: 'hidden',
               backgroundColor: '#0d0700',
@@ -655,7 +655,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
 
             return (
               <div className="h-full overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
-                <div style={{ padding: '16px', minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ padding: '16px', minHeight: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   {/* Card with corner brackets */}
                   <div style={{ maxWidth:'760px', position: 'relative', border: `1px solid ${c.border}`, flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                     {/* Corner brackets SVG */}

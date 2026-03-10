@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import { VT323 } from 'next/font/google'
+import { VT323, IBM_Plex_Mono } from 'next/font/google'
 import './globals.css'
 import ConditionalShell from '@/components/layout/ConditionalShell'
 import PasswordGate from '@/components/shared/PasswordGate'
@@ -27,6 +27,14 @@ const vt323 = VT323({
   subsets: ['latin'],
 })
 
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  variable: '--font-ibm-plex-mono',
+  display: 'swap',
+  subsets: ['latin'],
+})
+
 export const metadata: Metadata = {
   title: 'Eduardo Nogueira | Product Designer',
   description: 'Portfolio of Eduardo Nogueira - Product Designer crafting meaningful digital experiences',
@@ -40,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${workSans.variable} ${vt323.variable}`}>
+    <html lang="en" className={`${workSans.variable} ${vt323.variable} ${ibmPlexMono.variable}`}>
       <body>
         <a href="#main-content" className="skip-to-content">SKIP TO CONTENT</a>
         <noscript>
