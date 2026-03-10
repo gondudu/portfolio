@@ -387,14 +387,6 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
 
       <div style={{ borderTop: `1px solid ${c.border}`, ...fade(120) }} />
 
-      {/* ── Mobile status ticker (hidden on desktop) ── */}
-      <div className="block md:hidden overflow-hidden" style={{ borderBottom: `1px solid ${c.border}`, ...fade(200) }}>
-        <div className="ticker-track py-1" style={{ color: c.dim, fontSize: '20px', letterSpacing: '0.05em' }}>
-          <span>LIFE SUPPORT: 97% &nbsp;·&nbsp; HULL INTEGRITY: 94% &nbsp;·&nbsp; HYPERSLEEP: ONLINE &nbsp;·&nbsp; NAV: ONLINE &nbsp;·&nbsp; COMM ARRAY: ONLINE &nbsp;·&nbsp; POWER CORE: 88% &nbsp;·&nbsp;&nbsp;&nbsp;</span>
-          <span>LIFE SUPPORT: 97% &nbsp;·&nbsp; HULL INTEGRITY: 94% &nbsp;·&nbsp; HYPERSLEEP: ONLINE &nbsp;·&nbsp; NAV: ONLINE &nbsp;·&nbsp; COMM ARRAY: ONLINE &nbsp;·&nbsp; POWER CORE: 88% &nbsp;·&nbsp;&nbsp;&nbsp;</span>
-        </div>
-      </div>
-
       {/* ── Main area: two-column grid ── */}
       <div className="flex-1 flex min-h-0 overflow-hidden" style={fade(150)}>
 
@@ -657,7 +649,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
               <div className="h-full overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
                 <div style={{ padding: '16px', minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
                   {/* Card with corner brackets */}
-                  <div style={{ position: 'relative', border: `1px solid ${c.border}`, flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                  <div style={{ maxWidth:'760px', position: 'relative', border: `1px solid ${c.border}`, flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                     {/* Corner brackets SVG */}
                     <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }} viewBox="0 0 100 100" preserveAspectRatio="none">
                       <polyline points="0,6 0,0 6,0" fill="none" stroke={c.dim} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
@@ -773,12 +765,12 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
         <div className="flex items-center gap-3 px-4 py-1 overflow-x-auto" style={{ scrollbarWidth: 'none', whiteSpace: 'nowrap', fontSize: '18px' }}>
           <span style={{ color: c.dim, flexShrink: 0 }}>COMM ARRAY: ONLINE</span>
           <span style={{ color: c.border }}>·</span>
-          <a href="mailto:eduardo.nogueira@example.com" className="hover:opacity-70 transition-opacity" style={{ color: c.text, flexShrink: 0 }}>
-            EDUARDO.NOGUEIRA@EXAMPLE.COM
+          <a href="mailto:eduardo.bnogueira@gmail.com" className="hover:opacity-70 transition-opacity" style={{ color: c.text, flexShrink: 0 }}>
+            EMAIL
           </a>
           <span style={{ color: c.border }}>·</span>
-          <a href="https://linkedin.com/in/eduardo-nogueira" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: c.text, flexShrink: 0 }}>
-            LINKEDIN: /IN/EDUARDO-NOGUEIRA
+          <a href="https://www.linkedin.com/in/ebn18/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity" style={{ color: c.text, flexShrink: 0 }}>
+            LINKEDIN
           </a>
           <span style={{ color: c.border }}>·</span>
           <span style={{ color: c.dim, flexShrink: 0 }}>BERLIN, GER</span>
