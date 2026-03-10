@@ -355,7 +355,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
         {/* Left column: title + nav tabs */}
         <div className="flex-1 flex flex-col justify-between" style={{ borderRight: `1px solid ${c.border}` }}>
           <div className="px-3 pt-2 pb-1">
-            <span style={{ color: c.dim, fontSize: '16px', letterSpacing: '0.06em' }}>MU-TH-UR 6000 • Nogueira, Eduardo</span>
+            <span style={{ color: c.dim, fontSize: '16px', letterSpacing: '0.06em' }}>MU-TH-UR 6000 • NOGUEIRA, EDUARDO • PRODUCT DESIGNER </span>
           </div>
           <div className="flex items-center gap-3 md:gap-2/ px-3 pb-2 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
             {NAV_TABS.map(tab => (
@@ -655,7 +655,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
 
             return (
               <div className="h-full overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
-                <div style={{ padding: '16px', minHeight: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ padding: '16px', minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
                   {/* Card with corner brackets */}
                   <div style={{ maxWidth:'760px', position: 'relative', border: `1px solid ${c.border}`, flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                     {/* Corner brackets SVG */}

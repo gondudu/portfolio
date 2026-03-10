@@ -355,7 +355,7 @@ export default function ConsoleProjectPage({ project }: Props) {
                       {project.results.map((r, i) => (
                         <div key={i} style={{ display: 'flex', alignItems: 'baseline', gap: '10px', paddingLeft: '4px', borderLeft: `2px solid ${c.border}` }}>
                           <span style={{ color: c.bright, flexShrink: 0, fontFamily: 'var(--font-ibm-plex-mono)' }}>{'>'}</span>
-                          <span style={{ color: c.bright, fontFamily: 'var(--font-ibm-plex-mono)' }}></span>
+                          <span style={{ color: c.bright, fontFamily: 'var(--font-ibm-plex-mono)' }}>{r.toUpperCase()}</span>
                         </div>
                       ))}
                     </div>
