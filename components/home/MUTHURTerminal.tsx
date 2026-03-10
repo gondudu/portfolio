@@ -61,6 +61,7 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
   const [selectedCrewId, setSelectedCrewId] = useState<string>('nogueira')
   const [crewDetailOpen, setCrewDetailOpen] = useState(false) // mobile slide-in
   const [crewFading, setCrewFading] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
 
   // ── Mission prompt (post-boot interactive options) ──────────
   const [promptState, setPromptState] = useState<'idle' | 'showing' | 'done'>('idle')
@@ -349,43 +350,48 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
       className="h-full flex flex-col font-console overflow-hidden crt-monitor crt-flicker"
       style={{ backgroundColor: '#020100', color: c.text, fontSize: '16px', lineHeight: '1.5' }}
     >
-      {/* ── Header ── */}
-      <div className="flex items-center gap-2 px-4 py-2 flex-wrap" style={fade(0)}>
-        <span style={{ color: c.bright }}>MU-TH-UR 6000</span>
-        <span style={{ color: c.dim }}>·</span>
-        <span style={{ color: c.text }}>NOGUEIRA, E.</span>
-        <span className="hidden wide:inline" style={{ color: c.dim }}>·</span>
-        <span className="hidden wide:inline" style={{ color: c.dim }}>PRODUCT DESIGNER</span>
-        <div className="ml-auto flex items-center gap-2">
-          <span style={{ color: c.dim }}>STARDATE</span>
-          <span style={{ color: c.bright }}>{stardate || '-----.------'}</span>
+      {/* ── Combined Header + Nav ── */}
+      <div className="flex" style={{ paddingLeft:'8px', borderBottom: `1px solid ${c.border}`, ...fade(0) }}>
+        {/* Left column: title + nav tabs */}
+        <div className="flex-1 flex flex-col justify-between" style={{ borderRight: `1px solid ${c.border}` }}>
+          <div className="px-3 pt-2 pb-1">
+            <span style={{ color: c.dim, fontSize: '16px', letterSpacing: '0.06em' }}>MU-TH-UR 6000 • Nogueira, Eduardo</span>
+          </div>
+          <div className="flex items-center gap-3 md:gap-2/ px-3 pb-2 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+            {NAV_TABS.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => handleNavTab(tab)}
+                className="transition-opacity hover:opacity-100 flex-shrink-0"
+                style={{
+                  backgroundColor: activeView === tab.id ? c.bright : 'transparent',
+                  color: activeView === tab.id ? '#020100' : c.dim,
+                  opacity: activeView === tab.id ? 1 : 0.65,
+                  padding: '4px 14px',
+                  fontSize: '22px',
+                  lineHeight: '1',
+                  minHeight: '36px',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* Right column: operator info (top) + stardate (bottom) */}
+        <div className="flex flex-col flex-shrink-0" style={{ minWidth: '140px' }}>
+          <div className="px-3 py-2" style={{ borderBottom: `1px solid ${c.border}` }}>
+            <div style={{ color: c.text, fontSize: '16px', letterSpacing: '0.06em', lineHeight: '1.3' }}>USS Nostromo.</div>
+            <div style={{ color: c.dim, fontSize: '13px', letterSpacing: '0.08em', lineHeight: '1.3' }}>Weyland U. Corp</div>
+          </div>
+          <div className="px-3 py-2">
+            <div style={{ color: c.dim, fontSize: '12px', letterSpacing: '0.12em' }}>STARDATE</div>
+            <div style={{ color: c.bright, fontSize: '15px', letterSpacing: '0.04em' }}>{stardate || '-----.------'}</div>
+          </div>
         </div>
       </div>
-      <div style={{ borderTop: `1px solid ${c.border}`, ...fade(80) }} />
-
-      {/* ── Nav tabs ── */}
-      <div className="flex items-center gap-3 md:gap-6 px-3 md:px-4 py-1 md:py-2 overflow-x-auto" style={{ scrollbarWidth: 'none', ...fade(320) }}>
-        {NAV_TABS.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => handleNavTab(tab)}
-            className="transition-opacity hover:opacity-100 flex flex-col items-start flex-shrink-0"
-            style={{
-              color: activeView === tab.id ? c.bright : c.dim,
-              opacity: activeView === tab.id ? 1 : 0.7,
-              fontSize: '22px',
-              lineHeight: '1',
-              minHeight: '44px',
-              justifyContent: 'center',
-              display: 'flex',
-            }}
-          >
-            <span>{'>'} {tab.label}</span>
-          </button>
-        ))}
-      </div>
-
-      <div style={{ borderTop: `1px solid ${c.border}`, ...fade(120) }} />
 
       {/* ── Main area: two-column grid ── */}
       <div className="flex-1 flex min-h-0 overflow-hidden" style={fade(150)}>
@@ -532,8 +538,9 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                   className="flex items-center gap-2 px-3 py-2"
                   style={{
                     backgroundColor: '#020100',
-                    border: `1px solid ${c.border}`,
-                    boxShadow: `0 0 12px rgba(0,0,0,0.6)`,
+                    border: `1px solid ${isFocused ? c.dim : c.border}`,
+                    boxShadow: isFocused ? `0 0 8px rgba(232,160,0,0.2)` : `0 0 12px rgba(0,0,0,0.6)`,
+                    transition: 'border-color 120ms ease, box-shadow 120ms ease',
                   }}
                 >
                   <span style={{ color: c.dim }}>{'>'}</span>
@@ -542,6 +549,8 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                     value={inputValue}
                     onChange={e => { startAmbientHum(); playKeyClick(); setInputValue(e.target.value) }}
                     onKeyDown={handleKeyDown}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
                     className="flex-1 bg-transparent outline-none font-console placeholder-console-phosphor-dim"
                     style={{ color: c.text, fontSize: '20px', textTransform: 'uppercase' }}
                     placeholder="ENTER QUERY..."
@@ -555,14 +564,13 @@ export default function MUTHURTerminal({ alertMode, ready = false, skipBoot = fa
                     className="transition-opacity"
                     style={{
                       color: currentDisplay !== null ? c.border : c.dim,
-                      fontSize: '28px',
-                      border: `1px solid ${currentDisplay !== null ? c.border : c.border}`,
-                      padding: '0 4px',
-                      opacity: currentDisplay !== null ? 0.3 : 0.7,
+                      fontSize: '18px',
+                      letterSpacing: '0.06em',
+                      opacity: currentDisplay !== null ? 0.35 : 0.8,
                       cursor: currentDisplay !== null ? 'not-allowed' : 'default',
                     }}
                   >
-                    {currentDisplay !== null ? '...' : 'SEND'}
+                    {currentDisplay !== null ? '[ ....... ]' : '[ TRANSMIT ]'}
                   </button>
                 </div>
               </div>
