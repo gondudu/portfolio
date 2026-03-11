@@ -1,3 +1,31 @@
+export interface Section {
+  id: string
+  title: string
+  subtitle?: string
+  body?: string
+  items?: string[]
+  image?: string        // full filename e.g. 'problem.jpg' — if absent, section is imageless (80vh desktop)
+  imageCaption?: string
+  video?: { left: string; right: string }  // video pair, mutually exclusive with image
+}
+
+export interface ProjectContent {
+  slug: string
+  title: string
+  category: string
+  year: string
+  role: string
+  team?: string
+  timeline?: string
+  skills?: string[]
+  thumbnail: string
+  heroImage: string
+  overview: string
+  results: string[]
+  nextProject?: string
+  sections: Section[]
+}
+
 export interface CaseStudy {
   context: string
   researchFindings: string[]
@@ -31,16 +59,16 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: 'nmt-product-suite-design-system',
-    title: 'Blatt Design System',
+    title: 'Meet Blatt: Axel Springer\'s Editorial Design System',
     category: 'Design System / Organisational Transformation',
     year: '2024–2026',
     role: 'Product Designer',
     thumbnail: '/images/projects/nmt-product-suite-design-system/thumbnail.jpg',
     heroImage: '/images/projects/nmt-product-suite-design-system/hero.jpg',
     overview:
-      'Axel Springer\'s product teams built independently — separate components, separate conventions, no shared foundation across brands. I came to this through my bachelor\'s thesis — written while on an Axel Springer scholarship at CODE University Berlin, it mapped the state of design culture across the company through interviews with colleagues. That research gave me the credibility to propose the system. Blatt is the result: a unified design infrastructure for WELT and Bild, currently in active migration across both brands.',
+      'Axel Springer SE is Germany\'s largest digital publishing house and one of the most significant media conglomerates in Europe.',
     challenge:
-      'The problem was never technical — it was cultural. Designers without engineering context were building in an aesthetically free but system-hostile way: components that looked right in Figma and broke in production. Introducing design tokens, shared libraries, and contribution workflows meant asking colleagues to change habits that had been in place for years — while still shipping their own roadmaps. Without management patience and protected roadmap space, this system simply wouldn\'t exist. That tension has never fully gone away.',
+      'The problem was never technical — it was cultural. Designers without engineering context were building in an aesthetically free but system-hostile way: components that looked right in Figma and often broke in production.',
     solution:
       'I started with a pattern library for WELT — an immediate speed-up that created buy-in before any governance existed. I ran workshops and onboarding sessions early — not to document the system, but to make it feel like something colleagues had helped build. The goal wasn\'t compliance; it was understanding. The real breakthrough came from aligning with developers: we synced naming conventions, documentation standards, and repositories — creating an automated pipeline between Figma and production code. Developers taught me how their codebases worked; I taught them how design decisions were made. That mutual education changed the collaboration model. Across the team, designers started building tooling: a colleague built a Figma plugin to replace Token Studio — the licensed alternative was too expensive at scale. My contribution was a content plugin for populating designs with live publication data, later integrated into the company-wide Designers Toolkit and distributed to every Axel Springer employee.',
     results: [
@@ -59,19 +87,18 @@ export const projects: Project[] = [
       '/images/brand-guidelins/Slide 16_9 - 51.png',
       '/images/brand-guidelins/Slide 16_9 - 49.png',
     ],
-    team: 'Cross-brand design + dev teams',
-    timeline: 'Mid-2025 – ongoing',
+    team: 'Cross-brand product teams',
+    timeline: '2024 – ongoing',
     skills: ['Design Systems', 'Figma', 'Workshops', 'Developer Alignment'],
     nextProject: 'figma-content-plugin',
     caseStudy: {
       context:
-        'I came to Blatt through an unusual path. While studying at CODE University Berlin on an Axel Springer scholarship, I wrote my bachelor\'s thesis on the state of design culture at the company — interviewing colleagues, mapping workflow fragmentation, documenting exactly what was keeping teams from better product development. That research gave me the credibility to propose the system, and I was hired after graduation to build it. Blatt launched in mid-2025.',
+        'When I joined Axel Springer, I quickly noticed legacy structures holding back modern product development. That drove me to write my bachelor\'s thesis on the company\'s design culture — interviewing colleagues, mapping workflow fragmentation, and identifying what was slowing teams down. That research gave me the credibility to start building Blatt.',
       researchFindings: [
-        'Teams across Axel Springer brands built independently — no shared components, no common conventions, growing design debt and duplicated effort',
-        'Designers without engineering context were building components that were aesthetically free but expensive to implement and impossible to maintain at scale',
-        'Token Studio: too expensive to license per employee across multiple brands — an opening for internal tooling built by the team itself',
-        'Developers and designers lacked a shared vocabulary — naming conventions, documentation standards, and handoff workflows were inconsistent across brands',
-        'Structuring tokens for LLM consumption would extend the system\'s reach into AI-assisted prototyping — design decisions readable not just by humans, but by AI coding tools',
+        'Teams across Axel Springer editorial brands built independently',
+        'Designers worked often without engineering context',
+        'Developers and designers lacked a shared vocabulary',
+        'Learning were not always shared and documented',
       ],
       keyDecisions: [
         {
@@ -91,12 +118,13 @@ export const projects: Project[] = [
         },
       ],
       tradeoffs: [
-        'Management expects quick results; design systems require long-term cultural change — the project exists at the mercy of roadmap space that other teams control',
-        'System consistency vs. team autonomy — governance had to leave room for brand-specific expression, or teams would simply build outside the system',
-        'The tooling ecosystem was a collective effort across the design team — I contributed significantly but did not build everything. The work was collaborative, not a solo achievement.',
+        'Understand how other companies solve the same problem',
+        'Audit the current system looking for synergies and design debt',
+        'Interview product teams to understand pain points and opportunities for design',
+        'Understand how technology can support workflows',
       ],
       retrospective:
-        'The hardest part was never the components — it was the culture. A design system is only as strong as the management patience that protects its roadmap space. That\'s still the thing I can\'t fully control, and it\'s the thing that would break this if it disappeared.',
+        'Blatt was born to unify editorial and product teams around faster workflow, allowing teams to stop reinventing ans start building.',
     },
   },
   {
