@@ -4,6 +4,8 @@ export interface CaseStudy {
   keyDecisions: { decision: string; outcome: string }[]
   tradeoffs: string[]
   retrospective: string
+  tagline?: string
+  sectionImages?: Record<string, string[]>
 }
 
 export interface Project {
@@ -21,6 +23,9 @@ export interface Project {
   images: string[]
   nextProject?: string
   caseStudy?: CaseStudy
+  team?: string
+  timeline?: string
+  skills?: string[]
 }
 
 export const projects: Project[] = [
@@ -30,8 +35,8 @@ export const projects: Project[] = [
     category: 'Design System / Organisational Transformation',
     year: '2024–2026',
     role: 'Product Designer',
-    thumbnail: '/images/blatt.jpg',
-    heroImage: '/images/blatt.jpg',
+    thumbnail: '/images/projects/nmt-product-suite-design-system/thumbnail.jpg',
+    heroImage: '/images/projects/nmt-product-suite-design-system/hero.jpg',
     overview:
       'Axel Springer\'s product teams built independently — separate components, separate conventions, no shared foundation across brands. I came to this through my bachelor\'s thesis — written while on an Axel Springer scholarship at CODE University Berlin, it mapped the state of design culture across the company through interviews with colleagues. That research gave me the credibility to propose the system. Blatt is the result: a unified design infrastructure for WELT and Bild, currently in active migration across both brands.',
     challenge:
@@ -54,6 +59,9 @@ export const projects: Project[] = [
       '/images/brand-guidelins/Slide 16_9 - 51.png',
       '/images/brand-guidelins/Slide 16_9 - 49.png',
     ],
+    team: 'Cross-brand design + dev teams',
+    timeline: 'Mid-2025 – ongoing',
+    skills: ['Design Systems', 'Figma', 'Workshops', 'Developer Alignment'],
     nextProject: 'figma-content-plugin',
     caseStudy: {
       context:
@@ -97,21 +105,18 @@ export const projects: Project[] = [
     category: 'Mobile App / News Platform',
     year: '2024–Present',
     role: 'Lead Product Designer',
-    thumbnail: '/images/UPDAY.jpg',
-    heroImage: '/images/brand-guidelins/upday_cover.jpg',
+    thumbnail: '/images/projects/upday-news-app-redesign/thumbnail.jpg',
+    heroImage: '/images/projects/upday-news-app-redesign/hero.jpg',
     overview:
-      'Upday came preinstalled on every Samsung Galaxy phone in Europe — seventy million monthly users who never chose to download it. When Samsung replaced it with Google News in 2024, the product had to survive on its own for the first time. I led the redesign as part of a ten-person cross-functional team, working against a six-month deadline and a new backend. What we thought was a visual refresh turned into a harder question: without Samsung\'s distribution, what reason does anyone have to install this?',
+      'Upday was Samsung\'s default news application across Europe — preinstalled on Galaxy devices, never downloaded by choice. When Samsung replaced it in 2024, the product faced the open market for the first time. A cross-functional team inside Axel Springer had roughly six months to ship a version that could survive without the preinstall. I led UI/UX as part of this team.',
     challenge:
-      'The brief was to modernise the interface. Then we pulled the analytics. Eighty percent of users had never left the top news feed — the personalisation features, local news, and discovery tools the team treated as differentiators had almost no one using them. The problem wasn\'t visual. It was that the product had been designed for a captive audience that no longer existed. I argued to keep the local news feed using engagement data from sister publications at Axel Springer. I lost.',
+      'We audited the existing product, collected analytics, and mapped user behaviour against four news consumption moments — from structured morning rituals to accidental discovery through social feeds. The data reframed the problem. 80% of users had never left the top news feed — the personalisation, local news, and discovery features the team treated as differentiators had almost no engaged users. Most of Upday\'s audience behaved like Dedicated and Updated readers: they came for structured, quick consumption and left. The product had been designed for explorers who weren\'t there. Local news retained a loyal niche (~19%) — I used engagement data from sister Axel Springer publications to argue for keeping it. I lost — timeline and infrastructure cost won. The accent colour #1DB8DA failed WCAG contrast on buttons and chips against white (~2.7:1), found during the audit, not flagged externally. We also identified two distinct hues of blue used inconsistently across the product — the visual identity had drifted. Users had built routines around the app. Breaking established habits — how people entered, where they navigated first, what they expected to find — would potentially create backlash during an already disorienting migration. Any structural change had to respect existing muscle memory.',
     solution:
-      'I audited the full existing product — surfacing the iOS home widget as a critical retention feature for power users, and identifying the old accent colour (#1DB8DA) as an accessibility failure: roughly 2.7:1 contrast against white on buttons and chips, below the WCAG minimum. Navigation went from five tabs to four — Top News, My News, Shorts, and Games — with profile moved to the top bar. Two Google Fonts replaced Roboto: Freeman for display (condensed, giving more control across the app\'s seven language editions, and with the editorial personality Roboto never had) and Gothic A1 for body and labels. I considered Gotham Condensed and Futura — proven, well-established typefaces I\'d have preferred — but the team needed to avoid typefoundry licensing costs. The new colour, #002BFF, passed WCAG. Rolled out in phases to avoid disorienting users mid-migration.',
+      'Navigation went from five tabs to four: Top News, My News, Shorts, and Games. Profile moved to the top bar. Discover and Local were cut — despite my advocating for Local\'s retention with data. The decision was driven by infrastructure cost and the shift to an AI-editorial backend. The aggregator model ended with this redesign. The persona research showed a significant segment consuming news passively — as entertainment, not obligation. Shorts and games aligned with this behaviour, supported by patterns across Axel Springer news products and globally. News consumption is largely entertainment-driven for this group, and these formats compete directly with social media for the same idle moments. I was genuinely convinced — this was not a compromise. Two typefaces replaced Roboto: Freeman for display — condensed, handling seven language editions more efficiently and carrying the editorial personality Roboto never had. Gothic A1 for body, chosen for readability in short reading sessions. Both Google Fonts, avoiding typefoundry licensing costs. I would have preferred Gotham Condensed and Futura — proven, better-established typefaces — but the budget constraint was real. The brand colour moved from #1DB8DA to #002BFF. I proposed the new hue based on colours the brand had used historically, so the transition leveraged existing recognition rather than starting fresh. The rollout was phased to avoid disorienting users mid-migration. The component library was rebuilt from the ground up — buttons, chips, cards, navigation bars, teasers, inputs — all redesigned to express the new brand language. I used Material Design as a structural foundation, then defined spacing, elevation, radius, and state behaviour specific to Upday\'s identity. The brand had no documented component standards, so every decision had to be made from scratch and validated across seven language editions. We released the first version in parallel with the Samsung edition while it was still active. This let us observe real usage patterns with a smaller user base before the full migration — testing assumptions from the persona research against actual behaviour.',
     results: [
+      '1 million users migrated',
       '10% increase in user retention',
       '20% increase in time spent in app',
-      'Information architecture rebuilt around the dominant 80% use case',
-      'Accessibility corrected: #1DB8DA → #002BFF, WCAG contrast restored on all interactive elements',
-      'iOS home widget retained through migration — essential for power users, identified in audit',
-      'Ads shipped before UI issues resolved — I flagged the risk; business proceeded',
     ],
     images: [
       '/images/UPDAY.jpg',
@@ -120,46 +125,49 @@ export const projects: Project[] = [
       '/images/brand-guidelins/Slide 16_9 - 8.jpg',
       '/images/brand-guidelins/Slide 16_9 - 34@2x.jpg',
     ],
+    team: '10-person cross-functional',
+    timeline: '~6 months',
+    skills: ['UI/UX Design', 'Analytics', 'Typography', 'Accessibility'],
     nextProject: 'media-player-sdk-axel-springer',
     caseStudy: {
       context:
-        'Upday had been Samsung\'s default swipe-left news surface across Europe — preinstalled on Galaxy devices, never downloaded by choice. When Samsung replaced it with Google News in 2024, the product faced the open market for the first time. A ten-person cross-functional team — developers, product owners, business managers, the CTO, and me leading UI/UX — had roughly six months to ship a version that could survive without the preinstall.',
+        'Upday was Samsung\'s default news application across Europe — preinstalled on Galaxy devices, never downloaded by choice. When Samsung replaced it in 2024, the product faced the open market for the first time. A cross-functional team inside Axel Springer — developers, product owners, business managers, the CTO, and me leading UI/UX — had roughly six months to ship a version that could survive without the preinstall.',
       researchFindings: [
-        '80% of users had never left the top news feed — the personalisation, local news, and discovery features the team treated as differentiators had almost no one using them',
-        'Three user personas defined: News Seeker (fast, reliable updates), Explorer (diverse perspectives), Passive Reader (AI summaries)',
-        'Local news retained a loyal niche — I used engagement data from sister Axel Springer publications to argue for keeping it',
-        'Old accent colour #1DB8DA failed WCAG contrast requirements on buttons and chips against white (~2.7:1) — identified during design system audit, not flagged externally',
-        'iOS home widget: identified as essential for power users during the product audit; at risk of being cut in the migration sprint',
+        '80% of users had never left the top news feed — the personalisation, local news, and discovery features the team treated as differentiators had almost no engaged users. Most behaved like Dedicated and Updated readers: structured, quick consumption.',
+        'User behaviour mapped against four news consumption moments — from structured morning rituals to accidental discovery through social feeds — revealing a significant passive segment consuming news as entertainment',
+        'Local news retained a loyal niche (~19%) — I used engagement data from sister Axel Springer publications to argue for keeping it. Timeline and infrastructure cost won.',
+        'Accent colour #1DB8DA failed WCAG contrast on buttons and chips against white (~2.7:1) — identified during audit, not flagged externally. Two distinct hues of blue used inconsistently across the product.',
+        'Users had built routines around the app — breaking established habits during an already disorienting migration risked backlash. Any structural change had to respect existing muscle memory.',
       ],
       keyDecisions: [
         {
           decision: 'Rebuild navigation around the 80% use case — four tabs instead of five',
           outcome:
-            'Discover and Local were cut despite my advocating for their retention with data. The decision was driven by infrastructure cost and the new AI-editorial backend. Profile moved to the top bar. The aggregator model ended with this redesign.',
+            'Discover and Local were cut despite my advocating for Local\'s retention with data. The decision was driven by infrastructure cost and the shift to an AI-editorial backend. Profile moved to the top bar. The aggregator model ended with this redesign.',
         },
         {
-          decision: 'Replace Roboto with Freeman (display) and Gothic A1 (body)',
+          decision: 'Introduce Shorts and Games for Time-Filler audiences',
           outcome:
-            'Considered Gotham Condensed and Futura — established, better-proven typefaces I would have preferred. Budget ruled them out. Freeman\'s condensed style handles the app\'s seven language editions more efficiently: headlines stay tighter across longer words in German, Polish, and Dutch. Gothic A1 chosen for readability in short reading sessions. Both are Google Fonts, avoiding typefoundry licensing costs entirely.',
+            'Persona research showed a significant segment consuming news passively — as entertainment, not obligation. These formats compete directly with social media for the same idle moments. Supported by patterns across Axel Springer news products and globally. I was genuinely convinced — this was not a compromise.',
         },
         {
-          decision: 'Fix the accessibility failure and phase the colour rebrand separately',
+          decision: 'Redesign brand foundation and rebuild component library',
           outcome:
-            '#1DB8DA on white was running at ~2.7:1 contrast — below WCAG AA minimum for interactive UI components. Self-identified during the audit. #002BFF replaced it. The rollout was phased to avoid disorienting users who were already navigating a product migration.',
+            'Freeman (display) and Gothic A1 (body) replaced Roboto — both Google Fonts, avoiding typefoundry costs. I would have preferred Gotham Condensed and Futura but the budget constraint was real. Brand colour moved from #1DB8DA to #002BFF, proposed based on colours the brand had used historically. Component library rebuilt from the ground up — every interactive element redesigned to express the new brand language, validated across seven language editions.',
         },
         {
-          decision: 'Add Games as a fourth core tab',
+          decision: 'Release in parallel with Samsung edition to test assumptions',
           outcome:
-            'Supported by patterns across Axel Springer news products: news consumption is largely entertainment-driven, and games fit that habit for a meaningful user segment. I was genuinely convinced — this was not a compromise.',
+            'First version launched while the Samsung edition was still active. This let us observe real usage patterns with a smaller user base before full migration — testing persona research assumptions against actual behaviour.',
         },
       ],
       tradeoffs: [
-        'Ads shipped before UI quality issues were resolved — I raised the risk; the business made the call. The concern was documented.',
         'Local news and the aggregator model were cut despite engagement data supporting their retention — timeline and infrastructure cost won',
         'Google Fonts instead of professional typefoundry licences — a reasonable constraint-driven compromise, but a compromise on typographic craft',
+        'No documented component standards existed — every component decision had to be made from scratch, adding significant time to the redesign',
       ],
       retrospective:
-        'The iOS home widget is the work I\'m most proud of that isn\'t in the case study — finding it in the audit and making sure it survived the migration mattered to the users who relied on it daily. The ad timing decision is the one I\'d push harder on next time. Design can\'t fix what monetisation breaks.',
+        'The hardest part was redesigning for users who never chose to be there in the first place. When your entire audience was captive, every assumption about what they value is suspect. The data told us what they actually did — and we built around that.',
     },
   },
   {
@@ -168,8 +176,8 @@ export const projects: Project[] = [
     category: 'Platform Design / Consumer Media',
     year: '2024',
     role: 'Lead Product Designer',
-    thumbnail: '/images/bhxnu-s2HHseW10Pc-unsplash.jpg',
-    heroImage: '/images/bhxnu-s2HHseW10Pc-unsplash.jpg',
+    thumbnail: '/images/projects/media-player-sdk-axel-springer/thumbnail.jpg',
+    heroImage: '/images/projects/media-player-sdk-axel-springer/hero.jpg',
     overview:
       'WELT and Bild — Axel Springer\'s two largest news brands — each ran separate video infrastructure contracts, with engineers at both brands independently solving identical problems. I came into this project already knowing WELT\'s media experience from the inside: I\'d mapped its failure points through heuristic evaluation before the brief existed. The cost consolidation mandate gave us the opening to fix what I\'d already found.',
     challenge:
@@ -190,6 +198,9 @@ export const projects: Project[] = [
       '/images/brand-guidelins/Slide 16_9 - 44.png',
       '/images/brand-guidelins/Slide 16_9 - 54.png',
     ],
+    team: 'Cross-brand (WELT + Bild)',
+    timeline: '2024',
+    skills: ['Product Design', 'Co-design', 'Heuristic Evaluation'],
     nextProject: 'nmt-product-suite-design-system',
     caseStudy: {
       context:
@@ -233,8 +244,8 @@ export const projects: Project[] = [
     category: 'Internal Tool / Side Project',
     year: '2026',
     role: 'Designer + Developer',
-    thumbnail: '/images/figmaplug_cover.jpg',
-    heroImage: '/images/figmaplug_cover.jpg',
+    thumbnail: '/images/projects/figma-content-plugin/thumbnail.jpg',
+    heroImage: '/images/projects/figma-content-plugin/hero.jpg',
     overview:
       'While working on the Blatt design system, I was laying out a WELT prototype that needed real news content — ten teasers, populated with actual headlines and text. The manual process: open the website, find an article that fits, copy it in. Five minutes per teaser, twenty minutes minimum for a full page. I had been building vibe coding skills through the Blatt project. This time I built the solution instead of doing the task. First version scraped the website directly. Second used the RSS feed — stable, shareable, deployable to the whole team. Conceived, designed, and shipped in a day.',
     challenge:
@@ -253,6 +264,9 @@ export const projects: Project[] = [
       'video-pair::/images/Screen Recording 2026-03-09 at 20.37.53.mov::/images/2.Screen Recording 2026-03-09 at 20.37.53.mov',
       '/images/brand-guidelins/welt_teasers_03.jpg',
     ],
+    team: 'Solo',
+    timeline: '2025',
+    skills: ['Vibe Coding', 'Plugin Development', 'RSS Integration'],
     nextProject: 'upday-news-app-redesign',
     caseStudy: {
       context:

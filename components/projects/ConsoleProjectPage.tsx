@@ -1,23 +1,110 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Project, projects, getNextProject } from '@/lib/projects'
+import AnimatedSection from '@/components/shared/AnimatedSection'
 
 interface Props {
   project: Project
 }
 
-const c = {
+// Dark CRT colors — only used in sticky header
+const crt = {
   text: '#e8a000',
   dim: '#a87000',
   bright: '#ffc93c',
   border: '#2a1800',
+  bg: '#020100',
 }
 
-// Side-by-side video pair: shortSrc left, longSrc right. Both restart when long video ends.
-// leftSrc = long video, rightSrc = short video. Both restart when long video ends.
+// Light editorial colors — used in content area
+const lt = {
+  bg: '#dadada',
+  text: '#030303',
+  secondary: '#818181',
+  border: '#c5c5c5',
+  caption: '#666666',
+  tagBg: '#ffc93c',
+  tagText: '#030303',
+  labelAmber: '#a87000',
+}
+
+/*
+ * Image convention:
+ *   /images/projects/{slug}/{section}.jpg
+ *
+ * Section keys per project:
+ *   hero.jpg        — hero banner (21:9)
+ *   thumbnail.jpg   — project card on home (16:9)
+ *   intro.jpg       — after intro section
+ *   problem.jpg     — after problem section
+ *   solution.jpg    — after solution section
+ *   feature-01.jpg  — after feature 01
+ *   feature-02.jpg  — after feature 02
+ *   feature-03.jpg  — (if project has 3+ features)
+ *   impact.jpg      — after impact section (optional)
+ */
+
+// Placeholder rectangle shown until real images are placed
+function PlaceholderImage({ label, aspectRatio = '16 / 9' }: { label: string; aspectRatio?: string }) {
+  return (
+    <div style={{
+      width: '100%',
+      aspectRatio,
+      backgroundColor: '#b8b8b8',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {/* Diagonal lines pattern */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        opacity: 0.08,
+        backgroundImage: 'repeating-linear-gradient(45deg, #000 0, #000 1px, transparent 1px, transparent 20px)',
+      }} />
+      <div style={{
+        fontFamily: 'var(--font-jost)',
+        fontWeight: 700,
+        fontSize: '14px',
+        letterSpacing: '0.15em',
+        color: '#888',
+        textTransform: 'uppercase',
+        padding: '8px 16px',
+        border: '2px dashed #aaa',
+        borderRadius: '4px',
+        backgroundColor: 'rgba(218,218,218,0.7)',
+        zIndex: 1,
+      }}>
+        {label}
+      </div>
+    </div>
+  )
+}
+
+function ContentImageOrPlaceholder({ slug, section, caption }: { slug: string; section: string; caption?: string }) {
+  return (
+    <div>
+      <PlaceholderImage label={`${section}.jpg`} />
+      {caption && (
+        <div style={{
+          color: lt.caption,
+          fontSize: '16px',
+          fontFamily: 'var(--font-jost)',
+          marginTop: '12px',
+          paddingLeft: '4px',
+        }}>
+          {caption}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Side-by-side video pair (kept for figma-content-plugin)
 function VideoPair({ leftSrc, rightSrc }: { leftSrc: string; rightSrc: string }) {
   const leftRef = useRef<HTMLVideoElement>(null)
   const rightRef = useRef<HTMLVideoElement>(null)
@@ -34,102 +121,115 @@ function VideoPair({ leftSrc, rightSrc }: { leftSrc: string; rightSrc: string })
     return () => long.removeEventListener('ended', restart)
   }, [])
 
-  const wrapStyle: React.CSSProperties = {
-    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
-  }
-  const videoStyle: React.CSSProperties = {
-    width: '100%', height: '100%', objectFit: 'contain',
-  }
-
   return (
     <>
-    <div style={{
-      width: 'min(936px, 100vw)',
-      marginLeft: 'calc((min(936px, 100vw) - min(720px, 100%)) / -2)',
-      aspectRatio: '16 / 9',
-      display: 'flex',
-      gap: '2px',
-      backgroundColor: '#0d0800',
-      marginBottom: '0',
-      marginTop: '4px',
-      overflow: 'hidden',
-      position: 'relative',
-    }}>
-      <div style={wrapStyle}>
-        <video ref={leftRef} src={leftSrc} autoPlay muted playsInline style={videoStyle} />
+      <div style={{
+        width: '100%',
+        aspectRatio: '16 / 9',
+        display: 'flex',
+        gap: '2px',
+        backgroundColor: '#000',
+        overflow: 'hidden',
+        position: 'relative',
+      }}>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+          <video ref={leftRef} src={leftSrc} autoPlay muted playsInline style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        </div>
+        <div style={{ width: '1px', backgroundColor: '#333', flexShrink: 0 }} />
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+          <video ref={rightRef} src={rightSrc} autoPlay muted playsInline loop style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        </div>
       </div>
-      <div style={{ width: '1px', backgroundColor: '#2a1800', flexShrink: 0 }} />
-      <div style={wrapStyle}>
-        <video ref={rightRef} src={rightSrc} autoPlay muted playsInline loop style={videoStyle} />
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginTop: '12px',
+        padding: '0 4px',
+      }}>
+        <span style={{ color: lt.caption, fontSize: '16px', fontFamily: 'var(--font-jost)' }}>Before: around 2 minutes</span>
+        <span style={{ color: lt.caption, fontSize: '16px', fontFamily: 'var(--font-jost)' }}>After: 8 seconds</span>
       </div>
-      {/* Corner brackets */}
-      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} viewBox="0 0 100 100" preserveAspectRatio="none">
-        <polyline points="0,8 0,0 8,0"        fill="none" stroke="#2a1800" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-        <polyline points="92,0 100,0 100,8"   fill="none" stroke="#2a1800" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-        <polyline points="0,92 0,100 8,100"   fill="none" stroke="#2a1800" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-        <polyline points="92,100 100,100 100,92" fill="none" stroke="#2a1800" strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-      </svg>
-    </div>
-    <div style={{
-      width: 'min(936px, 100vw)',
-      marginLeft: 'calc((min(936px, 100vw) - min(720px, 100%)) / -2)',
-      display: 'flex',
-      justifyContent: 'space-between',
-      marginTop: '-20px',
-      marginBottom: '28px',
-      padding: '0 4px',
-    }}>
-      <span style={{ color: '#a87000', fontSize: '13px', letterSpacing: '0.12em' }}>BEFORE: AROUND 2 MINUTES</span>
-      <span style={{ color: '#a87000', fontSize: '13px', letterSpacing: '0.12em' }}>AFTER: 8 SECONDS</span>
-    </div>
     </>
   )
 }
 
-// Full-bleed content image with scanline overlay + corner brackets + label
-function ContentImage({ src, alt, label, index }: { src: string; alt: string; label: string; index: number }) {
+function TwoColSection({ title, subtitle, children }: {
+  title: string
+  subtitle?: string
+  children: React.ReactNode
+}) {
   return (
-    <div style={{ position: 'relative', width: 'min(936px, 100vw)', marginLeft: 'calc((min(936px, 100vw) - min(720px, 100%)) / -2)', aspectRatio: '16 / 9', overflow: 'hidden', marginBottom: '28px', marginTop: '4px', backgroundColor: '#0d0800' }}>
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        className="object-cover"
-        sizes="(min-width: 768px) 720px, 100vw"
-        loading="lazy"
-      />
-      {/* Scanline overlay */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'repeating-linear-gradient(to bottom, transparent, transparent 3px, rgba(0,0,0,0.09) 3px, rgba(0,0,0,0.09) 4px)',
-      }} />
-      {/* Corner brackets */}
-      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} viewBox="0 0 100 100" preserveAspectRatio="none">
-        <polyline points="0,8 0,0 8,0"   fill="none" stroke={c.border} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-        <polyline points="92,0 100,0 100,8"  fill="none" stroke={c.border} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-        <polyline points="0,92 0,100 8,100"  fill="none" stroke={c.border} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-        <polyline points="92,100 100,100 100,92" fill="none" stroke={c.border} strokeWidth="0.5" vectorEffect="non-scaling-stroke" />
-      </svg>
-      {/* Label */}
-      <div style={{
-        position: 'absolute', bottom: 10, left: 12,
-        color: c.dim, fontSize: '13px', letterSpacing: '0.12em',
-        textShadow: 'none',
-      }}>
-        {`IMG ${String(index + 1).padStart(2, '0')} — ${label}`}
+    <div className="flex flex-col md:flex-row" style={{ gap: '64px' }}>
+      {/* Left column */}
+      <div className="flex-1" style={{ borderTop: `1px solid ${lt.border}`, paddingTop: '24px' }}>
+        <AnimatedSection variant="fadeInUp">
+          <h2 style={{
+            fontFamily: 'var(--font-jost)',
+            fontWeight: 400,
+            fontSize: '48px',
+            lineHeight: 1.1,
+            color: lt.text,
+            margin: 0,
+          }}>
+            {title}
+          </h2>
+          {subtitle && (
+            <p style={{
+              fontFamily: 'var(--font-jost)',
+              fontWeight: 400,
+              fontSize: '48px',
+              lineHeight: 1.1,
+              color: lt.secondary,
+              margin: '16px 0 0 0',
+            }}>
+              {subtitle}
+            </p>
+          )}
+        </AnimatedSection>
       </div>
+      {/* Right column */}
+      <div className="flex-1" style={{ borderTop: `1px solid ${lt.border}`, paddingTop: '24px' }}>
+        <AnimatedSection variant="fadeInUp" delay={0.1}>
+          {children}
+        </AnimatedSection>
+      </div>
+    </div>
+  )
+}
+
+function BodyText({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{
+      fontFamily: 'var(--font-jost)',
+      fontWeight: 400,
+      fontSize: '20px',
+      lineHeight: 1.6,
+      color: lt.text,
+    }}>
+      {children}
+    </div>
+  )
+}
+
+function ListItems({ items }: { items: string[] }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {items.map((item, i) => (
+        <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'baseline' }}>
+          <span style={{ color: lt.secondary, flexShrink: 0, fontFamily: 'var(--font-jost)', fontSize: '20px' }}>-</span>
+          <span style={{ fontFamily: 'var(--font-jost)', fontSize: '20px', lineHeight: 1.6, color: lt.text }}>{item}</span>
+        </div>
+      ))}
     </div>
   )
 }
 
 export default function ConsoleProjectPage({ project }: Props) {
   const router = useRouter()
-  const [uiVisible, setUiVisible] = useState(false)
 
-  const allImages = project.images.length > 0 ? project.images : [project.heroImage]
-  const img = (n: number) => allImages[n] ?? null
   const frameNumber = projects.findIndex(p => p.slug === project.slug) + 1
   const nextProject = getNextProject(project.slug)
+  const fileId = `MX-${String(frameNumber).padStart(3, '0')}-LV426`
 
   const [stardate, setStardate] = useState('')
   useEffect(() => {
@@ -142,263 +242,338 @@ export default function ConsoleProjectPage({ project }: Props) {
     return () => clearInterval(id)
   }, [])
 
-  useEffect(() => {
-    const tid = setTimeout(() => setUiVisible(true), 80)
-    return () => clearTimeout(tid)
-  }, [])
+  const metadataFields = [
+    { label: 'FILE ID', value: fileId },
+    { label: 'YEAR', value: project.year },
+    { label: 'ROLE', value: project.role },
+    { label: 'CATEGORY', value: project.category },
+    ...(project.team ? [{ label: 'TEAM', value: project.team }] : []),
+    ...(project.timeline ? [{ label: 'TIMELINE', value: project.timeline }] : []),
+  ]
 
-  const fade = (delayMs: number): React.CSSProperties => ({
-    opacity: uiVisible ? 1 : 0,
-    transition: 'opacity 0.5s ease',
-    transitionDelay: uiVisible ? `${delayMs}ms` : '0ms',
-  })
-
-  const fileId = `MX-${String(frameNumber).padStart(3, '0')}-LV426`
-
-  const renderMedia = (n: number, label: string) => {
-    const src = img(n)
-    if (!src) return null
-    if (src.startsWith('video-pair::')) {
-      const [, leftSrc, rightSrc] = src.split('::')
-      return <VideoPair key={n} leftSrc={leftSrc} rightSrc={rightSrc} />
-    }
-    return <ContentImage key={n} src={src} alt={`${project.title} — ${label}`} label={label} index={n} />
-  }
-
-  const SectionLabel = ({ children }: { children: string }) => (
-    <div style={{
-      color: c.bright,
-      fontSize: '16px',
-      letterSpacing: '0.2em',
-      marginBottom: '10px',
-      paddingBottom: '4px',
-      borderBottom: `1px dashed ${c.border}`,
-      fontFamily: 'var(--font-ibm-plex-mono)',
-    }}>
-      {children}
-    </div>
-  )
+  // Check for video-pair in existing images (figma-content-plugin)
+  const videoPairSrc = project.images.find(s => s.startsWith('video-pair::'))
 
   return (
-    <div
-      className="fixed inset-0 flex flex-col font-console overflow-hidden"
-      style={{ backgroundColor: '#020100', color: c.text, lineHeight: '1.5' }}
-    >
-      {/* ── Header ── */}
+    <div className="min-h-screen" style={{ backgroundColor: lt.bg, color: lt.text }}>
+
+      {/* ── Sticky Header (dark CRT — unchanged) ── */}
       <div
-        className="flex items-center gap-3 px-4 py-2 flex-shrink-0 flex-wrap"
-        style={{ fontSize: '20px', ...fade(0) }}
+        className="sticky top-0 z-40 flex items-center gap-3 px-4 py-2 flex-wrap font-console"
+        style={{ backgroundColor: crt.bg, fontSize: '20px', borderBottom: `1px solid ${crt.border}` }}
       >
         <button
           onClick={() => router.push('/?view=mission-logs')}
           className="transition-opacity hover:opacity-100"
-          style={{ color: c.dim, opacity: 0.7 }}
+          style={{ color: crt.dim, opacity: 0.7 }}
         >
           {'< BACK TO FOLDER'}
         </button>
-        <span style={{ color: c.border }}>·</span>
-        <span style={{ color: c.dim }}>LOG</span>
-        <span style={{ color: c.bright }}>{String(frameNumber).padStart(3, '0')}</span>
-        <span style={{ color: c.border }}>·</span>
-        <span style={{ color: c.text, maxWidth: '55vw', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <span style={{ color: crt.border }}>·</span>
+        <span style={{ color: crt.dim }}>LOG</span>
+        <span style={{ color: crt.bright }}>{String(frameNumber).padStart(3, '0')}</span>
+        <span style={{ color: crt.border }}>·</span>
+        <span style={{ color: crt.text, maxWidth: '55vw', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {project.title.toUpperCase()}
         </span>
         <div className="ml-auto flex items-center gap-2">
-          <span style={{ color: c.dim }}>STARDATE</span>
-          <span style={{ color: c.bright }}>{stardate || '-----.------'}</span>
+          <span style={{ color: crt.dim }}>STARDATE</span>
+          <span style={{ color: crt.bright }}>{stardate || '-----.------'}</span>
         </div>
       </div>
-      <div style={{ borderTop: `1px solid ${c.border}` }} />
 
-      {/* ── Main area ── */}
-      <div className="flex-1 min-h-0 flex flex-col overflow-hidden" style={fade(120)}>
+      {/* ── Hero Image (no gradient) ── */}
+      <PlaceholderImage label="hero.jpg" aspectRatio="21 / 9" />
 
-        {/* ── CENTER: scrollable content with embedded images ── */}
-        <div className="flex-1 min-h-0 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+      {/* ── Content Container ── */}
+      <div style={{ maxWidth: '1320px', margin: '0 auto' }} className="px-4 md:px-24">
+        <div style={{ paddingTop: '64px', paddingBottom: '96px' }} className="flex flex-col gap-20">
 
-          {/* Hero image — full bleed, no padding */}
-          {img(0) && (
-            <div style={{ position: 'relative', width: '100%', aspectRatio: '21 / 9', overflow: 'hidden', flexShrink: 0, backgroundColor: '#0d0800' }}>
-              <Image
-                src={img(0)!}
-                alt={`${project.title} — hero image`}
-                fill
-                className="object-cover"
-                priority
-                sizes="100vw"
-              />
-              {/* Scanline */}
-              <div style={{
-                position: 'absolute', inset: 0, pointerEvents: 'none',
-                background: 'repeating-linear-gradient(to bottom, transparent, transparent 3px, rgba(0,0,0,0.09) 3px, rgba(0,0,0,0.09) 4px)',
-              }} />
-              {/* Gradient fade to background at bottom */}
-              <div style={{
-                position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', pointerEvents: 'none',
-                background: 'linear-gradient(to bottom, transparent, #020100)',
-              }} />
-            </div>
-          )}
-
-          {/* Metadata strip — replaces sidebar */}
-          <div className="px-3 md:px-6 pt-4" style={{ maxWidth: '720px', margin: '0 auto' }}>
-            <div style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '0',
-              borderTop: `1px solid ${c.border}`,
-              borderBottom: `1px solid ${c.border}`,
-              marginBottom: '20px',
-            }}>
-              {/* CLASSIFIED badge + log number */}
-              <div style={{
-                padding: '10px 16px',
-                borderRight: `1px solid ${c.border}`,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '4px',
-                flexShrink: 0,
-              }}>
-                <div style={{
-                  border: `1px solid ${c.border}`, padding: '1px 6px',
-                  fontSize: '11px', letterSpacing: '0.2em', color: c.dim,
-                  display: 'inline-block',
-                }}>CLASSIFIED</div>
-                <div style={{ color: c.bright, fontSize: '36px', lineHeight: '1' }}>{String(frameNumber).padStart(3, '0')}</div>
-              </div>
-              {/* Metadata fields */}
-              {[
-                { label: 'FILE ID', value: fileId },
-                { label: 'YEAR', value: project.year },
-                { label: 'ROLE', value: project.role },
-                { label: 'CATEGORY', value: project.category },
-              ].map(({ label, value }) => (
-                <div key={label} style={{
-                  padding: '10px 16px',
-                  borderRight: `1px solid ${c.border}`,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '2px',
-                  flexShrink: 0,
+          {/* ── Intro Section: title left, description right ── */}
+          <AnimatedSection variant="fadeInUp">
+            <div className="flex flex-col md:flex-row" style={{ gap: '64px' }}>
+              <div className="flex-1">
+                <h1 style={{
+                  fontFamily: 'var(--font-jost)',
+                  fontWeight: 700,
+                  fontSize: '48px',
+                  lineHeight: 1.1,
+                  color: lt.text,
+                  margin: 0,
                 }}>
-                  <div style={{ color: c.dim, fontSize: '11px', letterSpacing: '0.15em' }}>{label}</div>
-                  <div style={{ color: c.text, fontSize: '14px', lineHeight: '1.4' }}>{value}</div>
+                  {project.title}
+                </h1>
+              </div>
+              <div className="flex-1">
+                <p style={{
+                  fontFamily: 'var(--font-jost)',
+                  fontWeight: 400,
+                  fontSize: '23px',
+                  lineHeight: 1.5,
+                  color: lt.text,
+                  margin: 0,
+                }}>
+                  {project.overview}
+                </p>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          {/* ── Content Image: intro ── */}
+          <AnimatedSection variant="fadeInScale">
+            {videoPairSrc ? (
+              (() => {
+                const [, leftSrc, rightSrc] = videoPairSrc.split('::')
+                return <VideoPair leftSrc={leftSrc} rightSrc={rightSrc} />
+              })()
+            ) : (
+              <ContentImageOrPlaceholder slug={project.slug} section="intro" />
+            )}
+          </AnimatedSection>
+
+          {/* ── Quote + Metadata ── */}
+          <div className="flex flex-col md:flex-row" style={{ gap: '64px' }}>
+            {/* Left: large quote */}
+            <div className="flex-1" style={{ borderTop: `1px solid ${lt.border}`, paddingTop: '24px' }}>
+              <AnimatedSection variant="fadeInUp">
+                <p style={{
+                  fontFamily: 'var(--font-jost)',
+                  fontWeight: 400,
+                  fontSize: '36px',
+                  lineHeight: 1.3,
+                  color: lt.text,
+                  margin: 0,
+                }}>
+                  {project.caseStudy?.context || project.challenge}
+                </p>
+              </AnimatedSection>
+            </div>
+            {/* Right: stacked metadata */}
+            <div className="flex-1" style={{ borderTop: `1px solid ${lt.border}`, paddingTop: '24px' }}>
+              <AnimatedSection variant="fadeInUp" delay={0.1}>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {metadataFields.map(({ label, value }) => (
+                    <div key={label} style={{ borderBottom: `1px solid ${lt.border}`, padding: '12px 0' }}>
+                      <div style={{ color: lt.labelAmber, fontSize: '12px', letterSpacing: '0.15em', marginBottom: '4px', fontFamily: 'var(--font-jost)', fontWeight: 700, textTransform: 'uppercase' }}>{label}</div>
+                      <div style={{ color: lt.text, fontSize: '16px', lineHeight: '1.4', fontFamily: 'var(--font-jost)' }}>{value}</div>
+                    </div>
+                  ))}
+                  {project.skills && project.skills.length > 0 && (
+                    <div style={{ borderBottom: `1px solid ${lt.border}`, padding: '12px 0' }}>
+                      <div style={{ color: lt.labelAmber, fontSize: '12px', letterSpacing: '0.15em', marginBottom: '8px', fontFamily: 'var(--font-jost)', fontWeight: 700, textTransform: 'uppercase' }}>SKILLS</div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                        {project.skills.map(s => (
+                          <span key={s} style={{
+                            color: lt.tagText,
+                            fontSize: '13px',
+                            backgroundColor: lt.tagBg,
+                            padding: '3px 10px',
+                            borderRadius: '2px',
+                            fontFamily: 'var(--font-jost)',
+                            fontWeight: 700,
+                          }}>{s}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              ))}
+              </AnimatedSection>
             </div>
           </div>
 
-          {/* Content area */}
-          <div className="pb-10">
-            <div style={{ maxWidth: '720px', margin: '0 auto', padding: '0 16px' }}>
-
-              {/* Log access header */}
-              <div style={{ color: c.bright, marginBottom: '4px', fontSize: '18px' }}>
-                {'> '}ACCESSING MISSION LOG {String(frameNumber).padStart(3, '0')}...
-              </div>
-              <div style={{ color: c.border, marginBottom: '20px', fontSize: '16px' }}>{'─'.repeat(48)}</div>
-
-              {/* ── FULL LOG ── */}
-              {project.caseStudy && (
-                <div style={{ fontSize: '18px' }}>
-
-                  <div style={{ marginBottom: '28px' }}>
-                    <SectionLabel>{'// MISSION CONTEXT'}</SectionLabel>
-                    <div style={{ color: c.text, lineHeight: '1.8', fontFamily: 'var(--font-ibm-plex-mono)' }}>{project.caseStudy.context}</div>
-                  </div>
-
-                  {renderMedia(1, 'MISSION CONTEXT')}
-
-                  <div style={{ marginBottom: '28px' }}>
-                    <SectionLabel>{'// RECON FINDINGS'}</SectionLabel>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                      {project.caseStudy.researchFindings.map((f, i) => (
-                        <div key={i} style={{ display: 'flex', gap: '12px', color: c.text, lineHeight: '1.6' }}>
-                          <span style={{ color: c.dim, flexShrink: 0, fontFamily: 'var(--font-ibm-plex-mono)' }}>—</span>
-                          <span style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}>{f}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {renderMedia(2, 'PROCESS')}
-
-                  <div style={{ marginBottom: '28px' }}>
-                    <SectionLabel>{'// KEY DECISIONS'}</SectionLabel>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                      {project.caseStudy.keyDecisions.map((d, i) => (
-                        <div key={i} style={{ paddingLeft: '10px', borderLeft: `2px solid ${c.border}` }}>
-                          <div style={{ color: c.bright, marginBottom: '4px', fontFamily: 'var(--font-ibm-plex-mono)' }}>{'>'} {d.decision.toUpperCase()}</div>
-                          <div style={{ color: c.dim, lineHeight: '1.6', fontFamily: 'var(--font-ibm-plex-mono)' }}>{d.outcome}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div style={{ marginBottom: '28px' }}>
-                    <SectionLabel>{'// TRADEOFFS'}</SectionLabel>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                      {project.caseStudy.tradeoffs.map((t, i) => (
-                        <div key={i} style={{ display: 'flex', gap: '12px', color: c.text, lineHeight: '1.6' }}>
-                          <span style={{ color: c.dim, flexShrink: 0, fontFamily: 'var(--font-ibm-plex-mono)' }}>—</span>
-                          <span style={{ fontFamily: 'var(--font-ibm-plex-mono)' }}>{t}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {renderMedia(3, 'RESULTS')}
-
-                  <div style={{ marginBottom: '28px' }}>
-                    <SectionLabel>{'// RESULTS'}</SectionLabel>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      {project.results.map((r, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'baseline', gap: '10px', paddingLeft: '4px', borderLeft: `2px solid ${c.border}` }}>
-                          <span style={{ color: c.bright, flexShrink: 0, fontFamily: 'var(--font-ibm-plex-mono)' }}>{'>'}</span>
-                          <span style={{ color: c.bright, fontFamily: 'var(--font-ibm-plex-mono)' }}>{r.toUpperCase()}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {renderMedia(4, 'RETROSPECTIVE')}
-
-                  <div style={{ marginBottom: '28px' }}>
-                    <SectionLabel>{'// RETROSPECTIVE'}</SectionLabel>
-                    <div style={{ color: c.dim, lineHeight: '1.8', fontStyle: 'italic', fontFamily: 'var(--font-ibm-plex-mono)' }}>{project.caseStudy.retrospective}</div>
-                  </div>
-
+          {/* ── Case Study Sections ── */}
+          {project.caseStudy && (
+            <>
+              {/* PROBLEM */}
+              <TwoColSection title="Problem">
+                <div className="flex flex-col gap-6">
+                  <BodyText>{project.challenge}</BodyText>
+                  {project.caseStudy.researchFindings.length > 0 && (
+                    <ListItems items={project.caseStudy.researchFindings} />
+                  )}
                 </div>
+              </TwoColSection>
+
+              {/* Content image: problem */}
+              <AnimatedSection variant="fadeInScale">
+                <ContentImageOrPlaceholder slug={project.slug} section="problem" />
+              </AnimatedSection>
+
+              {/* RESEARCH */}
+              {project.caseStudy.tradeoffs.length > 0 && (
+                <TwoColSection title="Research">
+                  <div className="flex flex-col gap-6">
+                    <ListItems items={project.caseStudy.tradeoffs} />
+                  </div>
+                </TwoColSection>
               )}
 
-              {/* End marker */}
-              <div style={{ color: c.border, fontSize: '14px', marginTop: '8px' }}>{'── [END LOG] ──'}</div>
-            </div>
-          </div>
-        </div>
+              {/* SOLUTION */}
+              <TwoColSection title="Solution">
+                <div className="flex flex-col gap-6">
+                  <BodyText>{project.caseStudy.retrospective || project.solution}</BodyText>
+                </div>
+              </TwoColSection>
 
+              {/* Content image: solution */}
+              <AnimatedSection variant="fadeInScale">
+                <ContentImageOrPlaceholder slug={project.slug} section="solution" />
+              </AnimatedSection>
+
+              {/* FEATURE SECTIONS from keyDecisions */}
+              {project.caseStudy.keyDecisions.map((d, i) => (
+                <React.Fragment key={i}>
+                  <TwoColSection title={`Feature ${String(i + 1).padStart(2, '0')}`}>
+                    <div className="flex flex-col gap-6">
+                      <div style={{
+                        fontFamily: 'var(--font-jost)',
+                        fontWeight: 700,
+                        fontSize: '24px',
+                        color: lt.text,
+                      }}>
+                        {d.decision}
+                      </div>
+                      <BodyText>{d.outcome}</BodyText>
+                    </div>
+                  </TwoColSection>
+
+                  {/* Content image after each feature */}
+                  <AnimatedSection variant="fadeInScale">
+                    <ContentImageOrPlaceholder
+                      slug={project.slug}
+                      section={`feature-${String(i + 1).padStart(2, '0')}`}
+                    />
+                  </AnimatedSection>
+                </React.Fragment>
+              ))}
+
+              {/* RESULTS / IMPACT */}
+              <TwoColSection title="Impact">
+                <div className="flex flex-col gap-4">
+                  {project.results.map((r, i) => (
+                    <AnimatedSection key={i} variant="fadeInUp" delay={i * 0.05}>
+                      <div style={{
+                        fontFamily: 'var(--font-jost)',
+                        fontSize: '20px',
+                        lineHeight: 1.6,
+                        color: lt.text,
+                        paddingLeft: '16px',
+                        borderLeft: `3px solid ${lt.border}`,
+                      }}>
+                        {r}
+                      </div>
+                    </AnimatedSection>
+                  ))}
+                </div>
+              </TwoColSection>
+            </>
+          )}
+
+          {/* ── Fallback: no case study ── */}
+          {!project.caseStudy && (
+            <>
+              <TwoColSection title="Challenge">
+                <BodyText>{project.challenge}</BodyText>
+              </TwoColSection>
+              <AnimatedSection variant="fadeInScale">
+                <ContentImageOrPlaceholder slug={project.slug} section="problem" />
+              </AnimatedSection>
+              <TwoColSection title="Solution">
+                <BodyText>{project.solution}</BodyText>
+              </TwoColSection>
+              <AnimatedSection variant="fadeInScale">
+                <ContentImageOrPlaceholder slug={project.slug} section="solution" />
+              </AnimatedSection>
+              <TwoColSection title="Results">
+                <ListItems items={project.results} />
+              </TwoColSection>
+            </>
+          )}
+
+          {/* ── Next Mission Footer ── */}
+          {nextProject && (
+            <AnimatedSection variant="fadeInUp">
+              <div style={{ borderTop: `1px solid ${lt.border}`, paddingTop: '40px' }}>
+                <div className="flex flex-col md:flex-row" style={{ gap: '64px' }}>
+                  <div className="flex-1">
+                    <div style={{
+                      fontFamily: 'var(--font-jost)',
+                      fontWeight: 400,
+                      fontSize: '16px',
+                      color: lt.secondary,
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      marginBottom: '8px',
+                    }}>
+                      Next Project
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <button
+                      onClick={() => router.push(`/projects/${nextProject.slug}`)}
+                      className="group text-left w-full"
+                      style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}
+                    >
+                      <div className="flex items-center gap-6">
+                        <div style={{
+                          width: '160px',
+                          height: '90px',
+                          flexShrink: 0,
+                          overflow: 'hidden',
+                          backgroundColor: '#b8b8b8',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                          <span style={{ color: '#888', fontSize: '11px', fontFamily: 'var(--font-jost)', fontWeight: 700, letterSpacing: '0.1em' }}>THUMBNAIL</span>
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{
+                            fontFamily: 'var(--font-jost)',
+                            fontWeight: 700,
+                            fontSize: '28px',
+                            color: lt.text,
+                          }}>
+                            {nextProject.title} &rarr;
+                          </div>
+                          <div style={{
+                            fontFamily: 'var(--font-jost)',
+                            fontSize: '16px',
+                            color: lt.secondary,
+                            marginTop: '4px',
+                          }}>
+                            {nextProject.category}
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+          )}
+
+        </div>
       </div>
 
-      {/* Sticky NEXT MISSION button — always visible */}
+      {/* Fixed NEXT MISSION button — dark CRT style */}
       {nextProject && (
         <button
           onClick={() => router.push(`/projects/${nextProject.slug}`)}
           className="fixed bottom-6 right-6 transition-opacity hover:opacity-100 font-console"
           style={{
-            color: c.bright,
+            color: crt.bright,
             fontSize: '18px',
             letterSpacing: '0.08em',
-            border: `1px solid ${c.border}`,
-            backgroundColor: '#020100',
+            border: `1px solid ${crt.border}`,
+            backgroundColor: crt.bg,
             padding: '8px 16px',
             zIndex: 50,
-            ...fade(400),
           }}
         >
           NEXT MISSION {'>'}
         </button>
       )}
-
     </div>
   )
 }

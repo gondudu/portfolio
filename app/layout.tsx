@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import { VT323, IBM_Plex_Mono } from 'next/font/google'
+import { VT323, IBM_Plex_Mono, Jost } from 'next/font/google'
 import './globals.css'
 import ConditionalShell from '@/components/layout/ConditionalShell'
 import PasswordGate from '@/components/shared/PasswordGate'
@@ -35,6 +35,14 @@ const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
 })
 
+const jost = Jost({
+  weight: ['400', '700'],
+  style: ['normal'],
+  variable: '--font-jost',
+  display: 'swap',
+  subsets: ['latin'],
+})
+
 export const metadata: Metadata = {
   title: 'Eduardo Nogueira | Product Designer',
   description: 'Portfolio of Eduardo Nogueira - Product Designer crafting meaningful digital experiences',
@@ -48,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${workSans.variable} ${vt323.variable} ${ibmPlexMono.variable}`}>
+    <html lang="en" className={`${workSans.variable} ${vt323.variable} ${ibmPlexMono.variable} ${jost.variable}`}>
       <body>
         <a href="#main-content" className="skip-to-content">SKIP TO CONTENT</a>
         <noscript>

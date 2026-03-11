@@ -39,6 +39,7 @@ const config: Config = {
         display: ['var(--font-work-sans)', 'system-ui', 'sans-serif'],
         console: ['var(--font-vt323)', 'monospace'],
         body: ['var(--font-ibm-plex-mono)', 'monospace'],
+        jost: ['var(--font-jost)', 'sans-serif'],
       },
       fontSize: {
         xs: '16px',
