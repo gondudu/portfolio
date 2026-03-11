@@ -49,6 +49,7 @@ export const blatt: ProjectContent = {
         'Interview product teams to understand pain points and opportunities for design',
         'Understand how technology can support workflows',
       ],
+      image: 'research.jpg',
     },
     {
       id: 'solution',
@@ -58,9 +59,12 @@ export const blatt: ProjectContent = {
     },
     {
       id: 'feature-01',
-      title: 'Feature 01',
-      subtitle: 'Start with a pattern library for WELT, not a company-wide mandate',
+      title: 'Pattern Library & Styleguide',
+      subtitle: 'We start by giving the tools designers need',
       body: "Created an immediate speed-up for the team I knew best — early proof of value before asking anyone else to invest. Buy-in preceded governance.",
+      imageLayout: 'two-col',
+      image: 'feature-01-a.jpg',
+      image2: 'feature-01-B.jpg',
     },
     {
       id: 'feature-02',

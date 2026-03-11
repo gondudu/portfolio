@@ -10,6 +10,8 @@ export interface Section {
   body?: string
   items?: string[]
   image?: string        // full filename e.g. 'problem.jpg' — if absent, section is imageless (80vh desktop)
+  image2?: string       // second image for two-col layout
+  imageLayout?: 'full' | 'two-col'  // defaults to 'full' when absent
   imageCaption?: string
   video?: { left: string; right: string }  // video pair, mutually exclusive with image
 }

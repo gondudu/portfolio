@@ -1,0 +1,203 @@
+All case study content lives in content/projects/.
+  One file per project:             
+                                                       
+  content/projects/                                    
+    blatt.ts                 ← Blatt design system     
+    upday.ts                 ← Upday redesign          
+    media-player-sdk.ts      ← Media Player SDK        
+    figma-content-plugin.ts  ← Figma content plugin
+
+  ---
+  Page layout at a glance
+
+  ┌─────────────────────────────────┐
+  │  Hero image (hero.jpg)          │  ← always
+  full-bleed
+  ├─────────────────────────────────┤
+  │  Title         │  overview      │  ← hardcoded from
+   `overview` field
+  ├─────────────────────────────────┤
+  │  Intro image (intro.jpg)        │  ← always shown
+  (placeholder if missing)
+  ├─────────────────────────────────┤
+  │  sections[0] body  │  Metadata  │  ← context
+  section, no title
+  ├─────────────────────────────────┤
+  │  sections[1]                    │  ← sections loop
+  starts here
+  │  sections[2]                    │
+  │  ...                            │
+  ├─────────────────────────────────┤
+  │  Impact / Results               │  ← always last,
+  from `results[]`
+  └─────────────────────────────────┘
+
+  ---
+  The sections[] array
+
+  Each section has this shape:
+
+  {
+    id: 'problem',           // unique key (also used
+  for image filename convention)
+    title: 'Problem',        // left column label
+    subtitle: 'Optional',    // dimmer text below title
+   (good for feature headlines)
+    body: 'Paragraph...',    // rendered as body text
+    items: ['Point 1', ...], // rendered as bullet list
+    image: 'problem.jpg',    // OPTIONAL — if absent,
+  section fills 80vh
+    imageCaption: '...',     // optional caption below
+  image
+    video: {                 // OPTIONAL — replaces
+  image for a video pair
+      left: '/images/...',
+      right: '/images/...',
+    },
+  }
+
+  Rules:
+  - body and items can coexist — body renders first,
+  then list
+  - image and video are mutually exclusive
+  - If neither image nor video → section expands to
+  80vh on desktop
+  - sections[0] is always the context section — its
+  body appears beside the metadata panel, with no title
+   rendered
+
+  ---
+  Adding an image to a section
+
+  1. Drop the file in public/images/projects/{slug}/
+  2. Add image: 'filename.jpg' to the section
+
+  {
+    id: 'solution',
+    title: 'Solution',
+    body: '...',
+    image: 'solution.jpg',   // ← add this line
+  }
+
+  Supported extensions: .jpg, .png, .webp — whatever
+  you put in image is used as-is.
+
+  ---
+  Adding a new section
+
+  Add an object to sections[]. Position in the array =
+  position on page.
+
+  sections: [
+    { id: 'context', ... },   // always first — renders
+   beside metadata
+    { id: 'problem', ... },
+    { id: 'solution', ... },
+    // ↓ insert here
+    {
+      id: 'handoff',
+      title: 'Handoff',
+      subtitle: 'How designs reached production',
+      body: 'We built a token pipeline...',
+    },
+    { id: 'feature-01', ... },
+  ]
+
+  ---
+  Removing a section
+
+  Delete the object from the array. The page re-renders
+   with no trace of it.
+
+  ---
+  Updating project metadata
+
+  At the top of each file:
+
+  {
+    title: '...',
+    category: '...',
+    year: '2024',
+    role: 'Lead Product Designer',
+    team: '10-person cross-functional',
+    timeline: '~6 months',
+    skills: ['UI/UX Design', 'Analytics'],
+    overview: 'Shown in the intro paragraph and beside
+  the metadata.',
+    results: [
+      'Metric or outcome 1',
+      'Metric or outcome 2',
+    ],
+    nextProject: 'slug-of-next-project',  // controls
+  the Next Mission link
+  }
+
+  ---
+  Adding a tagline (optional pull-quote)
+
+  If you want a large-format quote to appear in the
+  left column beside the metadata instead of the
+  context body, add tagline to the project. (Currently
+  unused on all 4 projects — the context body fills
+  that space.)
+
+  tagline: 'A sentence that captures the project in one
+   line.',
+
+  ---
+  Image file naming conventions
+
+  public/images/projects/{slug}/
+    hero.jpg          ← full-bleed banner (21:9)
+    thumbnail.jpg     ← home page card (16:9)
+    intro.jpg         ← always shown after
+  title/overview row
+    problem.jpg       ← referenced by image:
+  'problem.jpg' in a section
+    solution.jpg      ← etc.
+    feature-01.jpg    ← name anything you want — just
+  match image: field
+
+  ---
+  Image layout options
+
+  By default, section images render full-width (16:9).
+  Add imageLayout: 'two-col' to switch to a two-column
+  square layout.
+
+  FIELDS
+    image         filename of the primary image
+    image2        filename of a second image (two-col only)
+    imageLayout   'full' | 'two-col'  (omit = 'full')
+    imageCaption  optional caption below the image block
+
+  Full-width (default — omit imageLayout):
+
+  {
+    id: 'solution',
+    title: 'Solution',
+    body: '...',
+    image: 'solution.jpg',
+  }
+
+  Two columns — two square images side by side:
+
+  {
+    id: 'solution',
+    title: 'Solution',
+    body: '...',
+    image: 'solution-a.jpg',
+    image2: 'solution-b.jpg',
+    imageLayout: 'two-col',
+  }
+
+  Two columns — single image, right column only:
+  (left column is empty — image stays aligned to grid)
+
+  {
+    id: 'solution',
+    title: 'Solution',
+    body: '...',
+    image: 'solution.jpg',
+    imageLayout: 'two-col',
+  }

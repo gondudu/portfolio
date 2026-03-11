@@ -119,6 +119,47 @@ function ContentImageOrPlaceholder({ slug, section, caption, aspectRatio = '16 /
   )
 }
 
+/**
+ * Two-column square image block.
+ * - Two images: left + right squares, each 1:1
+ * - One image: empty left column, image in right column (follows page grid)
+ */
+function TwoColImages({
+  slug,
+  image,
+  image2,
+  caption,
+}: {
+  slug: string
+  image: string
+  image2?: string
+  caption?: string
+}) {
+  return (
+    <div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        {image2 ? (
+          <ContentImageOrPlaceholder slug={slug} section={image2} aspectRatio="1 / 1" />
+        ) : (
+          <div />
+        )}
+        <ContentImageOrPlaceholder slug={slug} section={image} aspectRatio="1 / 1" />
+      </div>
+      {caption && (
+        <div style={{
+          color: lt.caption,
+          fontSize: '16px',
+          fontFamily: 'var(--font-jost)',
+          marginTop: '12px',
+          paddingLeft: '4px',
+        }}>
+          {caption}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // Side-by-side video pair (kept for figma-content-plugin)
 function VideoPair({ leftSrc, rightSrc }: { leftSrc: string; rightSrc: string }) {
   const leftRef = useRef<HTMLVideoElement>(null)
@@ -426,11 +467,20 @@ export default function ConsoleProjectPage({ project }: Props) {
 
                 {section.image && !section.video && (
                   <AnimatedSection variant="fadeInScale">
-                    <ContentImageOrPlaceholder
-                      slug={project.slug}
-                      section={section.image}
-                      caption={section.imageCaption}
-                    />
+                    {section.imageLayout === 'two-col' ? (
+                      <TwoColImages
+                        slug={project.slug}
+                        image={section.image}
+                        image2={section.image2}
+                        caption={section.imageCaption}
+                      />
+                    ) : (
+                      <ContentImageOrPlaceholder
+                        slug={project.slug}
+                        section={section.image}
+                        caption={section.imageCaption}
+                      />
+                    )}
                   </AnimatedSection>
                 )}
               </React.Fragment>
