@@ -351,21 +351,23 @@ export default function ConsoleProjectPage({ project }: Props) {
 
           {/* ── Quote + Metadata ── */}
           <div className="flex flex-col md:flex-row" style={{ gap: '64px' }}>
-            {/* Left: large quote */}
-            <div className="flex-1" style={{ borderTop: `1px solid ${lt.border}`, paddingTop: '24px' }}>
-              <AnimatedSection variant="fadeInUp">
-                <p style={{
-                  fontFamily: 'var(--font-jost)',
-                  fontWeight: 400,
-                  fontSize: '32px',
-                  lineHeight: 1.3,
-                  color: lt.text,
-                  margin: 0,
-                }}>
-                  {project.overview}
-                </p>
-              </AnimatedSection>
-            </div>
+            {/* Left: large tagline (only shown if tagline is set) */}
+            {project.tagline && (
+              <div className="flex-1" style={{ borderTop: `1px solid ${lt.border}`, paddingTop: '24px' }}>
+                <AnimatedSection variant="fadeInUp">
+                  <p style={{
+                    fontFamily: 'var(--font-jost)',
+                    fontWeight: 400,
+                    fontSize: '32px',
+                    lineHeight: 1.3,
+                    color: lt.text,
+                    margin: 0,
+                  }}>
+                    {project.tagline}
+                  </p>
+                </AnimatedSection>
+              </div>
+            )}
             {/* Right: stacked metadata */}
             <div className="flex-1" style={{ borderTop: `1px solid ${lt.border}`, paddingTop: '24px' }}>
               <AnimatedSection variant="fadeInUp" delay={0.1}>
@@ -400,7 +402,7 @@ export default function ConsoleProjectPage({ project }: Props) {
           </div>
 
           {/* ── Sections Loop ── */}
-          {project.sections.map((section) => {
+          {(project.sections ?? []).map((section) => {
             const hasMedia = Boolean(section.image) || Boolean(section.video)
             return (
               <React.Fragment key={section.id}>

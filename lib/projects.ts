@@ -21,6 +21,7 @@ export interface ProjectContent {
   thumbnail: string
   heroImage: string
   overview: string
+  tagline?: string
   results: string[]
   nextProject?: string
   sections: Section[]

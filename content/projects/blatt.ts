@@ -27,7 +27,6 @@ export const blatt: ProjectContent = {
       id: 'context',
       title: 'Context',
       body: "When I joined Axel Springer, I quickly noticed legacy structures holding back modern product development. That drove me to write my bachelor's thesis on the company's design culture — interviewing colleagues, mapping workflow fragmentation, and identifying what was slowing teams down. That research gave me the credibility to start building Blatt.",
-      image: 'intro.jpg',
     },
     {
       id: 'problem',
