@@ -26,7 +26,6 @@ export const mediaPlayerSdk: ProjectContent = {
       id: 'context',
       title: 'Context',
       body: "WELT and Bild ran separate contracts with video infrastructure providers. Developers at both brands were independently solving the same problems. Management's goal was consolidation and cost reduction. My goal: use that mandate to fix a user experience that had been falling behind for years. I came in with a head start — having already mapped WELT's media UX through heuristic evaluation before the project brief existed.",
-      image: 'intro.jpg',
     },
     {
       id: 'problem',

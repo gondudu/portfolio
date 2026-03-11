@@ -24,7 +24,6 @@ export const upday: ProjectContent = {
       id: 'context',
       title: 'Context',
       body: "Upday was Samsung's default news application across Europe — preinstalled on Galaxy devices, never downloaded by choice. When Samsung replaced it in 2024, the product faced the open market for the first time. A cross-functional team — developers, product owners, business managers, the CTO, and me leading UI/UX — had roughly six months to ship a version that could survive without the preinstall.",
-      image: 'intro.jpg',
     },
     {
       id: 'problem',
