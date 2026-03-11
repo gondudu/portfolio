@@ -266,6 +266,9 @@ export default function ConsoleProjectPage({ project }: Props) {
     ...(project.timeline ? [{ label: 'TIMELINE', value: project.timeline }] : []),
   ]
 
+  const contextSection = project.sections?.[0]
+  const bodySections = project.sections?.slice(1) ?? []
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: lt.bg, color: lt.text }}>
 
@@ -349,21 +352,21 @@ export default function ConsoleProjectPage({ project }: Props) {
             <ContentImageOrPlaceholder slug={project.slug} section="intro.jpg" />
           </AnimatedSection>
 
-          {/* ── Quote + Metadata ── */}
+          {/* ── Context + Metadata ── */}
           <div className="flex flex-col md:flex-row" style={{ gap: '64px' }}>
-            {/* Left: large tagline (only shown if tagline is set) */}
-            {project.tagline && (
+            {/* Left: context section body (first section, shown without title) */}
+            {contextSection?.body && (
               <div className="flex-1" style={{ borderTop: `1px solid ${lt.border}`, paddingTop: '24px' }}>
                 <AnimatedSection variant="fadeInUp">
                   <p style={{
                     fontFamily: 'var(--font-jost)',
                     fontWeight: 400,
-                    fontSize: '32px',
-                    lineHeight: 1.3,
+                    fontSize: '20px',
+                    lineHeight: 1.6,
                     color: lt.text,
                     margin: 0,
                   }}>
-                    {project.tagline}
+                    {contextSection.body}
                   </p>
                 </AnimatedSection>
               </div>
@@ -401,8 +404,8 @@ export default function ConsoleProjectPage({ project }: Props) {
             </div>
           </div>
 
-          {/* ── Sections Loop ── */}
-          {(project.sections ?? []).map((section) => {
+          {/* ── Sections Loop (skips first/context section — rendered above with metadata) ── */}
+          {bodySections.map((section) => {
             const hasMedia = Boolean(section.image) || Boolean(section.video)
             return (
               <React.Fragment key={section.id}>
