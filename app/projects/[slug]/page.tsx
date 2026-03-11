@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getProjectBySlug, projects } from '@/lib/projects'
+import { ProjectContent, getProjectBySlug, projects } from '@/lib/projects'
 import ConsoleProjectPage from '@/components/projects/ConsoleProjectPage'
 
 export async function generateStaticParams() {

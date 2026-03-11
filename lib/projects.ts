@@ -332,13 +332,14 @@ export const projects: Project[] = [
   },
 ]
 
-export function getProjectBySlug(slug: string): Project | undefined {
-  return projects.find((project) => project.slug === slug)
+export function getProjectBySlug(slug: string): ProjectContent | undefined {
+  return projects.find((project) => project.slug === slug) as unknown as ProjectContent | undefined
 }
 
-export function getNextProject(currentSlug: string): Project | undefined {
-  const currentIndex = projects.findIndex((p) => p.slug === currentSlug)
-  if (currentIndex === -1) return undefined
-  const nextIndex = (currentIndex + 1) % projects.length
-  return projects[nextIndex]
+export function getNextProject(currentSlug: string): ProjectContent | undefined {
+  const current = projects.find(p => p.slug === currentSlug)
+  if (!current) return undefined
+  if (current.nextProject) return projects.find(p => p.slug === current.nextProject) as unknown as ProjectContent | undefined
+  const idx = projects.findIndex(p => p.slug === currentSlug)
+  return projects[(idx + 1) % projects.length] as unknown as ProjectContent | undefined
 }

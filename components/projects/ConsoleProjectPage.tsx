@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { Project, projects, getNextProject } from '@/lib/projects'
+import { ProjectContent, projects, getNextProject } from '@/lib/projects'
 import AnimatedSection from '@/components/shared/AnimatedSection'
 
 interface Props {
-  project: Project
+  project: ProjectContent
 }
 
 // Dark CRT colors — only used in sticky header
@@ -25,7 +25,7 @@ const lt = {
   secondary: '#818181',
   border: '#c5c5c5',
   caption: '#666666',
-  tagBg: '#ffc93c',
+  tagBg: '#a87000',
   tagText: '#030303',
   labelAmber: '#a87000',
 }
@@ -85,10 +85,25 @@ function PlaceholderImage({ label, aspectRatio = '16 / 9' }: { label: string; as
   )
 }
 
-function ContentImageOrPlaceholder({ slug, section, caption }: { slug: string; section: string; caption?: string }) {
+function ContentImageOrPlaceholder({ slug, section, caption, aspectRatio = '16 / 9' }: { slug: string; section: string; caption?: string; aspectRatio?: string }) {
+  const [errored, setErrored] = React.useState(false)
+  const src = `/images/projects/${slug}/${section}`
+
   return (
     <div>
-      <PlaceholderImage label={`${section}.jpg`} />
+      {errored ? (
+        <PlaceholderImage label={section} aspectRatio={aspectRatio} />
+      ) : (
+        <div style={{ width: '100%', aspectRatio, overflow: 'hidden', position: 'relative', backgroundColor: '#b8b8b8' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={src}
+            alt={caption || section}
+            onError={() => setErrored(true)}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        </div>
+      )}
       {caption && (
         <div style={{
           color: lt.caption,
@@ -251,9 +266,6 @@ export default function ConsoleProjectPage({ project }: Props) {
     ...(project.timeline ? [{ label: 'TIMELINE', value: project.timeline }] : []),
   ]
 
-  // Check for video-pair in existing images (figma-content-plugin)
-  const videoPairSrc = project.images.find(s => s.startsWith('video-pair::'))
-
   return (
     <div className="min-h-screen" style={{ backgroundColor: lt.bg, color: lt.text }}>
 
@@ -282,8 +294,21 @@ export default function ConsoleProjectPage({ project }: Props) {
         </div>
       </div>
 
-      {/* ── Hero Image (no gradient) ── */}
-      <PlaceholderImage label="hero.jpg" aspectRatio="21 / 9" />
+      {/* ── Hero Image ── */}
+      {(() => {
+        const heroSrc = `/images/projects/${project.slug}/hero.jpg`
+        return (
+          <div style={{ width: '100%', aspectRatio: '21 / 9', overflow: 'hidden', position: 'relative', backgroundColor: '#b8b8b8' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={heroSrc}
+              alt={project.title}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+            />
+          </div>
+        )
+      })()}
 
       {/* ── Content Container ── */}
       <div style={{ maxWidth: '1320px', margin: '0 auto' }} className="px-4 md:px-24">
@@ -321,14 +346,7 @@ export default function ConsoleProjectPage({ project }: Props) {
 
           {/* ── Content Image: intro ── */}
           <AnimatedSection variant="fadeInScale">
-            {videoPairSrc ? (
-              (() => {
-                const [, leftSrc, rightSrc] = videoPairSrc.split('::')
-                return <VideoPair leftSrc={leftSrc} rightSrc={rightSrc} />
-              })()
-            ) : (
-              <ContentImageOrPlaceholder slug={project.slug} section="intro" />
-            )}
+            <ContentImageOrPlaceholder slug={project.slug} section="intro.jpg" />
           </AnimatedSection>
 
           {/* ── Quote + Metadata ── */}
@@ -339,12 +357,12 @@ export default function ConsoleProjectPage({ project }: Props) {
                 <p style={{
                   fontFamily: 'var(--font-jost)',
                   fontWeight: 400,
-                  fontSize: '36px',
+                  fontSize: '32px',
                   lineHeight: 1.3,
                   color: lt.text,
                   margin: 0,
                 }}>
-                  {project.caseStudy?.context || project.challenge}
+                  {project.overview}
                 </p>
               </AnimatedSection>
             </div>
@@ -381,113 +399,59 @@ export default function ConsoleProjectPage({ project }: Props) {
             </div>
           </div>
 
-          {/* ── Case Study Sections ── */}
-          {project.caseStudy && (
-            <>
-              {/* PROBLEM */}
-              <TwoColSection title="Problem">
-                <div className="flex flex-col gap-6">
-                  <BodyText>{project.challenge}</BodyText>
-                  {project.caseStudy.researchFindings.length > 0 && (
-                    <ListItems items={project.caseStudy.researchFindings} />
-                  )}
-                </div>
-              </TwoColSection>
-
-              {/* Content image: problem */}
-              <AnimatedSection variant="fadeInScale">
-                <ContentImageOrPlaceholder slug={project.slug} section="problem" />
-              </AnimatedSection>
-
-              {/* RESEARCH */}
-              {project.caseStudy.tradeoffs.length > 0 && (
-                <TwoColSection title="Research">
-                  <div className="flex flex-col gap-6">
-                    <ListItems items={project.caseStudy.tradeoffs} />
-                  </div>
-                </TwoColSection>
-              )}
-
-              {/* SOLUTION */}
-              <TwoColSection title="Solution">
-                <div className="flex flex-col gap-6">
-                  <BodyText>{project.caseStudy.retrospective || project.solution}</BodyText>
-                </div>
-              </TwoColSection>
-
-              {/* Content image: solution */}
-              <AnimatedSection variant="fadeInScale">
-                <ContentImageOrPlaceholder slug={project.slug} section="solution" />
-              </AnimatedSection>
-
-              {/* FEATURE SECTIONS from keyDecisions */}
-              {project.caseStudy.keyDecisions.map((d, i) => (
-                <React.Fragment key={i}>
-                  <TwoColSection title={`Feature ${String(i + 1).padStart(2, '0')}`}>
+          {/* ── Sections Loop ── */}
+          {project.sections.map((section) => {
+            const hasMedia = Boolean(section.image) || Boolean(section.video)
+            return (
+              <React.Fragment key={section.id}>
+                <div className={!hasMedia ? 'md:min-h-[80vh] md:flex md:flex-col md:justify-center' : ''}>
+                  <TwoColSection title={section.title} subtitle={section.subtitle}>
                     <div className="flex flex-col gap-6">
-                      <div style={{
-                        fontFamily: 'var(--font-jost)',
-                        fontWeight: 700,
-                        fontSize: '24px',
-                        color: lt.text,
-                      }}>
-                        {d.decision}
-                      </div>
-                      <BodyText>{d.outcome}</BodyText>
+                      {section.body && <BodyText>{section.body}</BodyText>}
+                      {section.items && <ListItems items={section.items} />}
                     </div>
                   </TwoColSection>
+                </div>
 
-                  {/* Content image after each feature */}
+                {section.video && (
+                  <AnimatedSection variant="fadeInScale">
+                    <VideoPair leftSrc={section.video.left} rightSrc={section.video.right} />
+                  </AnimatedSection>
+                )}
+
+                {section.image && !section.video && (
                   <AnimatedSection variant="fadeInScale">
                     <ContentImageOrPlaceholder
                       slug={project.slug}
-                      section={`feature-${String(i + 1).padStart(2, '0')}`}
+                      section={section.image}
+                      caption={section.imageCaption}
                     />
                   </AnimatedSection>
-                </React.Fragment>
-              ))}
+                )}
+              </React.Fragment>
+            )
+          })}
 
-              {/* RESULTS / IMPACT */}
-              <TwoColSection title="Impact">
-                <div className="flex flex-col gap-4">
-                  {project.results.map((r, i) => (
-                    <AnimatedSection key={i} variant="fadeInUp" delay={i * 0.05}>
-                      <div style={{
-                        fontFamily: 'var(--font-jost)',
-                        fontSize: '20px',
-                        lineHeight: 1.6,
-                        color: lt.text,
-                        paddingLeft: '16px',
-                        borderLeft: `3px solid ${lt.border}`,
-                      }}>
-                        {r}
-                      </div>
-                    </AnimatedSection>
-                  ))}
-                </div>
-              </TwoColSection>
-            </>
-          )}
-
-          {/* ── Fallback: no case study ── */}
-          {!project.caseStudy && (
-            <>
-              <TwoColSection title="Challenge">
-                <BodyText>{project.challenge}</BodyText>
-              </TwoColSection>
-              <AnimatedSection variant="fadeInScale">
-                <ContentImageOrPlaceholder slug={project.slug} section="problem" />
-              </AnimatedSection>
-              <TwoColSection title="Solution">
-                <BodyText>{project.solution}</BodyText>
-              </TwoColSection>
-              <AnimatedSection variant="fadeInScale">
-                <ContentImageOrPlaceholder slug={project.slug} section="solution" />
-              </AnimatedSection>
-              <TwoColSection title="Results">
-                <ListItems items={project.results} />
-              </TwoColSection>
-            </>
+          {/* ── Impact / Results ── */}
+          {project.results.length > 0 && (
+            <TwoColSection title="Impact">
+              <div className="flex flex-col gap-4">
+                {project.results.map((r, i) => (
+                  <AnimatedSection key={i} variant="fadeInUp" delay={i * 0.05}>
+                    <div style={{
+                      fontFamily: 'var(--font-jost)',
+                      fontSize: '20px',
+                      lineHeight: 1.6,
+                      color: lt.text,
+                      paddingLeft: '16px',
+                      borderLeft: `3px solid ${lt.border}`,
+                    }}>
+                      {r}
+                    </div>
+                  </AnimatedSection>
+                ))}
+              </div>
+            </TwoColSection>
           )}
 
           {/* ── Next Mission Footer ── */}
@@ -521,11 +485,14 @@ export default function ConsoleProjectPage({ project }: Props) {
                           flexShrink: 0,
                           overflow: 'hidden',
                           backgroundColor: '#b8b8b8',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
                         }}>
-                          <span style={{ color: '#888', fontSize: '11px', fontFamily: 'var(--font-jost)', fontWeight: 700, letterSpacing: '0.1em' }}>THUMBNAIL</span>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={nextProject.thumbnail}
+                            alt={nextProject.title}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                          />
                         </div>
                         <div style={{ flex: 1 }}>
                           <div style={{
