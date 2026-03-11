@@ -1,3 +1,8 @@
+import { blatt } from '@/content/projects/blatt'
+import { upday } from '@/content/projects/upday'
+import { mediaPlayerSdk } from '@/content/projects/media-player-sdk'
+import { figmaContentPlugin } from '@/content/projects/figma-content-plugin'
+
 export interface Section {
   id: string
   title: string
@@ -57,7 +62,9 @@ export interface Project {
   skills?: string[]
 }
 
-export const projects: Project[] = [
+export const projects: ProjectContent[] = [blatt, upday, mediaPlayerSdk, figmaContentPlugin]
+
+const _legacyProjectsPlaceholder: Project[] = [
   {
     slug: 'nmt-product-suite-design-system',
     title: 'Meet Blatt: Axel Springer\'s Editorial Design System',
@@ -334,13 +341,13 @@ export const projects: Project[] = [
 ]
 
 export function getProjectBySlug(slug: string): ProjectContent | undefined {
-  return projects.find((project) => project.slug === slug) as unknown as ProjectContent | undefined
+  return projects.find((project) => project.slug === slug)
 }
 
 export function getNextProject(currentSlug: string): ProjectContent | undefined {
   const current = projects.find(p => p.slug === currentSlug)
   if (!current) return undefined
-  if (current.nextProject) return projects.find(p => p.slug === current.nextProject) as unknown as ProjectContent | undefined
+  if (current.nextProject) return projects.find(p => p.slug === current.nextProject)
   const idx = projects.findIndex(p => p.slug === currentSlug)
-  return projects[(idx + 1) % projects.length] as unknown as ProjectContent | undefined
+  return projects[(idx + 1) % projects.length]
 }
