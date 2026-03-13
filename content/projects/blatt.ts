@@ -7,7 +7,7 @@ export const blatt: ProjectContent = {
   year: '2024–2026',
   role: 'Product Designer',
   team: 'Cross-brand product teams',
-  skills: ['Design Systems', 'Figma', 'Workshops', 'Developer Alignment'],
+  skills: ['Design Systems', 'UI Design', 'Design Thinking', 'Cross-functional collaboration'],
   thumbnail: '/images/projects/nmt-product-suite-design-system/thumbnail.jpg',
   heroImage: '/images/projects/nmt-product-suite-design-system/hero.jpg',
   overview:

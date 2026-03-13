@@ -6,8 +6,8 @@ export const mediaPlayerSdk: ProjectContent = {
   category: 'Platform Design / Consumer Media',
   year: '2024',
   role: 'Lead Product Designer',
-  team: 'Cross-brand (WELT + Bild)',
-  skills: ['Product Design', 'Co-design', 'Heuristic Evaluation'],
+  team: '2 developers • 3 product designers • UX researcher',
+  skills: ['UI Design', 'UX Design', 'Design System'],
   thumbnail: '/images/projects/media-player-sdk-axel-springer/thumbnail.jpg',
   heroImage: '/images/projects/media-player-sdk-axel-springer/hero.jpg',
   overview:
@@ -29,10 +29,11 @@ export const mediaPlayerSdk: ProjectContent = {
     {
       id: 'problem',
       title: 'Problem',
-      body: "Our videos performed well on YouTube. On our own products, they didn't. Users who arrived at an article page faced the same sequence: find the teaser, navigate to the article, locate the video container, press play — and lose the audio the moment they left the page.",
+      body: "Our videos performed well on YouTube. On our own products, they didn't not. Users who arrived at the home page faced the same sequence: find the teaser, navigate to the article, locate the video container, press play — and lose the content the moment they left the page.",
       items: [
         "Core UX failures: article-locked playback, no PiP on iOS, no playlists, no content discovery after a video ended.",
       ],
+      image:'problem.png',
 
     },
     {
@@ -75,6 +76,8 @@ export const mediaPlayerSdk: ProjectContent = {
       title: 'Brand agnostic',
       subtitle: 'Built for quick implementation & full expression',
       body: "Colours, typography, iconography, and spacing are brand-specific. Everything else is shared. The risk of a less carefully considered abstraction was a system where one brand felt like the other with different paint. That was avoided.",
+      imageLayout: 'two-col',
+      image:'feature-03.jpg',
     },
   ],
 }

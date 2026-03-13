@@ -8,7 +8,7 @@ export const figmaContentPlugin: ProjectContent = {
   role: 'Designer + Developer',
   team: 'Solo',
   timeline: '2025',
-  skills: ['Vibe Coding', 'Plugin Development', 'RSS Integration'],
+  skills: ['UX Design', 'Claude Code', 'Figma'],
   thumbnail: '/images/projects/figma-content-plugin/thumbnail.jpg',
   heroImage: '/images/projects/figma-content-plugin/hero.jpg',
   overview:
