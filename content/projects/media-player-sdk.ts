@@ -7,7 +7,6 @@ export const mediaPlayerSdk: ProjectContent = {
   year: '2024',
   role: 'Lead Product Designer',
   team: 'Cross-brand (WELT + Bild)',
-  timeline: '2024',
   skills: ['Product Design', 'Co-design', 'Heuristic Evaluation'],
   thumbnail: '/images/projects/media-player-sdk-axel-springer/thumbnail.jpg',
   heroImage: '/images/projects/media-player-sdk-axel-springer/hero.jpg',
