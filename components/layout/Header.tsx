@@ -17,13 +17,11 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 px-container-sm md:px-container-md lg:px-container ${
-        scrolled
-          ? 'bg-white/80 backdrop-blur-md shadow-sm py-4'
-          : 'bg-transparent py-6'
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 py-5 border-b border-gray-800 ${
+        scrolled ? 'bg-[#111111]/90 backdrop-blur-sm' : 'bg-[#111111]'
       }`}
     >
-      <div className="max-w-[1440px] mx-auto">
+      <div className="px-4 md:px-8">
         <Navigation scrolled={scrolled} />
       </div>
     </header>

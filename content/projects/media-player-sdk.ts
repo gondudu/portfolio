@@ -40,7 +40,6 @@ export const mediaPlayerSdk: ProjectContent = {
       id: 'research',
       title: 'Research',
       body: "The team was aligned going in: the UX was broken. What user interviews and analytics gave us was specificity — not 'the experience feels bad' but exactly where trust broke down and why:",
-      image:'research.jpg',
       items: [
         "Video content had too many ads. Users felt they lost control, or that their trust was broken when playing a video.",
         "Users not always knew how much time the video would last. How much time do I need to invest?",

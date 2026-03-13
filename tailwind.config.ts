@@ -22,8 +22,8 @@ const config: Config = {
         accent2: '#FF6B6B',
         accent3: '#7B68EE',
         accent4: '#00D9B1',
-        background: '#FFFFFF',
-        foreground: '#1E1E1E',
+        background: '#111111',
+        foreground: '#E8E8E8',
         // Console / 8-bit theme — amber phosphor
         'console-bg': '#080400',
         'console-panel': '#020100',
@@ -35,11 +35,11 @@ const config: Config = {
         'console-red': '#ff2200',
       },
       fontFamily: {
-        sans: ['var(--font-work-sans)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-work-sans)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-jost)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-jost)', 'system-ui', 'sans-serif'],
         console: ['var(--font-vt323)', 'monospace'],
         body: ['var(--font-ibm-plex-mono)', 'monospace'],
-        jost: ['var(--font-jost)', 'sans-serif'],
+        mono: ['var(--font-ibm-plex-mono)', 'monospace'],
       },
       fontSize: {
         xs: '16px',

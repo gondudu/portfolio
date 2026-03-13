@@ -1,33 +1,24 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { ProjectContent, projects, getNextProject } from '@/lib/projects'
+import { ProjectContent, getNextProject } from '@/lib/projects'
 import AnimatedSection from '@/components/shared/AnimatedSection'
 
 interface Props {
   project: ProjectContent
 }
 
-// Dark CRT colors — only used in sticky header
-const crt = {
-  text: '#e8a000',
-  dim: '#a87000',
-  bright: '#ffc93c',
-  border: '#2a1800',
-  bg: '#020100',
-}
-
-// Light editorial colors — used in content area
+// Editorial colors
 const lt = {
-  bg: '#dadada',
-  text: '#030303',
-  secondary: '#818181',
-  border: '#c5c5c5',
-  caption: '#666666',
+  bg: '#141414',
+  text: '#e0e0e0',
+  secondary: '#888888',
+  border: '#2a2a2a',
+  caption: '#888888',
   tagBg: '#a87000',
-  tagText: '#030303',
-  labelAmber: '#a87000',
+  tagText: '#1a1a1a',
+  labelAmber: '#c8860a',
 }
 
 /*
@@ -52,7 +43,7 @@ function PlaceholderImage({ label, aspectRatio = '16 / 9' }: { label: string; as
     <div style={{
       width: '100%',
       aspectRatio,
-      backgroundColor: '#b8b8b8',
+      backgroundColor: '#2a2a2a',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -74,9 +65,9 @@ function PlaceholderImage({ label, aspectRatio = '16 / 9' }: { label: string; as
         color: '#888',
         textTransform: 'uppercase',
         padding: '8px 16px',
-        border: '2px dashed #aaa',
+        border: '2px dashed #555',
         borderRadius: '4px',
-        backgroundColor: 'rgba(218,218,218,0.7)',
+        backgroundColor: 'rgba(20,20,20,0.7)',
         zIndex: 1,
       }}>
         {label}
@@ -94,7 +85,7 @@ function ContentImageOrPlaceholder({ slug, section, caption, aspectRatio = '16 /
       {errored ? (
         <PlaceholderImage label={section} aspectRatio={aspectRatio} />
       ) : (
-        <div style={{ width: '100%', aspectRatio, overflow: 'hidden', position: 'relative', backgroundColor: '#b8b8b8' }}>
+        <div style={{ width: '100%', aspectRatio, overflow: 'hidden', position: 'relative', backgroundColor: '#2a2a2a' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
@@ -283,23 +274,9 @@ function ListItems({ items }: { items: string[] }) {
 export default function ConsoleProjectPage({ project }: Props) {
   const router = useRouter()
 
-  const frameNumber = projects.findIndex(p => p.slug === project.slug) + 1
   const nextProject = getNextProject(project.slug)
-  const fileId = `MX-${String(frameNumber).padStart(3, '0')}-LV426`
-
-  const [stardate, setStardate] = useState('')
-  useEffect(() => {
-    const get = () => {
-      const now = new Date()
-      return `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}.${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`
-    }
-    setStardate(get())
-    const id = setInterval(() => setStardate(get()), 60000)
-    return () => clearInterval(id)
-  }, [])
 
   const metadataFields = [
-    { label: 'FILE ID', value: fileId },
     { label: 'YEAR', value: project.year },
     { label: 'ROLE', value: project.role },
     { label: 'CATEGORY', value: project.category },
@@ -313,36 +290,14 @@ export default function ConsoleProjectPage({ project }: Props) {
   return (
     <div className="min-h-screen" style={{ backgroundColor: lt.bg, color: lt.text }}>
 
-      {/* ── Sticky Header (dark CRT — unchanged) ── */}
-      <div
-        className="sticky top-0 z-40 flex items-center gap-3 px-4 py-2 flex-wrap font-console"
-        style={{ backgroundColor: crt.bg, fontSize: '20px', borderBottom: `1px solid ${crt.border}` }}
-      >
-        <button
-          onClick={() => router.push('/?view=mission-logs')}
-          className="transition-opacity hover:opacity-100"
-          style={{ color: crt.dim, opacity: 0.7 }}
-        >
-          {'< BACK TO FOLDER'}
-        </button>
-        <span style={{ color: crt.border }}>·</span>
-        <span style={{ color: crt.dim }}>LOG</span>
-        <span style={{ color: crt.bright }}>{String(frameNumber).padStart(3, '0')}</span>
-        <span style={{ color: crt.border }}>·</span>
-        <span style={{ color: crt.text, maxWidth: '55vw', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          {project.title.toUpperCase()}
-        </span>
-        <div className="ml-auto flex items-center gap-2">
-          <span style={{ color: crt.dim }}>STARDATE</span>
-          <span style={{ color: crt.bright }}>{stardate || '-----.------'}</span>
-        </div>
-      </div>
+      {/* ── Top padding for fixed global header ── */}
+      <div className="pt-[64px]" />
 
-      {/* ── Hero Image ── */}
+      {/* ── Hero Image + floating back button ── */}
       {(() => {
         const heroSrc = `/images/projects/${project.slug}/hero.jpg`
         return (
-          <div style={{ width: '100%', aspectRatio: '21 / 9', overflow: 'hidden', position: 'relative', backgroundColor: '#b8b8b8' }}>
+          <div style={{ width: '100%', aspectRatio: '21 / 9', overflow: 'hidden', position: 'relative', backgroundColor: '#2a2a2a' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={heroSrc}
@@ -350,6 +305,24 @@ export default function ConsoleProjectPage({ project }: Props) {
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
             />
+            {/* Floating back button */}
+            <button
+              onClick={() => router.push('/')}
+              className="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 font-sans text-xs tracking-widest transition-opacity hover:opacity-70"
+              style={{
+                backgroundColor: 'rgba(20,20,20,0.85)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                color: lt.text,
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              Work
+            </button>
           </div>
         )
       })()}
@@ -562,7 +535,7 @@ export default function ConsoleProjectPage({ project }: Props) {
                           height: '90px',
                           flexShrink: 0,
                           overflow: 'hidden',
-                          backgroundColor: '#b8b8b8',
+                          backgroundColor: '#2a2a2a',
                         }}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
@@ -601,24 +574,6 @@ export default function ConsoleProjectPage({ project }: Props) {
         </div>
       </div>
 
-      {/* Fixed NEXT MISSION button — dark CRT style */}
-      {nextProject && (
-        <button
-          onClick={() => router.push(`/projects/${nextProject.slug}`)}
-          className="fixed bottom-6 right-6 transition-opacity hover:opacity-100 font-console"
-          style={{
-            color: crt.bright,
-            fontSize: '18px',
-            letterSpacing: '0.08em',
-            border: `1px solid ${crt.border}`,
-            backgroundColor: crt.bg,
-            padding: '8px 16px',
-            zIndex: 50,
-          }}
-        >
-          NEXT MISSION {'>'}
-        </button>
-      )}
     </div>
   )
 }

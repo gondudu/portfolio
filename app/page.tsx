@@ -1,5 +1,5 @@
-import HeroIntro from '@/components/home/HeroIntro'
+import ProjectGrid from '@/components/home/ProjectGrid'
 
 export default function Home() {
-  return <HeroIntro />
+  return <ProjectGrid />
 }

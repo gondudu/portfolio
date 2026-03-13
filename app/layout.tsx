@@ -60,8 +60,8 @@ export default function RootLayout({
       <body>
         <a href="#main-content" className="skip-to-content">SKIP TO CONTENT</a>
         <noscript>
-          <div style={{ position: 'fixed', inset: 0, background: '#020100', color: '#a87000', fontFamily: 'monospace', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', textAlign: 'center', padding: '24px' }}>
-            MU-TH-UR 6000 requires JavaScript to operate. Please enable JavaScript in your browser.
+          <div style={{ position: 'fixed', inset: 0, background: '#ffffff', color: '#030303', fontFamily: 'sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', textAlign: 'center', padding: '24px' }}>
+            Please enable JavaScript to view this portfolio.
           </div>
         </noscript>
         <PasswordGate>

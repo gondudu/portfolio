@@ -15,11 +15,11 @@ export const blatt: ProjectContent = {
     "Axel Springer SE is Germany's largest digital publishing house and one of the most significant media conglomerates in Europe.",
   results: [
     'Adopted by 8 teams across the organisation',
-    'Migration phase active — WELT and Bild currently refactoring components to the Blatt standard',
-    'Automated Figma-to-production CSS pipeline, reducing design-to-dev handoff friction',
-    'Design tokens structured for LLM consumption — AI-assisted on-brand prototyping now possible',
-    'Internal tooling ecosystem built collectively across the design team, distributed company-wide via the Designers Toolkit',
-    'Design function has strategic input on product decisions across brands that it did not have before',
+    'Migration phase active — WELT and Bild currently refactoring components to the Blatt standard.',
+    'Automated Figma-to-production CSS pipeline, reducing design-to-dev handoff friction.',
+    'Design tokens structured for LLM consumption — AI-assisted on-brand prototyping now possible.',
+    'Internal tooling ecosystem built collectively across the design team, distributed company-wide via the Designers Toolkit.',
+    'Design function has strategic input on product decisions across brands that it did not have before.',
   ],
   nextProject: 'figma-content-plugin',
   sections: [

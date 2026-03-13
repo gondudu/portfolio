@@ -14,9 +14,9 @@ export const upday: ProjectContent = {
   overview:
     "Upday was Samsung's default news application across Europe — preinstalled on Galaxy devices, rarely downloaded by choice. When Samsung replaced it in 2024, the product faced the open market for the first time.",
   results: [
-    '1 million users migrated',
-    '10% increase in user retention',
-    '20% increase in time spent in app',
+    '1 million downloads',
+    '10% increase in time on app',
+    '4.3 at the Apple Store'
   ],
   nextProject: 'media-player-sdk-axel-springer',
   sections: [
@@ -51,7 +51,7 @@ export const upday: ProjectContent = {
     {
       id: 'solution',
       title: 'Solution',
-      body: "The new upday is a free, AI-powered news app — editorially curated, built around the 80% use case: fast, reliable access to the top stories. The business model shifted with it: no longer dependent on hardware distribution, the product competes on content quality and speed.",
+      body: "The new upday is a free, AI-powered news app — editorially curated, built around the 80% use case: fast, reliable access to the top stories. The business model shifted with it: no longer dependent on hardware distribution, the product competes on content curation and usability.",
       image: 'solution.jpg',
     },
     {
@@ -76,7 +76,7 @@ export const upday: ProjectContent = {
       body: "Persona research showed a significant segment consuming news passively — as entertainment, not always as obligation. These formats compete directly with social media for the same idle moments. We mainly kept the upday formula of fast and snackable news, and enhanced the feature set around the identified user behaviours.",
       items: [
         "Optimise for the check-in format: concise bulletpoints, explainer snippets, and well-tuned push notifications.",
-        "Short video, visual storytelling, and content designed for sharing are the entry points. Brand loyalty comes later, if at all.",
+        "Focus on short video, visual storytelling, and content designed for sharing.",
       ],
       imageLayout: 'two-col',
       image: 'feature-02-a.jpg',

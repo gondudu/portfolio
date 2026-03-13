@@ -15,20 +15,18 @@ export default function Navigation({ scrolled }: NavigationProps) {
 
   const links = [
     { href: '/', label: 'Work' },
-    { href: '/contact', label: 'Contact' },
+    { href: '/about', label: 'About' },
   ]
 
   return (
     <nav className="flex items-center justify-between">
       <Link href="/" className="group">
         <motion.h1
-          className={`font-display font-medium transition-all duration-300 ${
-            scrolled ? 'text-xl' : 'text-2xl'
-          }`}
+          className="font-body uppercase tracking-widest text-xs text-foreground"
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.2 }}
         >
-          Eduardo <span className="text-primary">Nogueira</span>
+          Eduardo Nogueira
         </motion.h1>
       </Link>
 
@@ -43,7 +41,7 @@ export default function Navigation({ scrolled }: NavigationProps) {
                 className="relative group"
               >
                 <span
-                  className={`text-base font-medium transition-colors duration-300 ${
+                  className={`font-sans text-xs font-medium transition-colors duration-300 ${
                     isActive ? 'text-foreground' : 'text-gray-500'
                   } group-hover:text-foreground`}
                 >
@@ -89,7 +87,7 @@ export default function Navigation({ scrolled }: NavigationProps) {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            className="fixed inset-0 bg-white z-40 md:hidden"
+            className="fixed inset-0 bg-[#111111] z-40 md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -112,7 +110,7 @@ export default function Navigation({ scrolled }: NavigationProps) {
                       className="relative group"
                     >
                       <span
-                        className={`text-3xl font-medium transition-colors duration-300 ${
+                        className={`font-sans text-xl font-medium transition-colors duration-300 ${
                           isActive ? 'text-foreground' : 'text-gray-500'
                         } group-hover:text-foreground`}
                       >
