@@ -40,6 +40,9 @@ next-env.d.ts
 
 # claude code
 .claude
+
+# superpowers brainstorming sessions
+.superpowers/
 .case studies.txt
 CHANGELOG.md
 .playwright-mcp

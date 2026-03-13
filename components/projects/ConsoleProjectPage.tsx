@@ -465,22 +465,45 @@ export default function ConsoleProjectPage({ project }: Props) {
                   </AnimatedSection>
                 )}
 
-                {section.image && !section.video && (
+                {!section.video && (section.image || (section.images && section.images.length > 0)) && (
                   <AnimatedSection variant="fadeInScale">
-                    {section.imageLayout === 'two-col' ? (
-                      <TwoColImages
-                        slug={project.slug}
-                        image={section.image}
-                        image2={section.image2}
-                        caption={section.imageCaption}
-                      />
-                    ) : (
-                      <ContentImageOrPlaceholder
-                        slug={project.slug}
-                        section={section.image}
-                        caption={section.imageCaption}
-                      />
-                    )}
+                    {(() => {
+                      // Normalise: prefer `images[]`, fall back to single `image`
+                      const imgs = section.images && section.images.length > 0
+                        ? section.images
+                        : section.image ? [section.image, ...(section.image2 ? [section.image2] : [])] : []
+
+                      if (section.imageLayout === 'two-col') {
+                        // Two-col: render first two images side by side
+                        return (
+                          <TwoColImages
+                            slug={project.slug}
+                            image={imgs[0]}
+                            image2={imgs[1]}
+                            caption={section.imageCaption}
+                          />
+                        )
+                      }
+
+                      // Default: stack vertically
+                      return (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                          {imgs.map((img) => (
+                            <ContentImageOrPlaceholder
+                              key={img}
+                              slug={project.slug}
+                              section={img}
+                              aspectRatio={section.imageAspectRatio}
+                            />
+                          ))}
+                          {section.imageCaption && (
+                            <div style={{ color: lt.caption, fontSize: '16px', fontFamily: 'var(--font-jost)', paddingLeft: '4px' }}>
+                              {section.imageCaption}
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })()}
                   </AnimatedSection>
                 )}
               </React.Fragment>

@@ -201,3 +201,15 @@ All case study content lives in content/projects/.
     image: 'solution.jpg',
     imageLayout: 'two-col',
   }
+
+
+  Usage in your project content files:
+  // Stacked (default) — 2 or more images
+  images: ['feature-01-a.jpg', 'feature-01-b.jpg']
+
+  // Two columns
+  images: ['feature-01-a.jpg', 'feature-01-b.jpg'],
+  imageLayout: 'two-col',
+
+  // Caption applies to the whole group
+  imageCaption: 'Before and after comparison'

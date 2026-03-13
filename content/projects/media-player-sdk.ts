@@ -2,7 +2,7 @@ import type { ProjectContent } from '@/lib/projects'
 
 export const mediaPlayerSdk: ProjectContent = {
   slug: 'media-player-sdk-axel-springer',
-  title: 'Media Player SDK',
+  title: 'Unifying the media experience on Axel Springer products.',
   category: 'Platform Design / Consumer Media',
   year: '2024',
   role: 'Lead Product Designer',
@@ -12,7 +12,7 @@ export const mediaPlayerSdk: ProjectContent = {
   thumbnail: '/images/projects/media-player-sdk-axel-springer/thumbnail.jpg',
   heroImage: '/images/projects/media-player-sdk-axel-springer/hero.jpg',
   overview:
-    "WELT and Bild — Axel Springer's two largest news brands — each ran separate video infrastructure contracts, with engineers at both brands independently solving identical problems. I came into this project already knowing WELT's media experience from the inside: I'd mapped its failure points through heuristic evaluation before the brief existed. The cost consolidation mandate gave us the opening to fix what I'd already found.",
+    "WELT and Bild — Axel Springer's two largest news brands — each ran separate video infrastructure contracts, with engineers at both brands independently solving identical problems.",
   results: [
     '8% improvement in media retention',
     '15% increase in audio consumption',
@@ -25,51 +25,57 @@ export const mediaPlayerSdk: ProjectContent = {
     {
       id: 'context',
       title: 'Context',
-      body: "WELT and Bild ran separate contracts with video infrastructure providers. Developers at both brands were independently solving the same problems. Management's goal was consolidation and cost reduction. My goal: use that mandate to fix a user experience that had been falling behind for years. I came in with a head start — having already mapped WELT's media UX through heuristic evaluation before the project brief existed.",
+      body: "Management mandated consolidation — one shared player to replace two separate infrastructure contracts. I had been owning the media experience at WELT, which meant I already knew the failure points before the brief arrived. In collaboration with the Bild design team, we defined what a brand-agnostic player would need to be.",
     },
     {
       id: 'problem',
       title: 'Problem',
       body: "Our videos performed well on YouTube. On our own products, they didn't. Users who arrived at an article page faced the same sequence: find the teaser, navigate to the article, locate the video container, press play — and lose the audio the moment they left the page.",
       items: [
-        "Video performed well on YouTube but not on own products — isolating the experience, not the content, as the problem",
-        "Core UX failures: article-locked playback, no PiP on iOS, no playlists, no content discovery after a video ended",
-        "WELT audience primarily SEO-driven cold-start users; Bild audience direct traffic habitual returners — different behaviours, shared friction",
-        "No external user testing conducted — internal stakeholder reviews used to mitigate risk; I would not make this call again",
+        "Core UX failures: article-locked playback, no PiP on iOS, no playlists, no content discovery after a video ended.",
       ],
-      image: 'problem.jpg',
+
     },
     {
       id: 'research',
       title: 'Research',
+      body: "The team was aligned going in: the UX was broken. What user interviews and analytics gave us was specificity — not 'the experience feels bad' but exactly where trust broke down and why:",
+      image:'research.jpg',
       items: [
-        "No external user testing — too fast. Internal reviews and stakeholder walkthroughs mitigated risk but left uncertainty about real user behaviour",
-        "Brand autonomy over player trigger design — WELT chose teaser-to-PiP without a new page; I disagreed on grounds of visual density",
-        "Video discovery still broken post-launch — the player works; the path to it doesn't",
+        "Video content had too many ads. Users felt they lost control, or that their trust was broken when playing a video.",
+        "Users not always knew how much time the video would last. How much time do I need to invest?",
+        "50% Users claimed they were not coming to our products looking for videos.",
+        "Not the right format. 10% of users didn't identify with the format of the videos being presented: 'too long'.",
+        "Users that visited videos with frequency, exalted the documentaries and TV coverages.",
       ],
     },
     {
       id: 'solution',
       title: 'Solution',
-      body: "I led the design alongside one designer from WELT and one from Bild, working in shared Figma files. I set the design vision and architecture; brand designers defined how it had to express each brand. The result: a shared behavioural core — persistent PiP, continuous audio, playlist and suggestion patterns — with a flexible visual layer on top.",
-      image: 'solution.jpg',
+      body: "The NMT Media player, grew from a simple Picture-in-Picture integration to a full fledge media player.",
+      image: 'hero.jpg',
     },
     {
       id: 'feature-01',
-      title: 'Feature 01',
-      subtitle: 'Scope the MVP to the two highest-impact fixes: persistent PiP and continuous audio',
-      body: "Article-locked audio was the clearest drop-off point. Scoping tightly gave the project measurable success criteria and a delivery cycle fast enough to get management support.",
+      title: 'Flexibility',
+      subtitle: 'Follows you whenever you need',
+      body: "The player is available for continuous playback throughout the product and device OS.",
+      imageLayout:'two-col',
+      image:'solution.jpg', 
+      image2:'feature-01-a.jpg' 
     },
     {
       id: 'feature-02',
-      title: 'Feature 02',
-      subtitle: 'Co-design with one designer from each brand, not design for them',
-      body: "I set the structural vision and component architecture. Brand designers from WELT and Bild defined the visual criteria. The final system reflected real constraints from each product — not assumptions from the outside.",
+      title: 'Scalability',
+      subtitle: 'Dive into the product',
+      body: "The player allows for creating multiple contexts for media content. This should support users in discovering new content and increase user retention.",
+      imageLayout:'two-col',
+      image:'feature-02-a.jpg'
     },
     {
       id: 'feature-03',
-      title: 'Feature 03',
-      subtitle: 'Shared behavioural core with a flexible visual layer',
+      title: 'Brand agnostic',
+      subtitle: 'Built for quick implementation & full expression',
       body: "Colours, typography, iconography, and spacing are brand-specific. Everything else is shared. The risk of a less carefully considered abstraction was a system where one brand felt like the other with different paint. That was avoided.",
     },
   ],

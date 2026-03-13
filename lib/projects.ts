@@ -11,7 +11,9 @@ export interface Section {
   items?: string[]
   image?: string        // full filename e.g. 'problem.jpg' — if absent, section is imageless (80vh desktop)
   image2?: string       // second image for two-col layout
+  images?: string[]     // multiple images — stacked vertically by default, or two-col when imageLayout='two-col'
   imageLayout?: 'full' | 'two-col'  // defaults to 'full' when absent
+  imageAspectRatio?: string         // CSS aspect-ratio e.g. '16 / 9', '4 / 3', '1 / 1' — defaults to '16 / 9'
   imageCaption?: string
   video?: { left: string; right: string }  // video pair, mutually exclusive with image
 }
