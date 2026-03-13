@@ -49,7 +49,7 @@ export default function Navigation({ scrolled }: NavigationProps) {
                 </span>
                 {isActive && (
                   <motion.div
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#ffb731]"
                     layoutId="activeLink"
                     transition={{
                       duration: 0.3,

@@ -18,21 +18,13 @@ const config: Config = {
     extend: {
       colors: {
         primary: '#0061FF',
-        accent1: '#FFD02F',
+        accent1: '#ff2f2f',
         accent2: '#FF6B6B',
         accent3: '#7B68EE',
         accent4: '#00D9B1',
         background: '#111111',
         foreground: '#E8E8E8',
-        // Console / 8-bit theme — amber phosphor
-        'console-bg': '#080400',
-        'console-panel': '#020100',
-        'console-border': '#2a1800',
-        'console-phosphor': '#e8a000',
-        'console-phosphor-dim': '#915c00',
-        'console-phosphor-bright': '#ffc93c',
-        'console-amber': '#e8a000',
-        'console-red': '#ff2200',
+      
       },
       fontFamily: {
         sans: ['var(--font-jost)', 'system-ui', 'sans-serif'],

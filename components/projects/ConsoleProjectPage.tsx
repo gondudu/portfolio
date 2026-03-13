@@ -16,9 +16,9 @@ const lt = {
   secondary: '#888888',
   border: '#2a2a2a',
   caption: '#888888',
-  tagBg: '#a87000',
+  tagBg: '#ffb731',
   tagText: '#1a1a1a',
-  labelAmber: '#c8860a',
+  labelAmber: '#ffb731',
 }
 
 /*
