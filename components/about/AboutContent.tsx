@@ -29,7 +29,7 @@ export default function AboutContent() {
               href="mailto:eduardobnog@gmail.com"
               className="inline-block font-sans text-base text-foreground underline underline-offset-4 hover:text-primary transition-colors"
             >
-              Send me an email
+              Get in touch
             </a>
           </div>
         </AnimatedSection>
