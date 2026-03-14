@@ -245,15 +245,31 @@ function TwoColSection({ title, subtitle, children }: {
 }
 
 function BodyText({ children }: { children: React.ReactNode }) {
+  const paragraphs = typeof children === 'string' ? children.split('\n\n') : null
   return (
-    <div style={{
-      fontFamily: 'var(--font-jost)',
-      fontWeight: 400,
-      fontSize: '20px',
-      lineHeight: 1.6,
-      color: lt.text,
-    }}>
-      {children}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      {paragraphs
+        ? paragraphs.map((p, i) => (
+            <p key={i} style={{
+              fontFamily: 'var(--font-jost)',
+              fontWeight: 400,
+              fontSize: '20px',
+              lineHeight: 1.6,
+              color: lt.text,
+              margin: 0,
+            }}>{p}</p>
+          ))
+        : (
+            <p style={{
+              fontFamily: 'var(--font-jost)',
+              fontWeight: 400,
+              fontSize: '20px',
+              lineHeight: 1.6,
+              color: lt.text,
+              margin: 0,
+            }}>{children}</p>
+          )
+      }
     </div>
   )
 }
@@ -369,19 +385,15 @@ export default function ConsoleProjectPage({ project }: Props) {
           {/* ── Context + Metadata ── */}
           <div className="flex flex-col md:flex-row" style={{ gap: '64px' }}>
             {/* Left: context section body (first section, shown without title) */}
-            {contextSection?.body && (
+            {(contextSection?.body || contextSection?.items) && (
               <div className="flex-1" style={{ borderTop: `1px solid ${lt.border}`, paddingTop: '24px' }}>
                 <AnimatedSection variant="fadeInUp">
-                  <p style={{
-                    fontFamily: 'var(--font-jost)',
-                    fontWeight: 400,
-                    fontSize: '20px',
-                    lineHeight: 1.6,
-                    color: lt.text,
-                    margin: 0,
-                  }}>
-                    {contextSection.body}
-                  </p>
+                  <div className="flex flex-col gap-6">
+                    {contextSection.body && (
+                      <BodyText>{contextSection.body}</BodyText>
+                    )}
+                    {contextSection.items && <ListItems items={contextSection.items} />}
+                  </div>
                 </AnimatedSection>
               </div>
             )}
