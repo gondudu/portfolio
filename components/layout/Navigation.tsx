@@ -18,6 +18,8 @@ export default function Navigation({ scrolled }: NavigationProps) {
     { href: '/about', label: 'About' },
   ]
 
+  const contactHref = 'mailto:eduardobnog@gmail.com'
+
   return (
     <nav className="flex items-center justify-between">
       <Link href="/" className="group">
@@ -31,7 +33,7 @@ export default function Navigation({ scrolled }: NavigationProps) {
       </Link>
 
       {/* Desktop Menu */}
-      <ul className="hidden md:flex gap-6">
+      <ul className="hidden md:flex gap-6 items-center">
         {links.map((link) => {
           const isActive = pathname === link.href
           return (
@@ -42,7 +44,7 @@ export default function Navigation({ scrolled }: NavigationProps) {
               >
                 <span
                   className={`font-sans text-xs font-medium transition-colors duration-300 ${
-                    isActive ? 'text-foreground' : 'text-gray-500'
+                    isActive ? 'text-foreground' : 'text-gray-300'
                   } group-hover:text-foreground`}
                 >
                   {link.label}
@@ -61,6 +63,14 @@ export default function Navigation({ scrolled }: NavigationProps) {
             </li>
           )
         })}
+        <li>
+          <a
+            href={contactHref}
+            className="font-sans text-xs font-medium text-gray-300 hover:text-foreground transition-colors duration-300"
+          >
+            Contact
+          </a>
+        </li>
       </ul>
 
       {/* Mobile Menu Button */}
@@ -111,7 +121,7 @@ export default function Navigation({ scrolled }: NavigationProps) {
                     >
                       <span
                         className={`font-sans text-xl font-medium transition-colors duration-300 ${
-                          isActive ? 'text-foreground' : 'text-gray-500'
+                          isActive ? 'text-foreground' : 'text-gray-300'
                         } group-hover:text-foreground`}
                       >
                         {link.label}
@@ -120,6 +130,20 @@ export default function Navigation({ scrolled }: NavigationProps) {
                   </motion.div>
                 )
               })}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <a
+                  href={contactHref}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="font-sans text-xl font-medium text-gray-300 hover:text-foreground transition-colors duration-300"
+                >
+                  Contact
+                </a>
+              </motion.div>
             </div>
           </motion.div>
         )}

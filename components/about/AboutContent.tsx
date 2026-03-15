@@ -4,38 +4,18 @@ import AnimatedSection from '@/components/shared/AnimatedSection'
 const META_FIELDS = [
   { label: 'LOCATION', value: 'Berlin, Germany' },
   { label: 'CURRENTLY', value: 'Product Designer at Axel Springer' },
-  { label: 'EDUCATION', value: 'B.Sc. Software Engineering — CODE University, Berlin (2024)' },
-  { label: 'SKILLS', value: 'Product Design · Design Systems · Prototyping · Figma · React · TypeScript' },
+  { label: 'EDUCATION', value: 'B.Sc. Interaction Design — CODE University, Berlin (2024)' },
 ]
+
+const SKILLS = ['Digital Product Design', 'UI/UX', 'Design Systems', 'Prototyping', 'Figma', 'Service Design']
 
 export default function AboutContent() {
   return (
     <div className="max-w-[1100px] mx-auto px-4 md:px-8 py-section">
       <div className="grid grid-cols-1 md:grid-cols-[3fr_2fr] gap-12 md:gap-16">
 
-        {/* Left: bio */}
-        <AnimatedSection variant="fadeInUp">
-          <div className="font-sans text-base text-foreground leading-relaxed space-y-5">
-            <p>
-              I&apos;m a Product Designer based in Berlin, focused on digital products that are both purposeful and refined. My background spans graphic design, UX, and frontend engineering — which means I think about design from concept through implementation.
-            </p>
-            <p>
-              Currently at Axel Springer, I work across WELT and Bild building the Blatt design system and shipping product improvements for millions of readers. Before that, I studied software engineering at CODE University, where I wrote my thesis on design culture at scale.
-            </p>
-            <p>
-              I care about the intersection of rigour and craft — systems that hold together, interfaces that feel considered, and teams that build the right thing.
-            </p>
-            <a
-              href="mailto:eduardobnog@gmail.com"
-              className="inline-block font-sans text-base text-foreground underline underline-offset-4 hover:text-primary transition-colors"
-            >
-              Get in touch
-            </a>
-          </div>
-        </AnimatedSection>
-
-        {/* Right: photo + metadata */}
-        <AnimatedSection variant="fadeInUp" delay={0.1}>
+        {/* Photo + metadata — mobile: first, desktop: second column */}
+        <AnimatedSection variant="fadeInUp" delay={0.1} className="md:order-2">
           <div className="relative w-full aspect-[4/5] mb-8 overflow-hidden">
             <Image
               src="/images/bio_pic.jpg"
@@ -57,6 +37,60 @@ export default function AboutContent() {
                 </p>
               </div>
             ))}
+            <div>
+              <p className="font-body text-xs uppercase tracking-widest text-gray-400 mb-2">
+                SKILLS
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {SKILLS.map((skill) => (
+                  <span
+                    key={skill}
+                    style={{
+                      color: '#1a1a1a',
+                      fontSize: '13px',
+                      backgroundColor: '#ffb731',
+                      padding: '3px 10px',
+                      borderRadius: '2px',
+                      fontFamily: 'var(--font-jost)',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </AnimatedSection>
+
+        {/* Bio — mobile: second, desktop: first column */}
+        <AnimatedSection variant="fadeInUp" className="md:order-1">
+          <div className="font-sans text-base text-foreground leading-relaxed space-y-5">
+            <p>
+              Brazilian product designer based in Berlin. Five years at Axel Springer, where I&apos;ve led design systems, redesigned consumer products, and built the kind of shared infrastructure that makes teams stop reinventing and start building.
+            </p>
+            <p>
+              I came from graphic design, which still shapes how I think about design and branding. I like to question structures that don&apos;t serve people — and then build what should replace them.
+            </p>
+            <p>
+              Currently interested in where AI actually helps users and where it&apos;s just an expensive gamble. Outside of work, I climb, play music, and collect records.
+            </p>
+            <div className="flex gap-6">
+              <a
+                href="mailto:eduardobnog@gmail.com"
+                className="inline-block font-sans text-base text-foreground underline underline-offset-4 hover:text-primary transition-colors"
+              >
+                Get in touch
+              </a>
+              <a
+                href="/images/eduardo_nogueira_cv.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block font-sans text-base text-foreground underline underline-offset-4 hover:text-primary transition-colors"
+              >
+                Download CV
+              </a>
+            </div>
           </div>
         </AnimatedSection>
 

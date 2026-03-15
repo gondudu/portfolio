@@ -13,7 +13,7 @@ export default function Footer() {
 
           <div className="flex gap-6">
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/ebn18/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-gray-400 hover:text-white transition-colors duration-300"

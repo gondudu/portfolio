@@ -2,14 +2,14 @@ import type { ProjectContent } from '@/lib/projects'
 
 export const blatt: ProjectContent = {
   slug: 'nmt-product-suite-design-system',
-  title: "Meet Blatt: Axel Springer's Editorial Design System",
-  category: 'Design System / Organisational Transformation',
+  title: "Blatt: Axel Springer's Editorial Design System",
+  category: 'Design System / Cross-brand Infrastructure',
   year: '2024–2026',
   role: 'Product Designer',
   team: 'Cross-brand product teams',
   skills: ['Design Systems', 'UI Design', 'Design Thinking', 'Cross-functional collaboration'],
   thumbnail: '/images/projects/nmt-product-suite-design-system/thumbnail.jpg',
-  heroImage: '/images/projects/nmt-product-suite-design-system/hero.jpg',
+  heroImage: '/images/projects/nmt-product-suite-design-system/intro.jpg',
   overview:
     "Axel Springer is Germany’s largest digital publishing house. In Berlin, two major editorial brands — WELT and Bild — share the same building and technology department, yet operated with completely separate design and development workflows. I initiated and led Blatt, a cross-brand design system now adopted by 8 teams across the organisation.",
   results: [

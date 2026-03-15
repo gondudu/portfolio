@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { ProjectContent, getNextProject } from '@/lib/projects'
 import AnimatedSection from '@/components/shared/AnimatedSection'
 
@@ -79,6 +79,7 @@ function PlaceholderImage({ label, aspectRatio = '16 / 9' }: { label: string; as
 function ContentImageOrPlaceholder({ slug, section, caption, aspectRatio = '16 / 9' }: { slug: string; section: string; caption?: string; aspectRatio?: string }) {
   const [errored, setErrored] = React.useState(false)
   const src = `/images/projects/${slug}/${section}`
+  const isVideo = section.endsWith('.mp4') || section.endsWith('.webm')
 
   return (
     <div>
@@ -86,13 +87,25 @@ function ContentImageOrPlaceholder({ slug, section, caption, aspectRatio = '16 /
         <PlaceholderImage label={section} aspectRatio={aspectRatio} />
       ) : (
         <div style={{ width: '100%', aspectRatio, overflow: 'hidden', position: 'relative', backgroundColor: '#2a2a2a' }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={src}
-            alt={caption || section}
-            onError={() => setErrored(true)}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-          />
+          {isVideo ? (
+            <video
+              src={src}
+              autoPlay
+              muted
+              loop
+              playsInline
+              onError={() => setErrored(true)}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={src}
+              alt={caption || section}
+              onError={() => setErrored(true)}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
+          )}
         </div>
       )}
       {caption && (
@@ -288,8 +301,6 @@ function ListItems({ items }: { items: string[] }) {
 }
 
 export default function ConsoleProjectPage({ project }: Props) {
-  const router = useRouter()
-
   const nextProject = getNextProject(project.slug)
 
   const metadataFields = [
@@ -322,23 +333,21 @@ export default function ConsoleProjectPage({ project }: Props) {
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
             />
             {/* Floating back button */}
-            <button
-              onClick={() => router.push('/')}
+            <Link
+              href="/"
               className="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 font-sans text-xs tracking-widest transition-opacity hover:opacity-70"
               style={{
                 backgroundColor: 'rgba(20,20,20,0.85)',
                 backdropFilter: 'blur(8px)',
                 WebkitBackdropFilter: 'blur(8px)',
                 color: lt.text,
-                border: 'none',
-                cursor: 'pointer',
               }}
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               Work
-            </button>
+            </Link>
           </div>
         )
       })()}
@@ -501,15 +510,16 @@ export default function ConsoleProjectPage({ project }: Props) {
               <div className="flex flex-col gap-4">
                 {project.results.map((r, i) => (
                   <AnimatedSection key={i} variant="fadeInUp" delay={i * 0.05}>
-                    <div style={{
-                      fontFamily: 'var(--font-jost)',
-                      fontSize: '20px',
-                      lineHeight: 1.6,
-                      color: lt.text,
-                      paddingLeft: '16px',
-                      borderLeft: `3px solid ${lt.border}`,
-                    }}>
-                      {r}
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                      <span style={{ color: lt.labelAmber, fontFamily: 'var(--font-jost)', fontSize: '20px', lineHeight: 1.6, flexShrink: 0 }}>—</span>
+                      <span style={{
+                        fontFamily: 'var(--font-jost)',
+                        fontSize: '20px',
+                        lineHeight: 1.6,
+                        color: lt.text,
+                      }}>
+                        {r}
+                      </span>
                     </div>
                   </AnimatedSection>
                 ))}
@@ -536,10 +546,9 @@ export default function ConsoleProjectPage({ project }: Props) {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <button
-                      onClick={() => router.push(`/projects/${nextProject.slug}`)}
-                      className="group text-left w-full"
-                      style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}
+                    <Link
+                      href={`/projects/${nextProject.slug}`}
+                      className="group text-left w-full block"
                     >
                       <div className="flex items-center gap-6">
                         <div style={{
@@ -576,7 +585,7 @@ export default function ConsoleProjectPage({ project }: Props) {
                           </div>
                         </div>
                       </div>
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
