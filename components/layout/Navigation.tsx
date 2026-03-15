@@ -22,14 +22,10 @@ export default function Navigation({ scrolled }: NavigationProps) {
 
   return (
     <nav className="flex items-center justify-between">
-      <Link href="/" className="group">
-        <motion.h1
-          className="font-body uppercase tracking-widest text-xs text-foreground"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.2 }}
-        >
+      <Link href="/">
+        <h1 className="font-body uppercase tracking-widest text-xs text-foreground">
           Eduardo Nogueira • Product Designer
-        </motion.h1>
+        </h1>
       </Link>
 
       {/* Desktop Menu */}
@@ -66,9 +62,12 @@ export default function Navigation({ scrolled }: NavigationProps) {
         <li>
           <a
             href={contactHref}
-            className="font-sans text-xs font-medium text-gray-300 hover:text-foreground transition-colors duration-300"
+            className="font-sans text-xs font-medium text-black bg-[#ffb731] hover:bg-[#e6a520] transition-colors duration-300 rounded-full px-4 py-1 inline-flex items-center gap-1.5"
           >
-            Contact
+            Get in touch
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5">
+              <path fillRule="evenodd" clipRule="evenodd" d="M2.52002 9.57605C2.52002 9.12005 2.80802 8.73605 3.38402 8.59205L19.32 4.36805C19.536 4.32005 19.896 4.24805 20.088 4.24805C21.048 4.24805 21.48 4.82405 21.48 5.52005C21.48 5.78405 21.36 6.16805 21.216 6.45605L14.88 19.104C14.664 19.536 14.256 19.776 13.8 19.776C13.416 19.776 13.128 19.608 12.864 19.368L10.56 17.28L8.35202 19.344C7.53602 20.088 6.48002 19.656 6.48002 18.576V13.608L2.92802 10.44C2.66402 10.2 2.52002 9.88805 2.52002 9.57605ZM11.5608 15.9474C12.2321 16.5416 12.9178 17.1486 13.656 17.808L19.08 7.10405L8.64002 13.344C9.65934 14.2643 10.5952 15.0926 11.5608 15.9474ZM4.84802 9.93605L16.92 6.62405L7.34402 12.192L4.84802 9.93605ZM8.08802 17.376L9.40802 16.176L8.08802 14.976V17.376Z" fill="currentColor"/>
+            </svg>
           </a>
         </li>
       </ul>
