@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { MoreProject } from '@/content/more-projects'
 import { moreProjectStyles as s } from '@/content/more-projects'
@@ -9,23 +10,34 @@ interface Props {
 }
 
 export default function MoreProjectCard({ project }: Props) {
-  return (
-    <motion.div whileHover="hover" initial="rest" animate="rest" className="cursor-default">
+  const inner = (
+    <motion.div whileHover="hover" initial="rest" animate="rest" className={project.href ? 'cursor-pointer' : 'cursor-default'}>
       <div className="relative overflow-hidden" style={{ aspectRatio: '4 / 3' }}>
 
-        {/* Image with zoom */}
+        {/* Thumbnail — video or image */}
         <motion.div
           className="absolute inset-0"
           variants={{ rest: { scale: 1 }, hover: { scale: 1.05 } }}
           transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={project.thumbnail}
-            alt={project.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-            onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0' }}
-          />
+          {project.thumbnailVideo ? (
+            <video
+              src={project.thumbnailVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={project.thumbnail}
+              alt={project.title}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              onError={(e) => { (e.target as HTMLImageElement).style.opacity = '0' }}
+            />
+          )}
         </motion.div>
 
         {/* Black overlay */}
@@ -66,4 +78,8 @@ export default function MoreProjectCard({ project }: Props) {
       </div>
     </motion.div>
   )
+
+  return project.href
+    ? <Link href={project.href} className="block">{inner}</Link>
+    : <>{inner}</>
 }

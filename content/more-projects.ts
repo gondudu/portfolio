@@ -8,6 +8,8 @@ export interface MoreProject {
   title: string
   description: string
   thumbnail: string
+  thumbnailVideo?: string  // when set, card uses a looping video instead of image
+  href?: string            // when set, card links to this page
 }
 
 // ─── Card text styles ─────────────────────────────────────────────────────────
@@ -45,6 +47,8 @@ export const moreProjects: MoreProject[] = [
     title: 'Rhythmus 21 – Sound design',
     description: 'Reimagined soundtrack for Hans Richter classic.',
     thumbnail: '/images/projects/project-06/thumbnail.gif',
+    thumbnailVideo: '/images/projects/project-06/thumbnail-video.mp4',
+    href: '/projects/project-06',
   },
   {
     slug: 'project-07',
