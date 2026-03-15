@@ -38,11 +38,11 @@ export default function ProjectCard({ project }: Props) {
 
           {/* Title — desktop hover only */}
           <motion.div
-            className="absolute inset-0 hidden md:flex items-top justify-center py-5 px-6"
+            className="absolute inset-0 hidden md:flex items-start justify-start py-5 px-6"
             variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
             transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <h2 className="font-sans font-bold text-white text-2xl text-left leading-snug">
+            <h2 className="font-sans font-bold text-white text-xl text-left leading-tight">
               {project.title}
             </h2>
           </motion.div>
