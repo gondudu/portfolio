@@ -19,7 +19,6 @@ export const upday: ProjectContent = {
     'Average session duration increased from 4 min to 8 min',
     
   ],
-  nextProject: 'media-player-sdk-axel-springer',
   sections: [
     {
       id: 'context',

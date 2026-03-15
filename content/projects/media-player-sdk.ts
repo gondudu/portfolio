@@ -19,7 +19,6 @@ export const mediaPlayerSdk: ProjectContent = {
     'Eliminated duplicate infrastructure contracts across brands',
     'Single SDK foundation for all future Axel Springer media products',
   ],
-  nextProject: 'nmt-product-suite-design-system',
   sections: [
     {
       id: 'context',

@@ -20,7 +20,6 @@ export const figmaContentPlugin: ProjectContent = {
     'First designer on the team to independently ship working software.',
     'Contributed to a wider movement of designer-built tooling.',
   ],
-  nextProject: 'upday-news-app-redesign',
   sections: [
     {
       id: 'context',

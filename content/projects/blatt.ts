@@ -20,7 +20,6 @@ export const blatt: ProjectContent = {
     'Token architecture structured for LLM consumption, enabling AI-assisted on-brand prototyping across any brand in the system.',
     'CodeBridge and the Designers Toolkit built collectively by the design team and distributed company-wide via our organization account.',
   ],
-  nextProject: 'figma-content-plugin',
   sections: [
     {
       id: 'context',
