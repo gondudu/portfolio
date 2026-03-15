@@ -1,0 +1,73 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// MORE PROJECTS
+// Manage all non-case-study project cards here.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface MoreProject {
+  slug: string
+  title: string
+  description: string
+  thumbnail: string
+}
+
+// ─── Card text styles ─────────────────────────────────────────────────────────
+export const moreProjectStyles = {
+  sectionLabel: {
+    fontFamily: 'font-mono' as const,   // Tailwind font class
+    fontSize: 'text-xs' as const,
+    color: 'text-gray-400' as const,
+    tracking: 'tracking-widest' as const,
+  },
+  title: {
+    fontSize: '32px',
+    fontWeight: 600,
+    color: '#1E1E1E',
+    lineHeight: 1.3,
+  },
+  description: {
+    fontSize: '20px',
+    fontWeight: 400,
+    color: '#888888',
+    lineHeight: 1.5,
+  },
+}
+
+// ─── Project list ─────────────────────────────────────────────────────────────
+export const moreProjects: MoreProject[] = [
+  {
+    slug: 'project-05',
+    title: 'UI for AI agent',
+    description: 'Concept for an AI agent using Unreal MetaHuman.',
+    thumbnail: '/images/projects/project-05/thumbnail.jpg',
+  },
+  {
+    slug: 'project-06',
+    title: 'Rhythmus 21 – Sound design',
+    description: 'Reimagined soundtrack for Hans Richter classic.',
+    thumbnail: '/images/projects/project-06/thumbnail.gif',
+  },
+  {
+    slug: 'project-07',
+    title: 'Alliance Artists',
+    description: 'Visual identity for the Brazilian management agency Alliance Artists.',
+    thumbnail: '/images/projects/project-07/thumbnail.jpg',
+  },
+  {
+    slug: 'project-08',
+    title: 'Eli Iwasa DJ',
+    description: 'Visual identity for Brazilian DJ Eli Iwasa.',
+    thumbnail: '/images/projects/project-08/thumbnail.jpg',
+  },
+  {
+    slug: 'project-09',
+    title: 'Discoteca Odara',
+    description: 'Visual identity for Brazilian label Discoteca Odara.',
+    thumbnail: '/images/projects/project-09/thumbnail.gif',
+  },
+  {
+    slug: 'project-10',
+    title: 'Paris de Janeiro',
+    description: 'Key visuals for French-Brazilian swimwear brand.',
+    thumbnail: '/images/projects/project-10/thumbnail.jpg',
+  },
+]

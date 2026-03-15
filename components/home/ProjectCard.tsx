@@ -7,11 +7,20 @@ import type { ProjectContent } from '@/lib/projects'
 
 interface Props {
   project: ProjectContent
+  linked?: boolean
 }
 
-export default function ProjectCard({ project }: Props) {
+export default function ProjectCard({ project, linked = true }: Props) {
+  const Wrapper = linked
+    ? ({ children }: { children: React.ReactNode }) => (
+        <Link href={`/projects/${project.slug}`} className="group block">{children}</Link>
+      )
+    : ({ children }: { children: React.ReactNode }) => (
+        <div className="group block cursor-default">{children}</div>
+      )
+
   return (
-    <Link href={`/projects/${project.slug}`} className="group block">
+    <Wrapper>
       <motion.div whileHover="hover" initial="rest" animate="rest">
         <div className="relative overflow-hidden" style={{ aspectRatio: '4 / 3' }}>
           {/* Image with zoom */}
@@ -48,6 +57,6 @@ export default function ProjectCard({ project }: Props) {
           </motion.div>
         </div>
       </motion.div>
-    </Link>
+    </Wrapper>
   )
 }

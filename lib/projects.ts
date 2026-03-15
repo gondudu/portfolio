@@ -36,7 +36,9 @@ export interface ProjectContent {
   sections: Section[]
 }
 
-export const projects: ProjectContent[] = [blatt, upday, mediaPlayerSdk, figmaContentPlugin]
+export const featuredProjects: ProjectContent[] = [blatt, upday, mediaPlayerSdk, figmaContentPlugin]
+
+export const projects: ProjectContent[] = featuredProjects
 
 export function getProjectBySlug(slug: string): ProjectContent | undefined {
   return projects.find((project) => project.slug === slug)
