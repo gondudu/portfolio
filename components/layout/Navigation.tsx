@@ -28,7 +28,7 @@ export default function Navigation({ scrolled }: NavigationProps) {
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.2 }}
         >
-          Eduardo Nogueira
+          Eduardo Nogueira • Product Designer
         </motion.h1>
       </Link>
 
