@@ -1,31 +1,22 @@
-'use client'
-
 import Link from 'next/link'
-import { motion } from 'framer-motion'
-import Button from '@/components/shared/Button'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center px-container-sm md:px-container-md lg:px-container">
-      <div className="text-center max-w-2xl">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="font-display font-bold text-8xl md:text-9xl mb-4 text-primary">
-            404
-          </h1>
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-            Page not found
-          </h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Sorry, the page you&apos;re looking for doesn&apos;t exist or has been moved.
+    <div className="page-x max-w-page mx-auto py-section">
+      <div className="grid-12">
+        <div className="col-span-12 md:col-span-7 rule-t pt-6">
+          <p className="text-label uppercase text-muted">Error 404</p>
+          <h1 className="text-display text-ink mt-6">Page not found</h1>
+          <p className="text-body text-muted mt-6 max-w-measure">
+            This page doesn&apos;t exist, or it moved. The work is all still here.
           </p>
-          <Link href="/">
-            <Button variant="primary">Back to home</Button>
+          <Link
+            href="/"
+            className="inline-block text-body text-accent underline underline-offset-4 mt-8"
+          >
+            View all projects
           </Link>
-        </motion.div>
+        </div>
       </div>
     </div>
   )

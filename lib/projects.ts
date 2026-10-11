@@ -1,7 +1,10 @@
+import { widgetStudio } from '@/content/projects/widget-studio'
 import { blatt } from '@/content/projects/blatt'
 import { upday } from '@/content/projects/upday'
 import { mediaPlayerSdk } from '@/content/projects/media-player-sdk'
 import { figmaContentPlugin } from '@/content/projects/figma-content-plugin'
+import { figmaAccessibilityPlugin } from '@/content/projects/figma-accessibility-plugin'
+import { caseFile } from '@/content/projects/case-file'
 
 export interface Section {
   id: string
@@ -15,6 +18,7 @@ export interface Section {
   imageLayout?: 'full' | 'two-col'  // defaults to 'full' when absent
   imageAspectRatio?: string         // CSS aspect-ratio e.g. '16 / 9', '4 / 3', '1 / 1' — defaults to '16 / 9'
   imageCaption?: string
+  imageAlt?: string      // screen-reader description of the image; falls back to `${title} — ${project title}`
   video?: { left: string; right: string }  // video pair, mutually exclusive with image
 }
 
@@ -36,7 +40,17 @@ export interface ProjectContent {
   sections: Section[]
 }
 
-export const featuredProjects: ProjectContent[] = [blatt, upday, mediaPlayerSdk, figmaContentPlugin]
+// Ordered tools-and-systems first: designer-built software and platform work
+// lead, consumer mobile work closes. `getNextProject()` follows this order.
+export const featuredProjects: ProjectContent[] = [
+  widgetStudio,
+  blatt,
+  figmaAccessibilityPlugin,
+  figmaContentPlugin,
+  caseFile,
+  mediaPlayerSdk,
+  upday,
+]
 
 export const projects: ProjectContent[] = featuredProjects
 

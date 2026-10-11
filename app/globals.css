@@ -10,179 +10,104 @@
 
 html {
   scroll-behavior: smooth;
+  /* Swiss layouts are quiet — no elastic overscroll flash of a different colour */
+  background-color: #0A0A0A;
+  color-scheme: dark;
 }
 
 body {
-  font-family: var(--font-jost), sans-serif;
-  color: #E8E8E8;
-  background-color: #111111;
+  font-family: var(--font-archivo), 'Helvetica Neue', Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #FAFAF8;
+  background-color: #0A0A0A;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  text-rendering: optimizeLegibility;
+}
+
+/* Nothing in this system is rounded. */
+img,
+video,
+input,
+button {
+  border-radius: 0;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
-}
 
-/* ─── CRT / Console Effects ─────────────────────────────────── */
+  /* Page gutter — 20px mobile, 48px from md up. Used by every top-level container. */
+  .page-x {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  @media (min-width: 768px) {
+    .page-x {
+      padding-left: 48px;
+      padding-right: 48px;
+    }
+  }
 
-/* Monitor wrapper: scanlines overlay + screen vignette */
-.crt-monitor {
-  position: relative;
-  overflow: hidden;
-}
+  /* The 12-column grid. */
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 24px;
+  }
 
-/* Scan lines */
-.crt-monitor::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.14) 2px,
-    rgba(0, 0, 0, 0.14) 4px
-  );
-  pointer-events: none;
-  z-index: 10;
-}
+  /* Hairline — the only structural device in the system. */
+  .rule-t {
+    border-top: 1px solid #2A2A28;
+  }
+  .rule-b {
+    border-bottom: 1px solid #2A2A28;
+  }
 
-/* Screen edge vignette */
-.crt-monitor::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.55) 100%);
-  pointer-events: none;
-  z-index: 11;
-}
-
-/* Amber phosphor text glow */
-.text-glow-amber {
-  text-shadow: 0 0 6px rgba(232, 160, 0, 0.65);
-}
-
-/* Screen glow inset */
-.crt-screen-glow {
-  box-shadow:
-    inset 0 0 30px rgba(0, 50, 0, 0.6),
-    0 0 8px rgba(51, 255, 0, 0.2);
-}
-
-/* Subtle flicker — opacity never drops below 0.98 */
-@keyframes crt-flicker {
-  0%,
-  90%,
-  100% { opacity: 1; }
-  93%  { opacity: 0.99; }
-  96%  { opacity: 0.98; }
-  98%  { opacity: 0.99; }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .crt-flicker {
-    animation: crt-flicker 8s ease-in-out infinite;
+  /* Scroll still works — just no visible track/thumb. Used on the bio and
+     work panes so the split reads as one continuous surface. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 
-/* Cursor blink on the typing line */
-@keyframes cursor-blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-}
+/* ─── Accessibility ──────────────────────────────────────────── */
 
-.cursor-blink::after {
-  content: '█';
-  animation: cursor-blink 1s step-end infinite;
-  margin-left: 1px;
-}
-
-/* Alert / xenomorph pulse */
-@keyframes alert-pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.6; }
-}
-
-.alert-pulse {
-  animation: alert-pulse 0.6s ease-in-out infinite;
-}
-
-/* Hide scrollbars globally (console aesthetic) */
-.font-console ::-webkit-scrollbar {
-  display: none;
-}
-
-/* ─── Accessibility: Focus rings ─────────────────────────────── */
-
-/* Skip-to-content link */
 .skip-to-content {
   position: fixed;
   top: -100%;
-  left: 8px;
+  left: 20px;
   z-index: 9999;
-  padding: 6px 14px;
-  background: #020100;
-  border: 1px solid #a87000;
-  color: #a87000;
-  font-family: var(--font-vt323), monospace;
-  font-size: 18px;
-  letter-spacing: 0.1em;
+  padding: 8px 16px;
+  background: #FAFAF8;
+  color: #0A0A0A;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   text-decoration: none;
   transition: top 0.1s;
 }
 .skip-to-content:focus {
-  top: 8px;
+  top: 20px;
 }
 
-/* Amber focus ring for all interactive console elements */
-.font-console button:focus-visible,
-.font-console a:focus-visible,
-.font-console input:focus-visible {
-  outline: 1px solid #a87000;
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #FF4438;
   outline-offset: 2px;
 }
 
+/* ─── Reduced motion ─────────────────────────────────────────── */
 
-/* ─── Hardware Console Effects ──────────────────────────────────── */
-
-/* Amber indicator light pulse */
-@keyframes amberGlow {
-  0%   { filter: brightness(1); }
-  100% { filter: brightness(0.68); }
-}
-
-/* CRT power-on: content expands from a horizontal line at center */
-@keyframes crtScanOn {
-  0% {
-    clip-path: inset(49.5% 0 49.5% 0);
-    filter: brightness(5);
-  }
-  40% {
-    filter: brightness(2);
-  }
-  100% {
-    clip-path: inset(0% 0 0% 0);
-    filter: brightness(1);
-  }
-}
-
-/* Mobile status ticker */
-@keyframes ticker-scroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.ticker-track {
-  display: inline-flex;
-  white-space: nowrap;
-  animation: ticker-scroll 40s linear infinite;
-}
-
-/* ─────────────────────────────────────────────────────────────── */
-
-/* Smooth scroll for reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

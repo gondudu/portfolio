@@ -12,28 +12,6 @@ export interface MoreProject {
   href?: string            // when set, card links to this page
 }
 
-// ─── Card text styles ─────────────────────────────────────────────────────────
-export const moreProjectStyles = {
-  sectionLabel: {
-    fontFamily: 'font-mono' as const,   // Tailwind font class
-    fontSize: 'text-xs' as const,
-    color: 'text-gray-400' as const,
-    tracking: 'tracking-widest' as const,
-  },
-  title: {
-    fontSize: '32px',
-    fontWeight: 600,
-    color: '#1E1E1E',
-    lineHeight: 1.3,
-  },
-  description: {
-    fontSize: '20px',
-    fontWeight: 400,
-    color: '#888888',
-    lineHeight: 1.5,
-  },
-}
-
 // ─── Project list ─────────────────────────────────────────────────────────────
 export const moreProjects: MoreProject[] = [
   {

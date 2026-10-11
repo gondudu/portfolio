@@ -1,35 +1,21 @@
 import type { Metadata } from 'next'
-import { VT323, IBM_Plex_Mono, Jost } from 'next/font/google'
+import { Archivo } from 'next/font/google'
 import './globals.css'
 import ConditionalShell from '@/components/layout/ConditionalShell'
 
-const vt323 = VT323({
-  weight: '400',
-  variable: '--font-vt323',
-  display: 'swap',
-  subsets: ['latin'],
-})
-
-const ibmPlexMono = IBM_Plex_Mono({
-  weight: ['400'],
-  style: ['normal', 'italic'],
-  variable: '--font-ibm-plex-mono',
-  display: 'swap',
-  subsets: ['latin'],
-})
-
-const jost = Jost({
-  weight: ['400', '700'],
+const archivo = Archivo({
+  weight: ['400', '500', '600'],
   style: ['normal'],
-  variable: '--font-jost',
+  variable: '--font-archivo',
   display: 'swap',
   subsets: ['latin'],
 })
 
 export const metadata: Metadata = {
-  title: 'Eduardo Nogueira | Product Designer',
-  description: 'Portfolio of Eduardo Nogueira - Product Designer crafting meaningful digital experiences',
-  keywords: ['Product Designer', 'UX Designer', 'UI Designer', 'Portfolio'],
+  title: 'Eduardo Nogueira — Product Designer',
+  description:
+    'Product designer in Berlin. Design systems, platform architecture, and the tools that let teams stop rebuilding and start shipping.',
+  keywords: ['Product Designer', 'Design Systems', 'UX Designer', 'Berlin', 'Portfolio'],
   authors: [{ name: 'Eduardo Nogueira' }],
 }
 
@@ -39,12 +25,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${vt323.variable} ${ibmPlexMono.variable} ${jost.variable}`}>
+    <html lang="en" className={archivo.variable}>
       <body>
-        <a href="#main-content" className="skip-to-content">SKIP TO CONTENT</a>
+        <a href="#main-content" className="skip-to-content">
+          Skip to content
+        </a>
         <noscript>
-          <div style={{ position: 'fixed', inset: 0, background: '#ffffff', color: '#030303', fontFamily: 'sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', textAlign: 'center', padding: '24px' }}>
-            Please enable JavaScript to view this portfolio.
+          <div className="page-x py-section-sm text-small text-muted">
+            This portfolio uses JavaScript for navigation. Core content is available without it.
           </div>
         </noscript>
         <ConditionalShell>

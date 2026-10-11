@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { ProjectContent, getProjectBySlug, projects } from '@/lib/projects'
-import ConsoleProjectPage from '@/components/projects/ConsoleProjectPage'
+import ProjectCaseStudy from '@/components/projects/ProjectPage'
 
 export async function generateStaticParams() {
   return projects.map((project) => ({
@@ -30,5 +30,5 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
     notFound()
   }
 
-  return <ConsoleProjectPage project={project} />
+  return <ProjectCaseStudy project={project} />
 }

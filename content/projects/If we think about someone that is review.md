@@ -1,0 +1,9 @@
+If we think about someone that is reviewing a portfolio, this person does not need to know so much. they will scan the portfolio in a few minutes and won't have the patience to read so much. I have an idea. Let's add a initial text to each project and use images to illustrate the process. This is the tone and the structure I would like you to follow in each project.a
+
+
+
+Blatt
+
+Axel springer is one of Germany's biggest media companies. The group owns some of the country's most popular news brands like Bild, WELT, while also having operations in the U.S, Spain, England and Poland with brands like Business Insider, Moroning Brew and The Telegraph. Once a company reaches this size, keeping proccesses and infrastructure aligned to avoiding wasting resources becomes extremely challanging. That's the kind of problem I like to solve.
+
+This project started when I joined Welt in 2022 and noticed that the brand lacked a design documentation that allowed designers and developers to create interfaces consistenly. This was costing the brand development time, user trust and, ultimately, revenue. The product felt dated and noisy, reflecting the internal structures of the company. This motivated me to seek change. I felt that this would be the perfect topic for my bachelor thesis. I would apply the design process to WELT's problem and try to come up with a solution. By 2023 I had finished creating our Figma pattern libraries and mapping the system principles. The outcome was an increased speed in the design to dev process, reduction in design debt and more transparency and understanding on what made the brand's UI dinstinct.The proccess draw attention of people around the company and other brand's designers started to approach me seeking to collaborate. This culminated on the project Blatt.as, Axel Springer's core design system that serves 12 companies inside the group.
