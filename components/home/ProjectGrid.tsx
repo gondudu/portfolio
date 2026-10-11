@@ -45,33 +45,23 @@ function Bio() {
           priority
         />
       </div>
-      <p>
-        I&apos;m Eduardo — a Brazilian designer living in Berlin, working at the
-        intersection of branding and product. I came up through graphic design,
-        which still shows in how I think about structure and type, before moving
-        into the kind of product work that actually ships.
-      </p>
-      <p>
-        Currently at Axel Springer, across brands like Bild, WELT, Business Insider,
-        and the Telegraph — design systems, internal tools, product work, whatever
-        the brand needs.
-      </p>
-      <p>
-        I like finding the systems that don&apos;t serve the people using them, and
-        then building what should replace them. Increasingly that means writing the
-        software myself — two of the tools on the right are ones I designed and
-        coded end to end.
-      </p>
-      <p>
-        Outside of work I climb, play music, and collect records. Lately I&apos;m
-        interested in where AI actually helps people work, and where it&apos;s just
-        an expensive guess.
-      </p>
       <p className="text-muted">
-        This site is being rebuilt right now — the work on the right is stills; the
-        real motion is on its way.
+        This is a temporary website, more projects and case studies will be added soon. In the meantime, you can check some of the projects I lead. My role in these projects ranges from design system, product design, and branding.
       </p>
       <p>
+        I&apos;m Eduardo — a Brazilian designer based in Berlin, working at the
+        intersection of branding and product design.
+      </p>
+      <p>
+        Currently at Axel Springer Tech, I worked with brands like Bild, WELT, Business Insider,
+        and the Telegraph. I enjoy working on design systems, experience design, product workflows and whatever
+        teams needs to create better products and services. Previously, I worked in social studies and graphic design, experiences that shape how I see the world and my profession. 
+      </p>
+      <p>
+        Outside of work I climb, play music, and collect records. Lately, I&apos;m
+        interested in AI and it's capabilities to empower designers and teams, while also being aware of the risks and challenges it brings to our society.
+      </p>
+        <p>
         Get in touch:{' '}
         <a href="mailto:eduardobnog@gmail.com" className={LINK_CLASS}>
           Email
@@ -98,7 +88,7 @@ function Bio() {
         <a href="/about" className={LINK_CLASS}>
           About
         </a>
-      </p>
+        </p>
     </div>
   )
 }
