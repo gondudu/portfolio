@@ -144,10 +144,6 @@ function Bio() {
             className={LINK_CLASS}
           >
             CV
-          </a>{' '}
-          ·{' '}
-          <a href="/about" className={LINK_CLASS}>
-            About
           </a>
         </p>
       </div>
