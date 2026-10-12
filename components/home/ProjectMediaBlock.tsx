@@ -10,6 +10,8 @@ export interface ScrollItem {
   meta?: string
   /** Still image for now; swap for an .mp4/.webm here once the animation is ready — same component. */
   media: string
+  /** For videos: timestamp (seconds) of the paused poster frame. See the poster effect below. */
+  posterTime?: number
 }
 
 const PLACEHOLDER = 'bg-wash'
@@ -48,23 +50,26 @@ export default function ProjectMediaBlock({
     }
   }, [])
 
-  // Paused videos default to a black frame. These films open on a black
-  // title card too, so parking at t=1s just trades one black frame for
-  // another — seek past the title/problem/solution cards into the actual
-  // product-demo footage instead.
+  // Paused videos default to their first frame. These films open on a black
+  // title card, so that first frame reads as a dead black rectangle — park on
+  // a hand-picked frame from the demo footage instead (item.posterTime, chosen
+  // per film). Without one, fall back to ~40% in, past the usual intro cards.
+  // Playback itself still starts from 0 — see handlePlay.
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
     const showFrame = () => {
-      const duration = video.duration || 10
-      video.currentTime = Math.min(10, Math.max(1, duration - 0.5))
+      const duration = video.duration || 0
+      const target =
+        item.posterTime ?? Math.min(10, duration * 0.4)
+      video.currentTime = Math.max(0, Math.min(target, duration - 0.05 || target))
     }
     // HAVE_METADATA (1) can already be true by the time this effect runs —
     // same hydration-timing gap as the image-error check above.
     if (video.readyState >= 1) showFrame()
     video.addEventListener('loadedmetadata', showFrame)
     return () => video.removeEventListener('loadedmetadata', showFrame)
-  }, [])
+  }, [item.posterTime])
 
   useEffect(() => {
     const video = videoRef.current

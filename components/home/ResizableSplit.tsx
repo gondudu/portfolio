@@ -176,11 +176,11 @@ export default function ResizableSplit({ bio, work }: { bio: ReactNode; work: Re
         ref={sheetRef}
         className={[
           // mobile: fixed bottom sheet
-          'fixed inset-x-0 bottom-0 z-30 h-[85dvh] bg-paper border-t border-ink',
+          'fixed inset-x-0 bottom-0 z-30 h-[85dvh] bg-panel',
           'max-md:translate-y-[var(--sheet-y)]',
           sheetDrag === null ? 'max-md:transition-transform max-md:duration-300 max-md:ease-swiss' : '',
           // md+: in-flow left column
-          'md:static md:z-auto md:h-full md:border-t-0 md:w-[var(--bio-width)] md:shrink-0',
+          'md:static md:z-auto md:h-full md:w-[var(--bio-width)] md:shrink-0',
         ].join(' ')}
       >
         <button
@@ -237,7 +237,7 @@ export default function ResizableSplit({ bio, work }: { bio: ReactNode; work: Re
         onPointerDown={startDrag}
         onKeyDown={onKeyDown}
         onDoubleClick={resetWidth}
-        className="relative hidden md:block w-px shrink-0 cursor-col-resize bg-ink outline-none focus-visible:bg-accent hover:bg-accent transition-colors duration-200 ease-swiss"
+        className="relative hidden md:block w-px shrink-0 cursor-col-resize bg-transparent outline-none focus-visible:bg-accent hover:bg-accent transition-colors duration-200 ease-swiss"
       >
         <span className="absolute inset-y-0 -left-2 -right-2" />
       </div>

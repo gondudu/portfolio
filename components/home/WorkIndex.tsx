@@ -67,7 +67,7 @@ export default function WorkIndex({ items }: { items: ScrollItem[] }) {
 
   return (
     <div ref={rootRef} className="no-scrollbar md:h-full md:overflow-y-auto">
-      <div className="mono-label sticky top-0 z-[2] flex justify-between border-y border-ink bg-paper px-5 py-2 md:border-t-0 md:px-6">
+      <div className="mono-label sticky top-0 z-[2] flex justify-between bg-paper px-5 py-2 md:px-6">
         <span>Selected work</span>
         <span>
           <b className="font-medium text-accent">{pad(current)}</b> / {pad(total)}
@@ -89,7 +89,7 @@ export default function WorkIndex({ items }: { items: ScrollItem[] }) {
         ))}
       </div>
 
-      <div className="mono-label flex justify-between border-t border-ink px-5 pb-12 pt-2 md:px-6">
+      <div className="mono-label flex justify-between px-5 pb-12 pt-2 md:px-6">
         <span>End of index</span>
         <span>© 2026</span>
       </div>

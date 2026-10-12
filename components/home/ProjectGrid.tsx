@@ -28,6 +28,7 @@ const items: ScrollItem[] = axisDesignTools.map((f): ScrollItem => ({
   caption: f.caption,
   meta: f.meta,
   media: f.video,
+  posterTime: f.posterTime,
 }))
 
 // Selected work shown after the plugin films.
@@ -43,6 +44,7 @@ items.push(
     title: 'Rhythmus 21 – Sound design',
     caption: 'Reimagined soundtrack for Hans Richter classic.',
     media: '/images/projects/project-06/rythmus.mp4',
+    posterTime: 45,
   },
   {
     slug: 'project-07',
@@ -79,14 +81,14 @@ const LINK_CLASS = 'underline underline-offset-4 text-ink hover:text-accent tran
  */
 function Bio() {
   return (
-    <div className="bio-pane h-full overflow-y-auto overscroll-contain no-scrollbar bg-paper text-ink">
+    <div className="bio-pane h-full overflow-y-auto overscroll-contain no-scrollbar bg-panel text-ink">
       <h1 className="poster-name px-3 pt-2">
         Eduardo
         <br />
         Nogueira
       </h1>
 
-      <div className="mono-label flex justify-between border-b border-ink px-3 pb-1.5 pt-2.5">
+      <div className="mono-label flex justify-between px-3 pb-1.5 pt-2.5">
         <span>Product Designer</span>
         <span>(BR → DE)</span>
       </div>
