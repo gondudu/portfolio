@@ -120,7 +120,7 @@ function Bio() {
           Given a time machine, he’d go straight to a Frank Zappa show in 1973. Priorities.
         </p>
         <p className="text-muted">
-          His role in these projects ranges from product design, and branding and strategy. All projects presented here were initiated by Eduardo and done in collaboration with many great colleagues.
+          His role in these projects ranges from product design, branding and design strategy. All work presented here was initiated by Eduardo and done in collaboration with many great colleagues.
         </p>
         <p>
           Get in touch:{' '}
