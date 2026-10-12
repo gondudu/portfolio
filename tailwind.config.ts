@@ -23,17 +23,22 @@ const config: Config = {
     },
     extend: {
       colors: {
-        paper: '#0A0A0A',
-        ink: '#FAFAF8',
-        muted: '#9A9A96',
-        rule: '#2A2A28',
-        accent: '#FF4438',
+        paper: '#FAFAF8',
+        ink: '#0A0A0A',
+        muted: '#6B6B67',
+        rule: '#DCDCD7',
+        // Darker than the old dark-mode red so accent text clears 4.5:1 on paper.
+        accent: '#D92B20',
+        // Quiet surfaces: bio panel / media placeholders, and the step above.
+        panel: '#F0F0EC',
+        wash: '#E4E4DF',
         // Aliases kept so `text-foreground` / `bg-background` stay meaningful.
-        background: '#0A0A0A',
-        foreground: '#FAFAF8',
+        background: '#FAFAF8',
+        foreground: '#0A0A0A',
       },
       fontFamily: {
         sans: ['var(--font-archivo)', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       fontSize: {
         // Named scale. Tailwind's numeric defaults (text-xs … text-9xl) are
@@ -58,7 +63,7 @@ const config: Config = {
         measure: '68ch', // comfortable reading line length for body copy
       },
       borderColor: {
-        DEFAULT: '#2A2A28',
+        DEFAULT: '#DCDCD7',
       },
       transitionTimingFunction: {
         swiss: 'cubic-bezier(0.25, 0.1, 0.25, 1)',

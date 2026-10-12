@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eduardo Nogueira — Brutalist Swiss</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Work+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /*
+   * Design exploration: Swiss structure, brutalist surface.
+   * Same information architecture as the live home page (bio left, work right).
+   * Served at /brutalist.html — the real site is untouched.
+   */
+  :root {
+    --paper: #FAFAF8;
+    --ink: #0A0A0A;
+    --muted: #6B6B67;
+    --rule: #DCDCD7;
+    --accent: #D92B20;
+    --grotesk: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'Work Sans', 'Helvetica Neue', Arial, sans-serif;
+    --g: 20px;
+  }
+  @media (min-width: 768px) { :root { --g: 24px; } }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--paper); color: var(--ink); }
+  body {
+    font-family: var(--grotesk);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  img, video { display: block; }
+
+  /* ── Type tokens: four sizes, nothing in between ─────────────── */
+  .mono {
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+  .title {
+    font-size: 28px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    font-stretch: 85%;
+  }
+
+  /* ── Split ───────────────────────────────────────────────────── */
+  @media (min-width: 768px) {
+    .split {
+      display: grid;
+      grid-template-columns: minmax(360px, 38%) 1fr;
+      height: 100vh; overflow: hidden;
+    }
+    .pane { height: 100vh; overflow-y: auto; scrollbar-width: none; }
+    .pane::-webkit-scrollbar { display: none; }
+    .bio { border-right: 1px solid var(--ink); }
+  }
+
+  /* ── Bio ─────────────────────────────────────────────────────── */
+  /* Tighter gutter than the work pane: the bio reads as a dense column. */
+  .bio { container-type: inline-size; --g: 12px; line-height: 1.2; }
+  .name {
+    padding: 8px var(--g) 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    text-transform: uppercase;
+    /* Fills the column: the name is the poster. */
+    font-size: 25cqi;
+    line-height: 0.8;
+    letter-spacing: -0.035em;
+    margin-left: -0.04em;
+  }
+  .role {
+    display: flex; justify-content: space-between;
+    padding: 10px var(--g) 6px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .data { list-style: none; }
+  .data li {
+    display: grid; grid-template-columns: 88px 1fr; gap: 8px;
+    padding: 5px var(--g);
+    border-bottom: 1px solid var(--rule);
+  }
+  .data li:last-child { border-bottom: 1px solid var(--ink); }
+  .data dt, .data .k { color: var(--muted); }
+  .data a { text-decoration: none; }
+  .data a:hover { color: var(--accent); }
+  .data .links { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+
+  .prose { padding: 24px var(--g) 0; display: flex; flex-direction: column; gap: 10px; max-width: 54ch; }
+  .prose .note { color: var(--muted); }
+
+  .portrait { margin: 24px var(--g) var(--g); position: relative; }
+  .portrait img { width: 100%; aspect-ratio: 4/5; object-fit: cover; object-position: top; filter: grayscale(1) contrast(1.1); }
+  .portrait figcaption { display: flex; justify-content: space-between; padding-top: 6px; }
+
+  /* ── Work ────────────────────────────────────────────────────── */
+  .work-head {
+    position: sticky; top: 0; z-index: 2;
+    display: flex; justify-content: space-between;
+    padding: 8px var(--g);
+    background: var(--paper);
+    border-bottom: 1px solid var(--ink);
+    border-top: 1px solid var(--ink);
+  }
+  @media (min-width: 768px) { .work-head { border-top: 0; } }
+  .counter b { font-weight: 500; color: var(--accent); }
+
+  .entry { padding-bottom: 128px; }
+
+  .media { position: relative; aspect-ratio: 16/9; background: #ECECE7; overflow: hidden; }
+  .media img, .media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .play {
+    position: absolute; left: 0; bottom: 0;
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px;
+    background: var(--ink); color: var(--paper);
+    border: 0; cursor: pointer;
+  }
+  .play:hover { background: var(--accent); }
+  .play svg { width: 9px; height: 10px; }
+
+  .caption {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    padding: 12px var(--g) 0;
+  }
+  @media (min-width: 1024px) {
+    .caption { grid-template-columns: 1fr 2fr; gap: 24px; }
+  }
+  .caption p { max-width: 60ch; }
+  .caption .k { color: var(--muted); }
+
+  .end {
+    padding: 0 var(--g) 48px;
+    display: flex; justify-content: space-between;
+    border-top: 1px solid var(--ink); padding-top: 8px;
+  }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Hard cuts, not fades. */
+  .entry { clip-path: inset(0 0 100% 0); }
+  .entry.in { clip-path: inset(0 0 0 0); transition: clip-path 240ms cubic-bezier(.2,0,0,1); }
+  @media (prefers-reduced-motion: reduce) {
+    .entry, .entry.in { clip-path: none; transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<main class="split">
+  <!-- ── Bio pane ─────────────────────────────────────────────── -->
+  <aside class="pane bio">
+    <h1 class="name">Eduardo<br>Nogueira</h1>
+    <div class="role mono"><span>Product Designer</span><span>(BR → DE)</span></div>
+
+    <div class="prose">
+      <p class="note">This is a temporary website, more projects and case studies will be added soon. In the meantime, you can check some of the projects I lead. My role in these projects ranges from design system, product design, and branding.</p>
+      <p>I’m Eduardo — a Brazilian designer based in Berlin, working at the intersection of branding and product design.</p>
+      <p>Currently at Axel Springer Tech, I worked with brands like Bild, WELT, Business Insider, and the Telegraph. I enjoy working on design systems, experience design, product workflows and whatever teams need to create better products and services. Previously, I worked in social studies and graphic design, experiences that shape how I see the world and my profession.</p>
+      <p>Outside of work I climb, play music, and collect records. Lately, I’m interested in AI and its capabilities to empower designers and teams, while also being aware of the risks and challenges it brings to our society.</p>
+    </div>
+
+    <figure class="portrait">
+      <img src="/images/bio_pic.jpg" alt="Eduardo Nogueira">
+      <figcaption class="mono"><span>Fig. 01</span><span>Berlin</span></figcaption>
+    </figure>
+  </aside>
+
+  <!-- ── Work pane ────────────────────────────────────────────── -->
+  <section class="pane work" id="work" aria-label="Selected work">
+    <div class="work-head mono">
+      <span>Selected work</span>
+      <span class="counter" id="counter"><b>01</b> / 13</span>
+    </div>
+    <div id="entries"></div>
+    <div class="end mono"><span>End of index</span><span>© 2026</span></div>
+  </section>
+</main>
+
+<script>
+  const DS = '/videos/axis-design-system'
+  const AX = '/videos/axis-design-tools'
+  const items = [
+    { title: 'Axis Design System', meta: 'Design System / Axel Springer · 2026', media: `${DS}/axis-design-system-overview-v2.mp4`,
+      caption: 'One token source for every Axel Springer brand, followed from Figma variables to published code. The film walks through five moments: tokens, theming, the styleguide, the release pipeline, and the guardrails that keep brands on system.' },
+    { title: 'Axis Design Tools', meta: 'Figma Plugin Suite · 2026', media: `${AX}/axis-overview.mp4`,
+      caption: 'I initiated this plugin and directed its UI and UX, built in collaboration with Axel Springer’s design team. I designed and coded two of its five tools myself — fetch content and accessibility — in a suite that keeps every brand on system, without leaving Figma.' },
+    { title: 'Axis: Fetch Content', meta: 'Figma Plugin / Axis Design Tools · 2026', media: `${AX}/axis-fetch.mp4`,
+      caption: 'Stress-tests components with live newsroom copy instead of lorem ipsum. Designed and coded by me.' },
+    { title: 'Axis: Inspect Design', meta: 'Figma Plugin / Axis Design Tools · 2026', media: `${AX}/axis-inspect.mp4`,
+      caption: 'Shows the system token behind every value, so nothing passes as a token that isn’t one.' },
+    { title: 'Axis: Annotate', meta: 'Figma Plugin / Axis Design Tools · 2026', media: `${AX}/axis-annotate.mp4`,
+      caption: 'Measures redlines against the system in one pass instead of by hand.' },
+    { title: 'Axis: Accessibility', meta: 'Figma Plugin / Axis Design Tools · 2026', media: `${AX}/axis-access.mp4`,
+      caption: 'Checks every component the way colour-blind readers actually see it. Designed and coded by me.' },
+    { title: 'Axis: Contribution', meta: 'Figma Plugin / Axis Design Tools · 2026', media: `${AX}/axis-contrib.mp4`,
+      caption: 'Feeds a spotted system gap back into the system, right where it was found.' },
+    { title: 'Upday News App Redesign', meta: 'Product Design', media: '/images/projects/upday-news-app-redesign/7.jpg',
+      caption: 'Redesign of the Upday news app.' },
+    { title: 'Rhythmus 21 – Sound design', meta: 'Sound Design', media: '/images/projects/project-06/rythmus.mp4',
+      caption: 'Reimagined soundtrack for Hans Richter classic.' },
+    { title: 'Alliance Artists', meta: 'Visual Identity', media: '/images/projects/project-07/thumbnail.jpg',
+      caption: 'Visual identity for the Brazilian management agency Alliance Artists.' },
+    { title: 'Eli Iwasa DJ', meta: 'Visual Identity', media: '/images/projects/project-08/thumbnail.jpg',
+      caption: 'Visual identity for Brazilian DJ Eli Iwasa.' },
+    { title: 'Discoteca Odara', meta: 'Visual Identity', media: '/images/projects/project-09/thumbnail.gif',
+      caption: 'Visual identity for Brazilian label Discoteca Odara.' },
+    { title: 'Paris de Janeiro', meta: 'Key Visuals', media: '/images/projects/project-10/thumbnail.jpg',
+      caption: 'Key visuals for French-Brazilian swimwear brand.' },
+  ]
+
+  const pad = (n) => String(n).padStart(2, '0')
+  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+  const root = document.getElementById('entries')
+  const total = pad(items.length)
+
+  root.innerHTML = items.map((it, i) => {
+    const isVideo = /\.(mp4|webm)$/.test(it.media)
+    const media = isVideo
+      ? `<video src="${it.media}#t=10" preload="metadata" playsinline></video>
+         <button class="play mono" type="button" aria-label="Play ${esc(it.title)}">
+           <svg viewBox="0 0 9 10" aria-hidden="true"><path d="M0 0L9 5L0 10Z" fill="currentColor"/></svg>Play
+         </button>`
+      : `<img src="${it.media}" alt="${esc(it.title)}" loading="lazy">`
+    return `
+      <article class="entry" data-i="${i}" aria-label="${esc(it.title)}">
+        <div class="media">${media}</div>
+        <div class="caption">
+          <span class="mono k">${pad(i + 1)} / ${total}</span>
+          <p>${esc(it.caption)}</p>
+        </div>
+      </article>`
+  }).join('')
+
+  // One video at a time, native controls once playing.
+  let current = null
+  root.addEventListener('click', (e) => {
+    const btn = e.target.closest('.play')
+    if (!btn) return
+    const video = btn.parentElement.querySelector('video')
+    if (current && current !== video) current.pause()
+    current = video
+    video.currentTime = 0
+    video.controls = true
+    video.play()
+    btn.hidden = true
+    video.onpause = video.onended = () => { video.controls = false; btn.hidden = false }
+  })
+
+  // Hard clip reveal + live counter.
+  const entries = [...root.querySelectorAll('.entry')]
+  const counter = document.getElementById('counter')
+  const reveal = new IntersectionObserver((list) => {
+    list.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); reveal.unobserve(en.target) } })
+  }, { rootMargin: '0px 0px -10% 0px' })
+  entries.forEach((el) => reveal.observe(el))
+
+  const track = new IntersectionObserver((list) => {
+    list.forEach((en) => {
+      if (!en.isIntersecting) return
+      entries.forEach((el) => el.classList.toggle('is-current', el === en.target))
+      counter.innerHTML = `<b>${pad(+en.target.dataset.i + 1)}</b> / ${total}`
+    })
+  }, { rootMargin: '-45% 0px -45% 0px' })
+  entries.forEach((el) => track.observe(el))
+</script>
+</body>
+</html>

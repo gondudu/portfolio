@@ -1,14 +1,23 @@
 import type { Metadata } from 'next'
-import { Archivo } from 'next/font/google'
+import { Archivo, Spline_Sans_Mono } from 'next/font/google'
 import './globals.css'
 import ConditionalShell from '@/components/layout/ConditionalShell'
 
+// Variable Archivo with the width axis exposed, so the poster name can go
+// condensed (font-stretch 62%) and the labels semi-condensed.
 const archivo = Archivo({
-  weight: ['400', '500', '600'],
-  style: ['normal'],
+  subsets: ['latin'],
+  axes: ['wdth'],
   variable: '--font-archivo',
   display: 'swap',
+})
+
+// The "mono" label voice — 11px, uppercase, tracked, tabular figures.
+const splineMono = Spline_Sans_Mono({
+  weight: ['400', '500'],
   subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -25,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={archivo.variable}>
+    <html lang="en" className={`${archivo.variable} ${splineMono.variable}`}>
       <body>
         <a href="#main-content" className="skip-to-content">
           Skip to content

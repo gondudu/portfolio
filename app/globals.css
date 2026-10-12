@@ -11,16 +11,16 @@
 html {
   scroll-behavior: smooth;
   /* Swiss layouts are quiet — no elastic overscroll flash of a different colour */
-  background-color: #0A0A0A;
-  color-scheme: dark;
+  background-color: #FAFAF8;
+  color-scheme: light;
 }
 
 body {
   font-family: var(--font-archivo), 'Helvetica Neue', Arial, sans-serif;
   font-size: 18px;
   line-height: 1.6;
-  color: #FAFAF8;
-  background-color: #0A0A0A;
+  color: #0A0A0A;
+  background-color: #FAFAF8;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: 'kern' 1, 'liga' 1;
@@ -61,10 +61,10 @@ button {
 
   /* Hairline — the only structural device in the system. */
   .rule-t {
-    border-top: 1px solid #2A2A28;
+    border-top: 1px solid #DCDCD7;
   }
   .rule-b {
-    border-bottom: 1px solid #2A2A28;
+    border-bottom: 1px solid #DCDCD7;
   }
 
   /* Scroll still works — just no visible track/thumb. Used on the bio and
@@ -76,6 +76,53 @@ button {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
+  /* ─── Brutalist Swiss home ───────────────────────────────────── */
+
+  /* The "mono" label voice: Spline Sans Mono, small, uppercase, tracked, tabular. */
+  .mono-label {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+    font-size: 11px;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The bio column is a container, so the name can be sized against its
+     own width (resizable on desktop, full-bleed in the mobile drawer). */
+  .bio-pane {
+    container-type: inline-size;
+  }
+
+  /* The name is the poster: it fills the column whatever its width. */
+  .poster-name {
+    font-weight: 900;
+    font-stretch: 62%;
+    text-transform: uppercase;
+    font-size: 25cqi;
+    line-height: 0.8;
+    letter-spacing: -0.035em;
+    margin-left: -0.04em;
+  }
+
+  /* Hard cuts, not fades: entries wipe up from a flat clip instead of a
+     fade/translate. Falls back to an instant show under reduced motion. */
+  .clip-reveal {
+    clip-path: inset(0 0 100% 0);
+  }
+  .clip-reveal.in {
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 240ms cubic-bezier(0.2, 0, 0, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clip-reveal,
+  .clip-reveal.in {
+    clip-path: none;
+    transition: none;
+  }
 }
 
 /* ─── Accessibility ──────────────────────────────────────────── */
@@ -86,8 +133,8 @@ button {
   left: 20px;
   z-index: 9999;
   padding: 8px 16px;
-  background: #FAFAF8;
-  color: #0A0A0A;
+  background: #0A0A0A;
+  color: #FAFAF8;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -102,7 +149,7 @@ button {
 a:focus-visible,
 button:focus-visible,
 input:focus-visible {
-  outline: 2px solid #FF4438;
+  outline: 2px solid #D92B20;
   outline-offset: 2px;
 }
 

@@ -15,7 +15,7 @@ interface Props {
  * Sections reference the filename only; the slug is prefixed here.
  */
 
-const PLACEHOLDER = 'bg-[#1C1C1A]'
+const PLACEHOLDER = 'bg-panel'
 
 function Media({
   slug,

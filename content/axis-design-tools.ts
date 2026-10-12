@@ -14,8 +14,17 @@ export interface AxisFilm {
 }
 
 const BASE = '/videos/axis-design-tools'
+const DS_BASE = '/videos/axis-design-system'
 
 export const axisDesignTools: AxisFilm[] = [
+  {
+    slug: 'axis-design-system',
+    title: 'Axis Design System',
+    caption:
+      'One token source for every Axel Springer brand, followed from Figma variables to published code. The film walks through five moments: tokens, theming, the styleguide, the release pipeline, and the guardrails that keep brands on system.',
+    meta: 'Design System / Axel Springer · 2026',
+    video: `${DS_BASE}/axis-design-system-overview-v2.mp4`,
+  },
   {
     slug: 'axis-overview',
     title: 'Axis Design Tools',

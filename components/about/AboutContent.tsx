@@ -75,7 +75,7 @@ export default function AboutContent() {
           delay={0.06}
           className="col-span-12 md:col-span-4 md:col-start-9 order-1 md:order-2"
         >
-          <div className="relative w-full aspect-[4/5] overflow-hidden bg-[#1C1C1A]">
+          <div className="relative w-full aspect-[4/5] overflow-hidden bg-panel">
             <Image
               src="/images/bio_pic.jpg"
               alt="Eduardo Nogueira"

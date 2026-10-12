@@ -12,7 +12,9 @@ export interface ScrollItem {
   media: string
 }
 
-const PLACEHOLDER = 'bg-[#1C1C1A]'
+const PLACEHOLDER = 'bg-wash'
+
+const pad = (n: number) => String(n).padStart(2, '0')
 
 // Shared across every block on the page: pressing play on one pauses
 // whichever other video was playing, so only one ever runs at a time.
@@ -22,7 +24,15 @@ let currentlyPlaying: HTMLVideoElement | null = null
  * Self-contained media + caption, no link to a detail page — the image/video
  * is expected to explain the work on its own, the caption just adds role context.
  */
-export default function ProjectMediaBlock({ item }: { item: ScrollItem }) {
+export default function ProjectMediaBlock({
+  item,
+  index,
+  total,
+}: {
+  item: ScrollItem
+  index: number
+  total: number
+}) {
   const [errored, setErrored] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const imgRef = useRef<HTMLImageElement>(null)
@@ -89,7 +99,7 @@ export default function ProjectMediaBlock({ item }: { item: ScrollItem }) {
       <div className={`relative overflow-hidden aspect-[16/9] ${PLACEHOLDER}`}>
         {errored ? (
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-label uppercase text-muted">{item.title}</span>
+            <span className="mono-label text-muted">{item.title}</span>
           </div>
         ) : isVideo ? (
           <>
@@ -107,13 +117,12 @@ export default function ProjectMediaBlock({ item }: { item: ScrollItem }) {
                 type="button"
                 onClick={handlePlay}
                 aria-label={`Play ${item.title}`}
-                className="group absolute inset-0 flex items-center justify-center"
+                className="mono-label absolute left-0 bottom-0 flex items-center gap-2.5 bg-ink px-4 py-3 text-paper transition-colors duration-200 ease-swiss hover:bg-accent"
               >
-                <span className="flex h-16 w-16 items-center justify-center bg-ink/90 transition-transform duration-200 ease-swiss group-hover:scale-105">
-                  <svg width="20" height="22" viewBox="0 0 20 22" fill="none" aria-hidden="true">
-                    <path d="M0 0L20 11L0 22V0Z" fill="#0A0A0A" />
-                  </svg>
-                </span>
+                <svg width="9" height="10" viewBox="0 0 9 10" aria-hidden="true">
+                  <path d="M0 0L9 5L0 10Z" fill="currentColor" />
+                </svg>
+                Play
               </button>
             )}
           </>
@@ -128,6 +137,14 @@ export default function ProjectMediaBlock({ item }: { item: ScrollItem }) {
             className="absolute inset-0 w-full h-full object-cover"
           />
         )}
+      </div>
+
+      {/* Index + role context. The media carries the work; this just labels it. */}
+      <div className="grid grid-cols-1 gap-2 px-5 pt-3 md:px-6 lg:grid-cols-[1fr_2fr] lg:gap-6">
+        <span className="mono-label text-muted">
+          {pad(index + 1)} / {pad(total)}
+        </span>
+        <p className="max-w-[60ch] text-[15px] leading-[1.4]">{item.caption}</p>
       </div>
     </div>
   )

@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import { axisDesignTools } from '@/content/axis-design-tools'
-import AnimatedSection from '@/components/shared/AnimatedSection'
-import ProjectMediaBlock, { type ScrollItem } from './ProjectMediaBlock'
+import { type ScrollItem } from './ProjectMediaBlock'
 import ResizableSplit from './ResizableSplit'
+import WorkIndex from './WorkIndex'
 
 /**
  * Split layout, after tee.works: bio pinned left as its own scrollable,
@@ -30,96 +30,152 @@ const items: ScrollItem[] = axisDesignTools.map((f): ScrollItem => ({
   media: f.video,
 }))
 
+// Selected work shown after the plugin films.
+items.push(
+  {
+    slug: 'upday-news-app-redesign',
+    title: 'Upday News App Redesign',
+    caption: 'Redesign of the Upday news app.',
+    media: '/images/projects/upday-news-app-redesign/7.jpg',
+  },
+  {
+    slug: 'project-06',
+    title: 'Rhythmus 21 – Sound design',
+    caption: 'Reimagined soundtrack for Hans Richter classic.',
+    media: '/images/projects/project-06/rythmus.mp4',
+  },
+  {
+    slug: 'project-07',
+    title: 'Alliance Artists',
+    caption: 'Visual identity for the Brazilian management agency Alliance Artists.',
+    media: '/images/projects/project-07/thumbnail.jpg',
+  },
+  {
+    slug: 'project-08',
+    title: 'Eli Iwasa DJ',
+    caption: 'Visual identity for Brazilian DJ Eli Iwasa.',
+    media: '/images/projects/project-08/thumbnail.jpg',
+  },
+  {
+    slug: 'project-09',
+    title: 'Discoteca Odara',
+    caption: 'Visual identity for Brazilian label Discoteca Odara.',
+    media: '/images/projects/project-09/thumbnail.gif',
+  },
+  {
+    slug: 'project-10',
+    title: 'Paris de Janeiro',
+    caption: 'Key visuals for French-Brazilian swimwear brand.',
+    media: '/images/projects/project-10/thumbnail.jpg',
+  },
+)
+
 const LINK_CLASS = 'underline underline-offset-4 text-ink hover:text-accent transition-colors duration-200 ease-swiss'
 
+/**
+ * Brutalist Swiss bio: the name is the poster (sized against the column via
+ * container queries), a role row, dense prose with every site link folded in,
+ * and a grayscale portrait captioned like a plate. Hard black rules on paper.
+ */
 function Bio() {
   return (
-    <div className="md:h-full md:overflow-y-auto no-scrollbar bg-[#1C1C1A] px-6 py-10 md:py-16 flex flex-col gap-5 text-[16px] leading-[1.7] text-ink">
-      <div className="relative w-full shrink-0 aspect-[4/5] overflow-hidden bg-[#2A2A28]">
-        <Image
-          src="/images/bio_pic.jpg"
-          alt="Eduardo Nogueira"
-          fill
-          className="object-cover object-top"
-          sizes="(max-width: 768px) 100vw, 600px"
-          priority
-        />
-      </div>
-      <p className="text-muted">
-        This is a temporary website, more projects and case studies will be added soon. In the meantime, you can check some of the projects I lead. My role in these projects ranges from design system, product design, and branding.
-      </p>
-      <p>
-        I&apos;m Eduardo — a Brazilian designer based in Berlin, working at the
-        intersection of branding and product design.
-      </p>
-      <p>
-        Currently at Axel Springer Tech, I worked with brands like Bild, WELT, Business Insider,
-        and the Telegraph. I enjoy working on design systems, experience design, product workflows and whatever
-        teams needs to create better products and services. Previously, I worked in social studies and graphic design, experiences that shape how I see the world and my profession. 
-      </p>
-      <p>
-        Outside of work I climb, play music, and collect records. Lately, I&apos;m
-        interested in AI and it's capabilities to empower designers and teams, while also being aware of the risks and challenges it brings to our society.
-      </p>
-        <p>
-        Get in touch:{' '}
-        <a href="mailto:eduardobnog@gmail.com" className={LINK_CLASS}>
-          Email
-        </a>{' '}
-        ·{' '}
-        <a
-          href="https://www.linkedin.com/in/ebn18/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={LINK_CLASS}
-        >
-          LinkedIn
-        </a>{' '}
-        ·{' '}
-        <a
-          href="/images/eduardo_nogueira_cv.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={LINK_CLASS}
-        >
-          CV
-        </a>{' '}
-        ·{' '}
-        <a href="/about" className={LINK_CLASS}>
-          About
-        </a>
-        </p>
-    </div>
-  )
-}
+    <div className="bio-pane h-full overflow-y-auto overscroll-contain no-scrollbar bg-paper text-ink">
+      <h1 className="poster-name px-3 pt-2">
+        Eduardo
+        <br />
+        Nogueira
+      </h1>
 
-function Work() {
-  return (
-    <div className="md:h-full md:overflow-y-auto no-scrollbar">
-      <div className="md:pl-10 py-section-md">
-        <div className="flex flex-col gap-section">
-          {items.map((item, i) => (
-            <AnimatedSection key={item.slug} variant="fadeInUp" delay={i === 0 ? 0 : 0.04}>
-              <ProjectMediaBlock item={item} />
-            </AnimatedSection>
-          ))}
-        </div>
+      <div className="mono-label flex justify-between border-b border-ink px-3 pb-1.5 pt-2.5">
+        <span>Product Designer</span>
+        <span>(BR → DE)</span>
       </div>
+
+      <div className="flex max-w-[54ch] flex-col gap-2.5 px-3 pt-6 text-[15px] leading-[1.35]">
+        <p>
+          Eduardo is a Brazilian designer who learned to love design by staring at
+          record covers in shops he used to go as a teenager. He’s been judging albums
+          by their covers ever since, and he’s usually right.
+        </p>
+        <p>
+          These days he works at Axel Springer Tech, somewhere between branding and
+          product design, on brands like WELT, Bild, Business Insider and The Telegraph.
+          His current obsession is Axis, a design system that lets teams jump between
+          brands without the visual equivalent of an identity crisis.
+        </p>
+        <p>
+          He loves the parts of design most people skip: systems, workflows, the
+          plumbing behind products.
+        </p>
+        <p>
+          Before all that he studied the social sciences, which explains why he still
+          asks the annoying question in meetings: “Okay, but who is this actually for?”
+        </p>
+        <p>
+          He thinks AI is genuinely exciting and uses it to give designers superpowers.
+          He’s also seen Idiocracy and has no plans to help make it a documentary.
+        </p>
+        <p>
+          Off the clock he climbs walls, makes music, and digs through crates of vinyl.
+          Given a time machine, he’d go straight to a Frank Zappa show in 1973. Priorities.
+        </p>
+        <p className="text-muted">
+          His role in these projects ranges from product design, and branding and strategy. All projects presented here were initiated by Eduardo and done in collaboration with many great colleagues.
+        </p>
+        <p>
+          Get in touch:{' '}
+          <a href="mailto:eduardobnog@gmail.com" className={LINK_CLASS}>
+            Email
+          </a>{' '}
+          ·{' '}
+          <a
+            href="https://www.linkedin.com/in/ebn18/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={LINK_CLASS}
+          >
+            LinkedIn
+          </a>{' '}
+          ·{' '}
+          <a
+            href="/images/eduardo_nogueira_cv.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={LINK_CLASS}
+          >
+            CV
+          </a>{' '}
+          ·{' '}
+          <a href="/about" className={LINK_CLASS}>
+            About
+          </a>
+        </p>
+      </div>
+
+      <figure className="relative mx-3 mb-3 mt-6">
+        <div className="relative aspect-[4/5] w-full overflow-hidden bg-wash">
+          <Image
+            src="/images/bio_pic.jpg"
+            alt="Eduardo Nogueira"
+            fill
+            className="object-cover object-top grayscale contrast-[1.1]"
+            sizes="(max-width: 768px) 100vw, 600px"
+            priority
+          />
+        </div>
+        <figcaption className="mono-label flex justify-between pt-1.5 text-muted">
+          <span>Fig. 01</span>
+          <span>Berlin</span>
+        </figcaption>
+      </figure>
     </div>
   )
 }
 
 export default function ProjectGrid() {
   return (
-    <div className="pr-5 md:pr-12 md:h-screen md:overflow-hidden">
-      <ResizableSplit
-        bio={
-          <AnimatedSection variant="fadeIn" className="md:h-full">
-            <Bio />
-          </AnimatedSection>
-        }
-        work={<Work />}
-      />
+    <div className="md:h-screen md:overflow-hidden">
+      <ResizableSplit bio={<Bio />} work={<WorkIndex items={items} />} />
     </div>
   )
 }
