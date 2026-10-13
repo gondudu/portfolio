@@ -27,7 +27,7 @@ export const axisDesignTools: AxisFilm[] = [
     slug: 'axis-design-system',
     title: 'Axis Design System',
     caption:
-      'One token source for every Axel Springer brand, followed from Figma variables to published code. The film walks through five moments: tokens, theming, the styleguide, the release pipeline, and the guardrails that keep brands on system.',
+      'One token source behind every Axel Springer brand, from Figma variables to shipped code. I help design the system and the guardrails that keep brands on it.',
     meta: 'Design System / Axel Springer · 2026',
     video: `${DS_BASE}/axis-design-system-overview-v2.mp4`,
     posterTime: 5,
@@ -36,7 +36,7 @@ export const axisDesignTools: AxisFilm[] = [
     slug: 'axis-overview',
     title: 'Axis Design Tools',
     caption:
-      'I initiated this plugin and directed its UI and UX, built in collaboration with Axel Springer’s design team. I designed and coded two of its five tools myself — fetch content and accessibility — in a suite that keeps every brand on system, without leaving Figma.',
+      'A Figma plugin suite that keeps every brand on system without leaving the file. I initiated it, directed the UX, and designed and coded two of its five tools.',
     meta: 'Figma Plugin Suite · 2026',
     video: `${BASE}/axis-overview.mp4`,
     posterTime: 33,
@@ -52,7 +52,7 @@ export const axisDesignTools: AxisFilm[] = [
   {
     slug: 'axis-inspect',
     title: 'Axis: Inspect Design',
-    caption: "Shows the system token behind every value, so nothing passes as a token that isn't one.",
+    caption: "Reveals the system token behind every value, so nothing passes as a token that isn't one. Directed by me.",
     meta: 'Figma Plugin / Axis Design Tools · 2026',
     video: `${BASE}/axis-inspect.mp4`,
     posterTime: 17,
@@ -60,7 +60,7 @@ export const axisDesignTools: AxisFilm[] = [
   {
     slug: 'axis-annotate',
     title: 'Axis: Annotate',
-    caption: 'Measures redlines against the system in one pass instead of by hand.',
+    caption: 'Measures redlines against the system in one pass instead of by hand. Directed by me.',
     meta: 'Figma Plugin / Axis Design Tools · 2026',
     video: `${BASE}/axis-annotate.mp4`,
     posterTime: 14,
@@ -76,7 +76,7 @@ export const axisDesignTools: AxisFilm[] = [
   {
     slug: 'axis-contrib',
     title: 'Axis: Contribution',
-    caption: "Feeds a spotted system gap back into the system, right where it was found.",
+    caption: "Feeds a spotted gap back into the library, right where it was found. Directed by me.",
     meta: 'Figma Plugin / Axis Design Tools · 2026',
     video: `${BASE}/axis-contrib.mp4`,
     posterTime: 17,

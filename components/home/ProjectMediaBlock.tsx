@@ -122,12 +122,11 @@ export default function ProjectMediaBlock({
                 type="button"
                 onClick={handlePlay}
                 aria-label={`Play ${item.title}`}
-                className="mono-label absolute left-0 bottom-0 flex items-center gap-2.5 bg-ink px-4 py-3 text-paper transition-colors duration-200 ease-swiss hover:bg-accent"
+                className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-ink text-paper transition-colors duration-200 ease-swiss hover:bg-accent"
               >
-                <svg width="9" height="10" viewBox="0 0 9 10" aria-hidden="true">
+                <svg width="18" height="20" viewBox="0 0 9 10" aria-hidden="true" className="ml-1">
                   <path d="M0 0L9 5L0 10Z" fill="currentColor" />
                 </svg>
-                Play
               </button>
             )}
           </>

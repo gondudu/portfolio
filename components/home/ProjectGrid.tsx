@@ -36,38 +36,38 @@ items.push(
   {
     slug: 'upday-news-app-redesign',
     title: 'Upday News App Redesign',
-    caption: 'Redesign of the Upday news app.',
+    caption: 'A ground-up redesign of Axel Springer’s Upday news app. Product design by me.',
     media: '/images/projects/upday-news-app-redesign/7.jpg',
   },
   {
     slug: 'project-06',
     title: 'Rhythmus 21 – Sound design',
-    caption: 'Reimagined soundtrack for Hans Richter classic.',
+    caption: 'A reimagined soundtrack for Hans Richter’s 1921 classic. Sound design by me.',
     media: '/images/projects/project-06/rythmus.mp4',
     posterTime: 45,
   },
   {
     slug: 'project-07',
     title: 'Alliance Artists',
-    caption: 'Visual identity for the Brazilian management agency Alliance Artists.',
+    caption: 'Visual identity for the Brazilian management agency Alliance Artists. Designed by me.',
     media: '/images/projects/project-07/thumbnail.jpg',
   },
   {
     slug: 'project-08',
     title: 'Eli Iwasa DJ',
-    caption: 'Visual identity for Brazilian DJ Eli Iwasa.',
+    caption: 'Visual identity for Brazilian DJ Eli Iwasa. Designed by me.',
     media: '/images/projects/project-08/thumbnail.jpg',
   },
   {
     slug: 'project-09',
     title: 'Discoteca Odara',
-    caption: 'Visual identity for Brazilian label Discoteca Odara.',
+    caption: 'Visual identity for the Brazilian record label Discoteca Odara. Designed by me.',
     media: '/images/projects/project-09/thumbnail.gif',
   },
   {
     slug: 'project-10',
     title: 'Paris de Janeiro',
-    caption: 'Key visuals for French-Brazilian swimwear brand.',
+    caption: 'Key visuals for French-Brazilian swimwear brand Paris de Janeiro. Designed by me.',
     media: '/images/projects/project-10/thumbnail.jpg',
   },
 )
@@ -95,13 +95,12 @@ function Bio() {
 
       <div className="flex max-w-[54ch] flex-col gap-2.5 px-3 pt-6 text-[15px] leading-[1.35]">
         <p>
-          Eduardo is a Brazilian designer who learned to love design by staring at
+          Eduardo, a Brazilian designer who learned to love design by staring at
           record covers in shops he used to go as a teenager. He’s been judging albums
           by their covers ever since, and he’s usually right.
         </p>
         <p>
-          These days he works at Axel Springer Tech, somewhere between branding and
-          product design, on brands like WELT, Bild, Business Insider and The Telegraph.
+          These days he works at Axel Springer Tech, as a product designer on brands like WELT, Bild, Business Insider and The Telegraph.
           His current obsession is Axis, a design system that lets teams jump between
           brands without the visual equivalent of an identity crisis.
         </p>
@@ -110,7 +109,7 @@ function Bio() {
           plumbing behind products.
         </p>
         <p>
-          Before all that he studied the social sciences, which explains why he still
+          Before all that he studied graphic design and social sciences, which explains why he still
           asks the annoying question in meetings: “Okay, but who is this actually for?”
         </p>
         <p>
