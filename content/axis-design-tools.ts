@@ -27,7 +27,7 @@ export const axisDesignTools: AxisFilm[] = [
     slug: 'axis-design-system',
     title: 'Axis Design System',
     caption:
-      'One token source behind every Axel Springer brand, from Figma variables to shipped code. I help design the system and the guardrails that keep brands on it.',
+      'A design system for the German publisher Axel Springer, which I initiated to optimize how the company develops and delivers its publications. I work within the brands to ensure understanding and compliance, while my colleague Mario architected the system’s pipeline.',
     meta: 'Design System / Axel Springer · 2026',
     video: `${DS_BASE}/axis-design-system-overview-v2.mp4`,
     posterTime: 5,
@@ -36,7 +36,7 @@ export const axisDesignTools: AxisFilm[] = [
     slug: 'axis-overview',
     title: 'Axis Design Tools',
     caption:
-      'A Figma plugin suite that keeps every brand on system without leaving the file. I initiated it, directed the UX, and designed and coded two of its five tools.',
+      'A Figma plugin built as part of the Axis design system, made to speed up designers’ work and keep every brand consistent. I built it with my colleague Mario — I did the UI and two of its features, and Mario built the rest.',
     meta: 'Figma Plugin Suite · 2026',
     video: `${BASE}/axis-overview.mp4`,
     posterTime: 33,
@@ -44,7 +44,7 @@ export const axisDesignTools: AxisFilm[] = [
   {
     slug: 'axis-fetch',
     title: 'Axis: Fetch Content',
-    caption: 'Stress-tests components with live newsroom copy instead of lorem ipsum. Designed and coded by me.',
+    caption: 'Fills designs with real published content instead of placeholder text, so layouts are tested against the real thing. Built by me.',
     meta: 'Figma Plugin / Axis Design Tools · 2026',
     video: `${BASE}/axis-fetch.mp4`,
     posterTime: 20,
@@ -52,7 +52,7 @@ export const axisDesignTools: AxisFilm[] = [
   {
     slug: 'axis-inspect',
     title: 'Axis: Inspect Design',
-    caption: "Reveals the system token behind every value, so nothing passes as a token that isn't one. Directed by me.",
+    caption: 'Checks that every value in a design comes from the system, flagging anything off-spec before handoff.',
     meta: 'Figma Plugin / Axis Design Tools · 2026',
     video: `${BASE}/axis-inspect.mp4`,
     posterTime: 17,
@@ -60,7 +60,7 @@ export const axisDesignTools: AxisFilm[] = [
   {
     slug: 'axis-annotate',
     title: 'Axis: Annotate',
-    caption: 'Measures redlines against the system in one pass instead of by hand. Directed by me.',
+    caption: 'Adds measurement and spec annotations automatically, in a single pass instead of by hand.',
     meta: 'Figma Plugin / Axis Design Tools · 2026',
     video: `${BASE}/axis-annotate.mp4`,
     posterTime: 14,
@@ -68,7 +68,7 @@ export const axisDesignTools: AxisFilm[] = [
   {
     slug: 'axis-access',
     title: 'Axis: Accessibility',
-    caption: 'Checks every component the way colour-blind readers actually see it. Designed and coded by me.',
+    caption: 'Previews how each design reads for colour-blind users and flags low contrast. Built by me.',
     meta: 'Figma Plugin / Axis Design Tools · 2026',
     video: `${BASE}/axis-access.mp4`,
     posterTime: 17,
@@ -76,7 +76,7 @@ export const axisDesignTools: AxisFilm[] = [
   {
     slug: 'axis-contrib',
     title: 'Axis: Contribution',
-    caption: "Feeds a spotted gap back into the library, right where it was found. Directed by me.",
+    caption: 'Lets designers push a missing component back into the shared library, right where they spotted the gap.',
     meta: 'Figma Plugin / Axis Design Tools · 2026',
     video: `${BASE}/axis-contrib.mp4`,
     posterTime: 17,
